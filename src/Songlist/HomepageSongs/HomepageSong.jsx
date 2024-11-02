@@ -1,11 +1,17 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import styles from './homepageSong.module.css';
-import  Grid2  from '@mui/material/Grid2';
+import Grid2 from '@mui/material/Grid2';
+import { useNavigate } from 'react-router-dom';
 
 const HomepageSong = ({ song }) => {
+      const navigate = useNavigate();
+
+    const handleSongClick = () => {
+        navigate(`/songs/${song.id}`);
+    };
     return (
-        <Grid2 className={styles.song_card}>
+        <Grid2 className={styles.song_card} onClick={handleSongClick}>
             <Grid2 className={styles.song_image}>
                 <img src={song.cover_art} alt={song.title} />
             </Grid2>

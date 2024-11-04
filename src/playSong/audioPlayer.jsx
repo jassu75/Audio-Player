@@ -86,7 +86,7 @@ const AudioPlayer = () => {
     const keys = Object.keys(songsList);
     const lastKey = keys[keys.length - 1];
     if (songId === lastKey) {
-      navigate(`/songs/1`, { replace: true });
+      navigate(`/songs/0`, { replace: true });
     } else {
       navigate(`/songs/${Number(songId) + 1}`, { replace: true });
     }

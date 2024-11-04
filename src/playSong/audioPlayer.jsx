@@ -70,11 +70,11 @@ const AudioPlayer = () => {
     if (progressBar.current.value <= 2) {
       setIsPlaying(false);
       if (songId > 1) {
-        navigate(`/songs/${songId - 1}`);
+        navigate(`/songs/${songId - 1}`, { replace: true });
       } else {
         const keys = Object.keys(songsList);
         const lastKey = keys[keys.length - 1];
-        navigate(`/songs/${lastKey}`);
+        navigate(`/songs/${lastKey}`, { replace: true });
       }
     }
     progressBar.current.value = 0;
@@ -86,9 +86,9 @@ const AudioPlayer = () => {
     const keys = Object.keys(songsList);
     const lastKey = keys[keys.length - 1];
     if (songId === lastKey) {
-      navigate(`/songs/1`);
+      navigate(`/songs/1`, { replace: true });
     } else {
-      navigate(`/songs/${Number(songId) + 1}`);
+      navigate(`/songs/${Number(songId) + 1}`, { replace: true });
     }
     progressBar.current.value = duration;
     changeRange();

@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 0,
     "title": "Adventure",
     "artist": "Benjamin Tissot",
     "album": "Inspiration",
@@ -11,7 +11,7 @@
     "audio_url": "https://www.bensound.com/bensound-music/bensound-adventure.mp3"
   },
   {
-    "id": 2,
+    "id": 1,
     "title": "Creative Minds",
     "artist": "Benjamin Tissot",
     "album": "Inspiration",
@@ -22,7 +22,7 @@
     "audio_url": "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3"
   },
   {
-    "id": 3,
+    "id": 2,
     "title": "Sunny",
     "artist": "Benjamin Tissot",
     "album": "Happiness",
@@ -33,7 +33,7 @@
     "audio_url": "https://www.bensound.com/bensound-music/bensound-sunny.mp3"
   },
   {
-    "id": 4,
+    "id": 3,
     "title": "Energy",
     "artist": "Benjamin Tissot",
     "album": "Workout",
@@ -44,7 +44,7 @@
     "audio_url": "https://www.bensound.com/bensound-music/bensound-energy.mp3"
   },
   {
-    "id": 5,
+    "id": 4,
     "title": "Once Again",
     "artist": "Benjamin Tissot",
     "album": "Sentimental",

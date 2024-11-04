@@ -69,7 +69,7 @@ const AudioPlayer = () => {
   const backButton = () => {
     if (progressBar.current.value <= 2) {
       setIsPlaying(false);
-      if (songId > 1) {
+      if (songId > 0) {
         navigate(`/songs/${songId - 1}`, { replace: true });
       } else {
         const keys = Object.keys(songsList);

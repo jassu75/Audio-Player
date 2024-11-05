@@ -90,6 +90,8 @@
   width: 50vw;
   height: 5px;
   outline: none;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 /* progress bar - safari */
@@ -100,6 +102,7 @@
   width: 50vw;
   height: 5px;
   outline: none;
+  overflow: hidden;
 }
 
 /* progress bar - firefox */
@@ -110,6 +113,7 @@
   width: 50vw;
   height: 5px;
   outline: none;
+  overflow: hidden;
 }
 
 .progressBar::-moz-focus-outer {
@@ -127,6 +131,7 @@
   position: absolute;
   z-index: 2;
   cursor: pointer;
+  overflow: hidden;
 }
 
 /* progress bar - firefox */
@@ -135,6 +140,7 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   height: 5px;
+  overflow: hidden;
 }
 
 /* knobby - chrome and safari */
@@ -150,12 +156,14 @@
   margin: -2px 0 0 0;
   z-index: 3;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* knobby while dragging - chrome and safari */
 .progressBar:active::-webkit-slider-thumb {
   transform: scale(1.2);
   background: var(--selectedKnobby);
+  overflow: hidden;
 }
 
 /* knobby - firefox */
@@ -169,10 +177,12 @@
   position: relative;
   z-index: 3;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* knobby while dragging - firefox */
 .progressBar:active::-moz-range-thumb {
   transform: scale(1.2);
   background: var(--selectedKnobby);
+  overflow: hidden;
 }

@@ -58,6 +58,43 @@ const AudioPlayer = () => {
     changePlayerCurrentTime();
   };
 
+  useEffect(() => {
+    const handleEnded = () => {
+      const keys = Object.keys(songsList);
+      const lastKey = keys[keys.length - 1];
+      const nextSongId = songId === lastKey ? 0 : Number(songId) + 1;
+
+      const nextSong = songsList[nextSongId];
+      audioPlayer.current.src = nextSong.audio_url;
+
+      const playNextSong = () => {
+        audioPlayer.current.play().catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+      };
+
+      audioPlayer.current.addEventListener("canplaythrough", playNextSong, {
+        once: true,
+      });
+
+      navigate(`/songs/${nextSongId}`, { replace: true });
+
+      progressBar.current.value = 0;
+      changeRange();
+    };
+
+    const player = audioPlayer.current;
+    if (player) {
+      player.addEventListener("ended", handleEnded);
+    }
+
+    return () => {
+      if (player) {
+        player.removeEventListener("ended", handleEnded);
+      }
+    };
+  }, [audioPlayer, navigate, songId, songsList]);
+
   const changePlayerCurrentTime = () => {
     progressBar.current.style.setProperty(
       "--seek-before-width",

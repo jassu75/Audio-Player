@@ -140,10 +140,12 @@ const AudioPlayer = () => {
       />
       <Grid2 className={styles.song_details}>
         <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{song.title}</Typography>
+          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
         </Grid2>
         <Grid2 className={styles.song_artist}>
-          <Typography variant="audioPlayerSongArtist">{song.artist}</Typography>
+          <Typography variant="audioPlayerSongArtist">
+            {song?.artist}
+          </Typography>
         </Grid2>
       </Grid2>
       <Grid2 className={styles.audio_buttons}>

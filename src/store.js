@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import songsReducer from './Songlist/HomepageSongs/homepageSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import songsReducer from "./Songlist/HomepageSongs/homepage.slice";
 
 const store = configureStore({
-    reducer: {
-        songs: songsReducer,
-    },
+  reducer: {
+    homepage: songsReducer,
+  },
 });
 
 export default store;

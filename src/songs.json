@@ -1,6 +1,5 @@
-[
-  {
-    "id": 0,
+{
+  "0": {
     "title": "Adventure",
     "artist": "Benjamin Tissot",
     "album": "Inspiration",
@@ -10,19 +9,17 @@
     "cover_art": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?fit=crop&w=500&h=500",
     "audio_url": "https://www.bensound.com/bensound-music/bensound-adventure.mp3"
   },
-  {
-    "id": 1,
+  "1": {
     "title": "Creative Minds",
     "artist": "Benjamin Tissot",
     "album": "Inspiration",
-    "duration": 120,
+    "duration": 147,
     "genre": "Corporate",
     "release_date": "2016-02-11",
     "cover_art": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?fit=crop&w=500&h=500",
     "audio_url": "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3"
   },
-  {
-    "id": 2,
+  "2": {
     "title": "Sunny",
     "artist": "Benjamin Tissot",
     "album": "Happiness",
@@ -32,8 +29,7 @@
     "cover_art": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?fit=crop&w=500&h=500",
     "audio_url": "https://www.bensound.com/bensound-music/bensound-sunny.mp3"
   },
-  {
-    "id": 3,
+  "3": {
     "title": "Energy",
     "artist": "Benjamin Tissot",
     "album": "Workout",
@@ -43,8 +39,7 @@
     "cover_art": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?fit=crop&w=500&h=500",
     "audio_url": "https://www.bensound.com/bensound-music/bensound-energy.mp3"
   },
-  {
-    "id": 4,
+  "4": {
     "title": "Once Again",
     "artist": "Benjamin Tissot",
     "album": "Sentimental",
@@ -54,4 +49,4 @@
     "cover_art": "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?fit=crop&w=500&h=500",
     "audio_url": "https://www.bensound.com/bensound-music/bensound-onceagain.mp3"
   }
-]
+}

@@ -1,18 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setSongs } from "./Songlist/HomepageSongs/homepageSlice";
+import React from "react";
+import useInitializeHomepage from "./hooks/useInitializeHomepage";
 import HomepageSongsList from "./Songlist/HomepageSongs/homepageSongsList";
 import songs from "./songs.json";
+import { useSelector } from "react-redux";
 
 const Homepage = () => {
-  const dispatch = useDispatch();
+  useInitializeHomepage();
+  const songList = useSelector((state) => state.homepage.songs);
 
-  useEffect(() => {
-    dispatch(setSongs(songs));
-    localStorage.setItem("songsList", JSON.stringify(songs));
-  }, [dispatch]);
-
-  return <HomepageSongsList songsList={songs} />;
+  return <HomepageSongsList songsList={songList} />;
 };
 
 export default Homepage;

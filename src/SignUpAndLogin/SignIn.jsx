@@ -10,12 +10,10 @@ import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -27,20 +25,17 @@ const SignIn = () => {
 
       if (user.emailVerified) navigate("/homepage");
       else alert("Please verify your email and then login");
-    } catch (err) {
-      setError("Invalid username or password");
-    }
+    } catch (err) {}
   };
 
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       await signInWithPopup(auth, googleAuthProvider);
       navigate("/homepage");
     } catch (err) {
-      setError("Invalid google signin");
+      console.error("signin failed");
     }
   };
 

@@ -14,8 +14,7 @@ const AudioUploadForm = ({ open, onClose }) => {
     useCloudinaryImageUpload();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [addSong, { loading: mutationLoading, error: mutationError }] =
-    useMutation(ADD_SONG);
+  const [addSong, { loading: mutationLoading }] = useMutation(ADD_SONG);
 
   const handleAudioUpload = async (event) => {
     const file = event.target.files[0];

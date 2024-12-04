@@ -29,7 +29,11 @@ const UserAuthentication = () => {
       </Grid2>
 
       <Grid2 className={styles.signin_card}>
-        <img src={musicNote} className={styles.authentication_logo} />
+        <img
+          src={musicNote}
+          className={styles.authentication_logo}
+          alt={null}
+        />
 
         <nav className={styles.navbar}>
           <ButtonBase onClick={() => setView("signIn")}>

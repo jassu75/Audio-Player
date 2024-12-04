@@ -5,12 +5,11 @@ import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
 
 const AudioPlayer = () => {
   const id = useParams();
   const songId = id.id;
-  const songsList = useSelector((state) => state.homepage.songs);
+  const songsList = JSON.parse(localStorage.getItem("songsList"));
   const song = songsList[songId];
   const songIds = Object.keys(songsList);
 

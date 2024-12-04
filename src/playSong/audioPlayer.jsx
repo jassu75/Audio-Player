@@ -5,27 +5,65 @@ import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
 
 const AudioPlayer = () => {
   const id = useParams();
   const songId = id.id;
-  const songsList = JSON.parse(localStorage.getItem("songsList"));
+  const songsList = useSelector((state) => state.homepage.songs);
   const song = songsList[songId];
-  // state
+  const songIds = Object.keys(songsList);
+
   const [isPlaying, setIsPlaying] = useState(false);
-  const duration = song?.duration;
   const [currentTime, setCurrentTime] = useState(0);
+  const [songDuration, setSongDuration] = useState(0);
   const navigate = useNavigate();
 
-  // references
-  const audioPlayer = useRef(); // reference our audio component
-  const progressBar = useRef(); // reference our progress bar
-  const animationRef = useRef(); // reference the animation
+  const audioPlayer = useRef(); // Reference to the audio component
+  const progressBar = useRef(); // Reference to the progress bar
+  const animationRef = useRef(); // Reference to the animation
 
   useEffect(() => {
-    const seconds = Math.floor(audioPlayer.current.duration);
-    progressBar.current.max = seconds;
-  }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
+    const player = audioPlayer.current;
+
+    if (player) {
+      const updateDuration = () => {
+        if (!isNaN(player.duration)) {
+          const duration = Math.floor(player.duration);
+          setSongDuration(duration);
+          progressBar.current.max = duration;
+        }
+      };
+
+      updateDuration();
+
+      const handleEnded = () => {
+        const currentIndex = songIds.indexOf(songId);
+        const nextIndex = (currentIndex + 1) % songIds.length;
+        const nextSongId = songIds[nextIndex];
+
+        const nextSong = songsList[nextSongId];
+        player.src = nextSong.audio_url;
+
+        const playNextSong = () => {
+          player.play().catch((error) => {
+            console.error("Error playing audio:", error);
+          });
+        };
+
+        player.addEventListener("canplaythrough", playNextSong, { once: true });
+
+        navigate(`/songs/${nextSongId}`, { replace: true });
+        resetProgressBar();
+      };
+
+      player.addEventListener("ended", handleEnded);
+
+      return () => {
+        player.removeEventListener("ended", handleEnded);
+      };
+    }
+  }, [audioPlayer, navigate, songId, songsList, songIds]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -60,77 +98,38 @@ const AudioPlayer = () => {
     changePlayerCurrentTime();
   };
 
-  useEffect(() => {
-    const handleEnded = () => {
-      const keys = Object.keys(songsList);
-      const lastKey = keys[keys.length - 1];
-      const nextSongId = songId === lastKey ? 0 : Number(songId) + 1;
-
-      const nextSong = songsList[nextSongId];
-      audioPlayer.current.src = nextSong.audio_url;
-
-      const playNextSong = () => {
-        audioPlayer.current.play().catch((error) => {
-          console.error("Error playing audio:", error);
-        });
-      };
-
-      audioPlayer.current.addEventListener("canplaythrough", playNextSong, {
-        once: true,
-      });
-
-      navigate(`/songs/${nextSongId}`, { replace: true });
-
-      progressBar.current.value = 0;
-      changeRange();
-    };
-
-    const player = audioPlayer.current;
-    if (player) {
-      player.addEventListener("ended", handleEnded);
-    }
-
-    return () => {
-      if (player) {
-        player.removeEventListener("ended", handleEnded);
-      }
-    };
-  }, [audioPlayer, navigate, songId, songsList]);
+  const resetProgressBar = () => {
+    setCurrentTime(0);
+    progressBar.current.value = 0;
+    changePlayerCurrentTime();
+  };
 
   const changePlayerCurrentTime = () => {
     progressBar.current.style.setProperty(
       "--seek-before-width",
-      `${(progressBar.current.value / duration) * 100}%`
+      `${(progressBar.current.value / songDuration) * 100}%`
     );
     setCurrentTime(progressBar.current.value);
   };
 
   const backButton = () => {
-    if (progressBar.current.value <= 2) {
-      setIsPlaying(false);
-      if (songId > 0) {
-        navigate(`/songs/${songId - 1}`, { replace: true });
-      } else {
-        const keys = Object.keys(songsList);
-        const lastKey = keys[keys.length - 1];
-        navigate(`/songs/${lastKey}`, { replace: true });
-      }
-    }
-    progressBar.current.value = 0;
-    changeRange();
+    const currentIndex = songIds.indexOf(songId);
+    const prevIndex = (currentIndex - 1 + songIds.length) % songIds.length; // Circular navigation
+    const prevSongId = songIds[prevIndex];
+
+    setIsPlaying(false);
+    navigate(`/songs/${prevSongId}`, { replace: true });
+    resetProgressBar();
   };
 
   const forwardButton = () => {
+    const currentIndex = songIds.indexOf(songId);
+    const nextIndex = (currentIndex + 1) % songIds.length; // Circular navigation
+    const nextSongId = songIds[nextIndex];
+
     setIsPlaying(false);
-    const keys = Object.keys(songsList);
-    const lastKey = keys[keys.length - 1];
-    if (songId === lastKey) {
-      navigate(`/songs/0`, { replace: true });
-    } else {
-      navigate(`/songs/${Number(songId) + 1}`, { replace: true });
-    }
-    progressBar.current.value = duration;
-    changeRange();
+    navigate(`/songs/${nextSongId}`, { replace: true });
+    resetProgressBar();
   };
 
   return (
@@ -155,6 +154,11 @@ const AudioPlayer = () => {
           ref={audioPlayer}
           src={song?.audio_url}
           preload="metadata"
+          onLoadedMetadata={() => {
+            const duration = Math.floor(audioPlayer.current?.duration || 0);
+            setSongDuration(duration);
+            progressBar.current.max = duration;
+          }}
         ></audio>
         <button className={styles.forwardBackward} onClick={backButton}>
           <SkipPrevious />
@@ -166,15 +170,12 @@ const AudioPlayer = () => {
           <SkipNext />
         </button>
       </Grid2>
-      {/* current time */}
       <Grid2 className={styles.progress_bar_and_time}>
         <Grid2 className={styles.currentTime}>
           <Typography variant="AudioPlayerCurrentTimeAndDuration">
             {calculateTime(currentTime)}
           </Typography>
         </Grid2>
-
-        {/* progress bar */}
         <Grid2>
           <input
             type="range"
@@ -184,14 +185,12 @@ const AudioPlayer = () => {
             onChange={changeRange}
           />
         </Grid2>
-
-        {/* duration */}
         <Grid2 className={styles.duration}>
-          {duration && !isNaN(duration) ? (
+          {songDuration > 0 && (
             <Typography variant="AudioPlayerCurrentTimeAndDuration">
-              {calculateTime(duration)}
+              {calculateTime(songDuration)}
             </Typography>
-          ) : null}
+          )}
         </Grid2>
       </Grid2>
     </Grid2>

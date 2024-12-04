@@ -1,0 +1,77 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  justify-items: center;
+  background-color: #1e1e1e;
+  padding: 10px;
+}
+
+.nav_button {
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.nav_button.active {
+  color: #000;
+  background-color: #ffffff;
+}
+
+.left_pane {
+  width: 50%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.signin_card {
+  width: 50%;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.authentication_logo {
+  aspect-ratio: 1;
+  width: 150px;
+  object-fit: cover;
+}
+
+.authentication_man_logo {
+  height: 50%;
+  aspect-ratio: 1;
+  position: absolute;
+  bottom: 10px;
+  right: 50%;
+}
+
+.man_falling_text {
+  color: #ffffff;
+}
+
+.left_side_text {
+  transform: rotate(-15deg);
+  padding-top: 25%;
+  height: 50%;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .left_pane {
+    display: none;
+  }
+
+  .signin_card {
+    width: 100%;
+    box-shadow: none;
+  }
+}

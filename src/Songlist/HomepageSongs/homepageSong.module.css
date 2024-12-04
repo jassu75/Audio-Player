@@ -1,26 +1,28 @@
 .song_card {
-    border-radius: 8px; 
-    display: flex;    
-    flex-direction: row;
-    gap: 20px;
-    height: 70px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  height: 70px;
+  cursor: pointer;
 }
 
-.song_image img { 
-    height: 100%;
-    object-fit: cover;
+.song_image img {
+  aspect-ratio: 1;
+  height: 100%;
+  object-fit: cover;
 }
 
 .song_title {
-    color: white;
+  color: white;
 }
 
 .song_artist {
-    color: white; 
-    font-style: italic;
+  color: white;
+  font-style: italic;
 }
 
 .song_content {
-    padding-top: 10px;
-    height: 100%;
+  padding-top: 10px;
+  height: 100%;
 }

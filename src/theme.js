@@ -24,6 +24,26 @@ const theme = createTheme({
       fontSize: "16px",
       fontWeight: 400,
     },
+    SignInHeading: {
+      fontFamily: "Outfit",
+      fontSize: "40px",
+      fontWeight: 600,
+    },
+    SignInAndSignUpButton: {
+      fontFamily: "Outfit",
+      fontSize: "12px",
+      fontWeight: 400,
+    },
+    ManFallingText: {
+      fontFamily: "Anton",
+      fontSize: "30px",
+      fontWeight: "800px",
+    },
+    RedirectText: {
+      fontFamily: "Outfit",
+      fontSize: "20px",
+      fontWeight: 600,
+    },
   },
 });
 

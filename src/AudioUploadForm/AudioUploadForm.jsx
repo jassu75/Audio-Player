@@ -1,58 +1,75 @@
-import React from "react";
-import { Modal, Box } from "@mui/material";
+import React, { useState } from "react";
+import { Modal, Grid2 } from "@mui/material";
 import * as musicMetadata from "music-metadata-browser";
+import { useMutation } from "@apollo/client";
+import { ADD_SONG } from "../mutations";
+import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
+import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
 import styles from "./AudioForm.module.css";
 
 const AudioUploadForm = ({ open, onClose }) => {
-  const handleFileUpload = async (event) => {
+  const { uploadAudioToCloudinary, loading: audioLoading } =
+    useCloudinaryAudioUpload();
+  const { uploadImageToCloudinary, loading: imageLoading } =
+    useCloudinaryImageUpload();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [addSong, { loading: mutationLoading, error: mutationError }] =
+    useMutation(ADD_SONG);
+
+  const handleAudioUpload = async (event) => {
     const file = event.target.files[0];
-    if (file && file.type === "audio/mpeg") {
-      try {
-        const metadata = await musicMetadata.parseBlob(file);
 
-        const newSong = {
-          title: metadata.common.title || file.name.replace(".mp3", ""),
-          artist: metadata.common.artist || "",
-          album: metadata.common.album || "",
-          duration: Math.round(metadata.format.duration || 0),
-          genre: metadata.common.genre || "",
-          release_year: metadata.common.year || "",
-          cover_art: metadata.common.picture
-            ? URL.createObjectURL(
-                new Blob([metadata.common.picture[0].data], {
-                  type: metadata.common.picture[0].format,
-                })
-              )
-            : "",
-          audio_url: URL.createObjectURL(file),
-        };
+    if (!file || !file.type.startsWith("audio/")) {
+      setErrorMessage("Invalid file chosen. Select correct file");
+      return;
+    }
 
-        const songsList = JSON.parse(localStorage.getItem("songsList")) || {};
+    try {
+      const audioUrl = await uploadAudioToCloudinary(file);
 
-        const nextKey = Object.keys(songsList).length
-          ? Math.max(...Object.keys(songsList).map(Number)) + 1
-          : 0;
+      const metadata = await musicMetadata.parseBlob(file);
+      const image = metadata.common.picture
+        ? metadata.common.picture[0].data
+        : null;
 
-        const updatedSongsList = { ...songsList, [nextKey]: newSong };
+      const imageUrl = await uploadImageToCloudinary(
+        new Blob([image], { type: "image/jpeg" })
+      );
+      const newSong = {
+        title: metadata.common.title || file.name.replace(".mp3", ""),
+        artist: metadata.common.artist || "",
+        album: metadata.common.album || "",
+        duration: Math.round(metadata.format.duration || 0),
+        genre: metadata.common.genre || "",
+        release_year: String(metadata.common.year) || "",
+        cover_art: imageUrl,
+        audio_url: audioUrl,
+      };
 
-        localStorage.setItem("songsList", JSON.stringify(updatedSongsList));
-      } catch (error) {
-        console.error("Error occurred uploading audio file:", error);
-      }
+      await addSong({ variables: newSong });
+      alert("Audio and image uploaded successfully!");
+    } catch (error) {
+      console.error("Error occurred:", error);
+      alert(`Error: ${error.message}`);
     }
   };
 
   return (
     <Modal open={true} onClose={onClose}>
-      <Box className={styles.modal_box}>
+      <Grid2 className={styles.modal_box}>
         <h2>Upload Audio File</h2>
         <input
           type="file"
-          accept="audio/mpeg"
-          onChange={handleFileUpload}
+          accept="audio/*"
+          onChange={handleAudioUpload}
           className={styles.file_input}
         />
-      </Box>
+        {errorMessage && <p className={styles.error_text}>{errorMessage}</p>}
+        {(audioLoading || imageLoading || mutationLoading) && (
+          <p>Uploading...</p>
+        )}
+      </Grid2>
     </Modal>
   );
 };

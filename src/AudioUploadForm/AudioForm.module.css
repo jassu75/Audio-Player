@@ -17,3 +17,9 @@
 .metadata_box {
   margin-top: 16px;
 }
+
+.error_text {
+  color: red;
+  margin-top: 8px;
+  font-size: 14px;
+}

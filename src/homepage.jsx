@@ -1,14 +1,15 @@
 import React from "react";
-import useInitializeHomepage from "./hooks/useInitializeHomepage";
+import useSongHashMap from "./hooks/useInitializeHomepage";
 import HomepageSongsList from "./Songlist/HomepageSongs/homepageSongsList";
-import songs from "./songs.json";
-import { useSelector } from "react-redux";
 
 const Homepage = () => {
-  useInitializeHomepage();
-  const songList = useSelector((state) => state.homepage.songs);
+  const { songsHashMap, loading, error } = useSongHashMap();
 
-  return <HomepageSongsList songsList={songList} />;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  localStorage.setItem("songsList", JSON.stringify(songsHashMap));
+  return <HomepageSongsList songsList={songsHashMap} />;
 };
 
 export default Homepage;

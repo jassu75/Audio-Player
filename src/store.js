@@ -1,10 +1,31 @@
 import { configureStore } from "@reduxjs/toolkit";
-import songsReducer from "./Songlist/HomepageSongs/homepage.slice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import homepageReducer from "./Songlist/HomepageSongs/homepage.slice";
+import { combineReducers } from "redux";
 
-const store = configureStore({
-  reducer: {
-    homepage: songsReducer,
-  },
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["homepage"],
+};
+
+const rootReducer = combineReducers({
+  homepage: homepageReducer,
 });
 
-export default store;
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+      },
+    }),
+});
+
+const persistor = persistStore(store);
+
+export { store, persistor };

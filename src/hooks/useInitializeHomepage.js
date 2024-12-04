@@ -1,17 +1,25 @@
+import { useQuery } from "@apollo/client";
+import { GET_SONGS } from "../queries";
 import { useDispatch } from "react-redux";
-import { useRef } from "react";
 import { setSongs } from "../Songlist/HomepageSongs/homepage.slice";
-import songs from "../songs.json";
-
-const useInitializeHomepage = () => {
+import { useEffect } from "react";
+const useSongHashMap = () => {
+  const { data, loading, error } = useQuery(GET_SONGS);
   const dispatch = useDispatch();
-  const isInitialized = useRef(false);
 
-  if (!isInitialized.current) {
-    dispatch(setSongs(songs));
-    localStorage.setItem("songsList", JSON.stringify(songs));
-    isInitialized.current = true;
-  }
+  const songsHashMap = data?.audio_details?.reduce((acc, song) => {
+    const { id, ...rest } = song;
+    acc[id] = rest;
+    return acc;
+  }, {});
+
+  useEffect(() => {
+    if (songsHashMap) {
+      dispatch(setSongs(songsHashMap));
+    }
+  }, [songsHashMap, dispatch]);
+
+  return { songsHashMap, loading, error };
 };
 
-export default useInitializeHomepage;
+export default useSongHashMap;

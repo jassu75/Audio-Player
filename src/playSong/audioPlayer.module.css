@@ -13,6 +13,8 @@
   width: 80vw;
   border-radius: 20px;
   max-width: 400px;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .audio_buttons {
@@ -35,10 +37,6 @@
   align-items: center;
   cursor: pointer;
   color: #fff;
-}
-
-.forwardBackward:hover {
-  color: gray;
 }
 
 .song_details {

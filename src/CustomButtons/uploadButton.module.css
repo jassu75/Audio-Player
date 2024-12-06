@@ -1,0 +1,42 @@
+.button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #228b22, #ffd700);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.button_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: linear-gradient(to right, #90ee90, #32cd32);
+  border-top-left-radius: 40%;
+  border-bottom-left-radius: 40%;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.button_text_container {
+  padding: 8px 6px;
+}
+
+.button_text {
+  color: #000000;
+}
+
+.button:hover {
+  background: linear-gradient(to bottom, #1e7a1e, #e6c200);
+}
+
+.icon {
+  color: white;
+  font-size: 20px;
+}
+.text {
+  font-size: 16px;
+  font-weight: bold;
+}

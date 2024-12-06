@@ -11,12 +11,13 @@ const songsSlice = createSlice({
     setSongs: (state, action) => {
       state.songs = action.payload;
     },
-    addSong: (state, action) => {
-      const newId = Object.keys(state.songs).length;
-      state.songs[newId] = action.payload;
+    addSongs: (state, action) => {
+      const { id, ...songWithoutId } = action.payload;
+      state.songs[id] = songWithoutId;
+      localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
   },
 });
 
-export const { setSongs, addSong } = songsSlice.actions;
+export const { setSongs, addSongs } = songsSlice.actions;
 export default songsSlice.reducer;

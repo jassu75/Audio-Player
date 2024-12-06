@@ -44,6 +44,22 @@ const theme = createTheme({
       fontSize: "20px",
       fontWeight: 600,
     },
+    UploadSongText: {
+      fontFamily: "Outfit",
+      fontSize: "16px",
+      fontWeight: 600,
+    },
+    UploadFileText: {
+      fontFamily: "Outfit",
+      fontSize: "15px",
+      fontWeight: 500,
+    },
+
+    UploadFileStatusText: {
+      fontFamily: "Outfit",
+      fontSize: "13px",
+      fontWeight: 400,
+    },
   },
 });
 

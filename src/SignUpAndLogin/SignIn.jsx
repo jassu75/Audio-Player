@@ -61,7 +61,7 @@ const SignIn = () => {
         onClick={handleGoogleSignIn}
         className={styles.signin_buttons_container}
       >
-        <img src={GoogleSignIn} className={styles.signin_button} />
+        <img src={GoogleSignIn} alt="" className={styles.signin_button} />
       </ButtonBase>
 
       <Grid2 className={styles.submit_button_container}>

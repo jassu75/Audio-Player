@@ -21,7 +21,7 @@ const useSongHashMap = () => {
 
       localStorage.setItem("songsList", JSON.stringify(songsHashMap));
     }
-  }, [data, dispatch, songsList]);
+  }, [data]);
 
   return { loading, error };
 };

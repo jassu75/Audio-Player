@@ -31,3 +31,11 @@ export const ADD_SONG = gql`
     }
   }
 `;
+
+export const DELETE_SONG = gql`
+  mutation DELETE_SONG($id: uuid!) {
+    delete_audio_details_by_pk(id: $id) {
+      id
+    }
+  }
+`;

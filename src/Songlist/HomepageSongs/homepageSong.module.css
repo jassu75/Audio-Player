@@ -1,10 +1,17 @@
 .song_card {
+  display: flex;
+  flex-direction: row;
+}
+
+.song_card_info {
   border-radius: 8px;
   display: flex;
   flex-direction: row;
   gap: 20px;
   height: 70px;
   cursor: pointer;
+  width: 90%;
+  max-width: 400px;
 }
 
 .song_image img {
@@ -25,4 +32,27 @@
 .song_content {
   padding-top: 10px;
   height: 100%;
+}
+
+.song_actions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.loader {
+  color: #000000;
+}
+
+.menu_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.menu_item_text {
+  color: #000000;
 }

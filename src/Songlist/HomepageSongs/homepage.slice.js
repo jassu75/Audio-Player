@@ -16,8 +16,12 @@ const songsSlice = createSlice({
       state.songs[id] = songWithoutId;
       localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
+    removeSongs: (state, action) => {
+      delete state.songs[action.payload];
+      localStorage.setItem("songsList", JSON.stringify(state.songs));
+    },
   },
 });
 
-export const { setSongs, addSongs } = songsSlice.actions;
+export const { setSongs, addSongs, removeSongs } = songsSlice.actions;
 export default songsSlice.reducer;

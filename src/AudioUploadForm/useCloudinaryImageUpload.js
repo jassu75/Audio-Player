@@ -1,12 +1,9 @@
 import { useState } from "react";
-import defaultMusicNote from "../assets/AudioUploadForm/defaultMusicImage.webp";
 
 const useCloudinaryImageUpload = () => {
   const [loading, setLoading] = useState(false);
 
   const uploadImageToCloudinary = async (image) => {
-    if (!image) return defaultMusicNote;
-
     setLoading(true);
 
     try {

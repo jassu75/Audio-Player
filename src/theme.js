@@ -60,6 +60,11 @@ const theme = createTheme({
       fontSize: "13px",
       fontWeight: 400,
     },
+    MenuItemText: {
+      fontFamily: "Outfit",
+      fontSize: "15px",
+      fontWeight: 400,
+    },
   },
 });
 

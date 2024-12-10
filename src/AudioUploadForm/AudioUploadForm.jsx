@@ -12,6 +12,7 @@ import styles from "./AudioUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
+import defaultMusicNote from "../assets/AudioUploadForm/defaultMusicImage.webp";
 
 const AudioUploadForm = ({ open, onClose }) => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const AudioUploadForm = ({ open, onClose }) => {
           ? await uploadImageToCloudinary(
               new Blob([image], { type: "image/jpeg" })
             )
-          : null;
+          : defaultMusicNote;
 
         const uploadedSong = {
           title: metadata.common.title || file.name.replace(".mp3", ""),

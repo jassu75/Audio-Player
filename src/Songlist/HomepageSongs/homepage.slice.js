@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   songs: {},
+  user: null,
 };
 
 const songsSlice = createSlice({
@@ -20,8 +21,11 @@ const songsSlice = createSlice({
       delete state.songs[action.payload];
       localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
-export const { setSongs, addSongs, removeSongs } = songsSlice.actions;
+export const { setSongs, addSongs, removeSongs, setUser } = songsSlice.actions;
 export default songsSlice.reducer;

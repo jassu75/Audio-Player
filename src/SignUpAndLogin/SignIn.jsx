@@ -1,41 +1,98 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { auth, googleAuthProvider } from "../config/firebase";
 import styles from "./signIn.module.css";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
+import { CHECK_EXISTING_USER } from "../queries";
+import { ADD_USER } from "../mutations";
+import { useDispatch } from "react-redux";
+import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
+
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
+  const [addUser] = useMutation(ADD_USER);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      const { data } = await checkExistingUser({
+        variables: { email },
+      });
 
-      if (user.emailVerified) navigate("/homepage");
-      else alert("Please verify your email and then login");
-    } catch (err) {}
+      if (data && data.users.length > 0) {
+        const userFromDB = data.users[0];
+
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+
+        if (user.emailVerified) {
+          localStorage.setItem("user", JSON.stringify(userFromDB));
+          dispatch(setUser(userFromDB));
+
+          navigate("/homepage");
+        } else {
+          alert("Please verify your email and then login");
+        }
+      } else {
+        alert("User does not exist. Please register first.");
+      }
+    } catch (err) {
+      if (err.code === "auth/invalid-credential") {
+        alert("Incorrect Email ID or Password");
+      } else {
+        console.error("Login failed", err);
+      }
+    }
   };
 
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
 
     try {
-      await signInWithPopup(auth, googleAuthProvider);
-      navigate("/homepage");
+      const userCredential = await signInWithPopup(auth, googleAuthProvider);
+      const user = userCredential.user;
+      const { data } = await checkExistingUser({
+        variables: { email: user.email },
+      });
+
+      if (data && data.users.length > 0) {
+        localStorage.setItem("user", JSON.stringify(data.users[0]));
+        dispatch(setUser(data.users[0]));
+        navigate("/homepage");
+      } else {
+        const newUser = {
+          id: user.uid,
+          email_id: user.email,
+          username: user.displayName || "New User",
+          sign_in_method: "google",
+        };
+
+        await addUser({
+          variables: newUser,
+        });
+
+        localStorage.setItem("user", JSON.stringify(newUser));
+        dispatch(setUser(newUser));
+
+        navigate("/homepage");
+      }
     } catch (err) {
-      console.error("signin failed");
+      console.error("Google Sign-In failed", err);
     }
   };
 
@@ -61,7 +118,11 @@ const SignIn = () => {
         onClick={handleGoogleSignIn}
         className={styles.signin_buttons_container}
       >
-        <img src={GoogleSignIn} alt="" className={styles.signin_button} />
+        <img
+          src={GoogleSignIn}
+          alt="Google Sign-In"
+          className={styles.signin_button}
+        />
       </ButtonBase>
 
       <Grid2 className={styles.submit_button_container}>

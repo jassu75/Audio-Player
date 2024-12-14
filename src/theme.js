@@ -65,6 +65,12 @@ const theme = createTheme({
       fontSize: "15px",
       fontWeight: 400,
     },
+
+    UserWelcomeText: {
+      fontFamily: "Outfit",
+      fontSize: "25px",
+      fontWeight: 700,
+    },
   },
 });
 

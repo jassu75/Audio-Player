@@ -5,6 +5,7 @@ import TopBar from "./TopBar";
 import Grid2 from "@mui/material/Grid2";
 import styles from "./homepage.module.css";
 import { useSelector } from "react-redux";
+import UserWelcome from "./UserWelcome";
 
 const Homepage = () => {
   const { loading, error } = useSongHashMap();
@@ -15,6 +16,7 @@ const Homepage = () => {
 
   return (
     <Grid2 className={styles.container}>
+      <UserWelcome />
       <TopBar />
       <HomepageSongsList songsList={songsList} />
     </Grid2>

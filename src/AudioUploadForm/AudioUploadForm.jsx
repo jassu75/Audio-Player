@@ -59,30 +59,32 @@ const AudioUploadForm = ({ open, onClose }) => {
           : defaultMusicNote;
 
         const uploadedSong = {
-          title: metadata.common.title || file.name.replace(".mp3", ""),
-          artist: metadata.common.artist || "",
-          album: metadata.common.album || "",
+          title: (
+            metadata.common.title || file.name.replace(".mp3", "")
+          ).trim(),
+          artist: (metadata.common.artist || "").trim(),
+          album: (metadata.common.album || "").trim(),
           duration: Math.round(metadata.format.duration || 0),
           genre: metadata.common.genre || "",
-          release_year: String(metadata.common.year) || "",
+          release_year: String(metadata.common.year || "").trim(),
           cover_art: imageUrl,
           audio_url: audioUrl,
         };
 
-        const { data, error } = await addSong({ variables: uploadedSong });
+        await addSong({ variables: uploadedSong });
 
-        if (error) {
-          progress[file.name] = "Error occurred uploading the song";
-        } else {
-          const songId = data.insert_audio_details.returning[0].id;
-          progress[file.name] = "Uploaded successfully";
+        progress[file.name] = "Uploaded successfully";
 
-          const songWithId = { ...uploadedSong, id: songId };
-          setNewSong(songWithId);
-        }
+        const songWithId = { ...uploadedSong };
+        setNewSong(songWithId);
       } catch (error) {
         console.error("Error occurred:", error);
-        progress[file.name] = `Error: ${error.message}`;
+
+        if (error.message.includes("unique constraint")) {
+          progress[file.name] = "Song already exists";
+        } else {
+          progress[file.name] = `Error Occured. Try Again`;
+        }
       }
 
       setUploadProgress({ ...progress });
@@ -100,7 +102,15 @@ const AudioUploadForm = ({ open, onClose }) => {
   }, [newSong, dispatch]);
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal
+      open={open}
+      onClose={(event, reason) => {
+        if (reason === "backdropClick") {
+          return;
+        }
+        onClose();
+      }}
+    >
       <Grid2 className={styles.modal_box}>
         <Typography variant="RedirectText" className={styles.audio_upload_text}>
           Upload Audio Files

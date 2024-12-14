@@ -15,3 +15,15 @@ export const GET_SONGS = gql`
     }
   }
 `;
+
+export const CHECK_EXISTING_USER = gql`
+  query CHECK_EXISTING_USER($email: String!) {
+    users(where: { email_id: { _eq: $email } }) {
+      id
+      username
+      email_id
+      homepage_songs
+      sign_in_method
+    }
+  }
+`;

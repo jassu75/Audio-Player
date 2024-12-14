@@ -1,0 +1,14 @@
+.username_text {
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.welcome_text_container {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}

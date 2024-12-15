@@ -71,11 +71,12 @@ const AudioUploadForm = ({ open, onClose }) => {
           audio_url: audioUrl,
         };
 
-        await addSong({ variables: uploadedSong });
+        const result = await addSong({ variables: uploadedSong });
+        const id = result?.data?.insert_audio_details?.returning?.[0]?.id;
 
         progress[file.name] = "Uploaded successfully";
 
-        const songWithId = { ...uploadedSong };
+        const songWithId = { ...uploadedSong, id };
         setNewSong(songWithId);
       } catch (error) {
         console.error("Error occurred:", error);

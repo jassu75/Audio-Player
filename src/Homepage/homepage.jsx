@@ -6,6 +6,7 @@ import Grid2 from "@mui/material/Grid2";
 import styles from "./homepage.module.css";
 import { useSelector } from "react-redux";
 import UserWelcome from "./UserWelcome";
+import Typography from "@mui/material/Typography";
 
 const Homepage = () => {
   const { loading, error } = useSongHashMap();
@@ -18,6 +19,11 @@ const Homepage = () => {
     <Grid2 className={styles.container}>
       <UserWelcome />
       <TopBar />
+      <Grid2 className={styles.title}>
+        <Typography variant="HomepageTitleText" className={styles.title_text}>
+          Your Songs
+        </Typography>
+      </Grid2>
       <HomepageSongsList songsList={songsList} />
     </Grid2>
   );

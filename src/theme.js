@@ -71,6 +71,11 @@ const theme = createTheme({
       fontSize: "25px",
       fontWeight: 700,
     },
+    HomepageTitleText: {
+      fontFamily: "Outfit",
+      fontSize: "22px",
+      fontWeight: 500,
+    },
   },
 });
 

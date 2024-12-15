@@ -10,7 +10,7 @@ import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
 import { CHECK_EXISTING_USER } from "../queries";
 import { ADD_USER } from "../mutations";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
 
 const SignIn = () => {
@@ -18,6 +18,9 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let userFromDB =
+    useSelector((state) => state.homepage.user) ||
+    JSON.parse(localStorage.getItem("user"));
 
   const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
   const [addUser] = useMutation(ADD_USER);
@@ -26,30 +29,31 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const { data } = await checkExistingUser({
-        variables: { email },
-      });
-
-      if (data && data.users.length > 0) {
-        const userFromDB = data.users[0];
-
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        const user = userCredential.user;
-
-        if (user.emailVerified) {
-          localStorage.setItem("user", JSON.stringify(userFromDB));
-          dispatch(setUser(userFromDB));
-
-          navigate("/homepage");
+      if (!userFromDB || userFromDB.email_id !== email) {
+        const { data } = await checkExistingUser({
+          variables: { email },
+        });
+        if (data && data.users.length > 0) {
+          userFromDB = data.users[0];
         } else {
-          alert("Please verify your email and then login");
+          alert("User does not exist. Please register first.");
+          return;
         }
+      }
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      if (user.emailVerified) {
+        localStorage.setItem("user", JSON.stringify(userFromDB));
+        dispatch(setUser(userFromDB));
+        navigate("/homepage");
       } else {
-        alert("User does not exist. Please register first.");
+        alert("Please verify your email and then login");
       }
     } catch (err) {
       if (err.code === "auth/invalid-credential") {

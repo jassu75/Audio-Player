@@ -13,12 +13,15 @@ import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { CHECK_EXISTING_USER } from "../queries";
 import { ADD_USER } from "../mutations";
+import { useDispatch } from "react-redux";
+import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
   const [addUser] = useMutation(ADD_USER);
@@ -53,6 +56,9 @@ const SignUp = () => {
       await addUser({
         variables: newUser,
       });
+      localStorage.setItem("user", JSON.stringify(newUser));
+      dispatch(setUser(newUser));
+
       await sendEmailVerification(user);
       await signOut(auth);
 

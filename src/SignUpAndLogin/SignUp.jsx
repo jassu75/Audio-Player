@@ -51,6 +51,7 @@ const SignUp = () => {
         email_id: user.email,
         username: username,
         sign_in_method: "email",
+        homepage_songs: [],
       };
 
       await addUser({

@@ -10,6 +10,8 @@ export const ADD_SONG = gql`
     $release_year: String!
     $cover_art: String!
     $audio_url: String!
+    $user_id: String!
+    $homepage_songs: jsonb
   ) {
     insert_audio_details(
       objects: {
@@ -29,6 +31,15 @@ export const ADD_SONG = gql`
         artist
       }
     }
+    update_users(
+      where: { id: { _eq: $user_id } }
+      _set: { homepage_songs: $homepage_songs }
+    ) {
+      returning {
+        id
+        homepage_songs
+      }
+    }
   }
 `;
 
@@ -46,6 +57,7 @@ export const ADD_USER = gql`
     $email_id: String!
     $username: String!
     $sign_in_method: String!
+    $homepage_songs: jsonb
   ) {
     insert_users(
       objects: {
@@ -53,12 +65,27 @@ export const ADD_USER = gql`
         email_id: $email_id
         username: $username
         sign_in_method: $sign_in_method
+        homepage_songs: $homepage_songs
       }
     ) {
       returning {
         id
         email_id
         username
+      }
+    }
+  }
+`;
+
+export const UPDATE_HOMEPAGE_SONGS = gql`
+  mutation UPDATE_HOMEPAGE_SONGS($user_id: String!, $homepage_songs: jsonb) {
+    update_users(
+      where: { id: { _eq: $user_id } }
+      _set: { homepage_songs: $homepage_songs }
+    ) {
+      returning {
+        id
+        homepage_songs
       }
     }
   }

@@ -27,3 +27,11 @@ export const CHECK_EXISTING_USER = gql`
     }
   }
 `;
+
+export const GET_HOMEPAGE_SONGS = gql`
+  query GET_HOMEPAGE_SONGS($userId: uuid!) {
+    user(id: $userId) {
+      homepage_songs
+    }
+  }
+`;

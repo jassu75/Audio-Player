@@ -47,16 +47,14 @@ const HomepageSong = ({ songKey, song }) => {
   return (
     <Grid2 className={styles.song_card}>
       <Grid2 className={styles.song_card_info} onClick={handleSongClick}>
-        <Grid2 className={styles.song_image}>
-          <img src={song.cover_art} alt={song.title} />
-        </Grid2>
+        <img className={styles.song_image} src={song?.cover_art} alt="" />
         <Grid2 className={styles.song_content}>
           <Grid2 className={styles.song_title}>
             <Typography
               variant="homepageSongTitle"
               className={styles.song_title}
             >
-              {song.title}
+              {songKey}
             </Typography>
           </Grid2>
           <Grid2 className={styles.song_artist}>
@@ -64,7 +62,7 @@ const HomepageSong = ({ songKey, song }) => {
               variant="homepageSongArtist"
               className={styles.song_artist}
             >
-              {song.artist}
+              {song?.artist}
             </Typography>
           </Grid2>
         </Grid2>

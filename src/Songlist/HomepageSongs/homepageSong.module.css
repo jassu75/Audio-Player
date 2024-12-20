@@ -14,7 +14,7 @@
   max-width: 400px;
 }
 
-.song_image img {
+.song_image {
   aspect-ratio: 1;
   height: 100%;
   object-fit: cover;
@@ -22,6 +22,10 @@
 
 .song_title {
   color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .song_artist {

@@ -12,8 +12,8 @@ const useSongHashMap = () => {
   useEffect(() => {
     if (data?.audio_details && Object.keys(songsList).length === 0) {
       const songsHashMap = data.audio_details.reduce((acc, song) => {
-        const { id, ...rest } = song;
-        acc[id] = rest;
+        const { title, ...rest } = song;
+        acc[title] = rest;
         return acc;
       }, {});
 

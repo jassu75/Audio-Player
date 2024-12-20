@@ -10,7 +10,9 @@ import Typography from "@mui/material/Typography";
 
 const Homepage = () => {
   const { loading, error } = useSongHashMap();
-  const songsList = useSelector((state) => state.homepage.songs);
+  const homepageSongsList = useSelector(
+    (state) => state.homepage?.user?.homepage_songs
+  );
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -24,7 +26,7 @@ const Homepage = () => {
           Your Songs
         </Typography>
       </Grid2>
-      <HomepageSongsList songsList={songsList} />
+      <HomepageSongsList songsList={homepageSongsList} />
     </Grid2>
   );
 };

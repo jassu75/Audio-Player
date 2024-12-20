@@ -18,9 +18,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let userFromDB =
-    useSelector((state) => state.homepage.user) ||
-    JSON.parse(localStorage.getItem("user"));
+  let userFromDB = useSelector((state) => state.homepage.user);
 
   const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
   const [addUser] = useMutation(ADD_USER);
@@ -84,6 +82,7 @@ const SignIn = () => {
           email_id: user.email,
           username: user.displayName || "New User",
           sign_in_method: "google",
+          homepage_songs: [],
         };
 
         await addUser({

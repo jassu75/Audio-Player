@@ -5,11 +5,12 @@ import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
 
 const AudioPlayer = () => {
   const id = useParams();
   const songId = id.id;
-  const songsList = JSON.parse(localStorage.getItem("songsList"));
+  const songsList = useSelector((state) => state.homepage.songs);
   const song = songsList[songId];
   const songIds = Object.keys(songsList);
 
@@ -133,14 +134,10 @@ const AudioPlayer = () => {
 
   return (
     <Grid2 className={styles.audioPlayer}>
-      <img
-        src={song?.cover_art}
-        alt={song?.title}
-        className={styles.song_image}
-      />
+      <img src={song?.cover_art} alt="" className={styles.song_image} />
       <Grid2 className={styles.song_details}>
         <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
+          <Typography variant="audioPlayerSongTitle">{songId}</Typography>
         </Grid2>
         <Grid2 className={styles.song_artist}>
           <Typography variant="audioPlayerSongArtist">

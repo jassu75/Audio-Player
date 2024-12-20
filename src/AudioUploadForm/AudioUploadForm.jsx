@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import UploadFile from "@mui/icons-material/UploadFile";
 import * as musicMetadata from "music-metadata-browser";
 import { useMutation } from "@apollo/client";
-import { ADD_SONG } from "../mutations";
+import { ADD_SONG, UPDATE_HOMEPAGE_SONGS } from "../mutations";
 import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
-import { addSongs } from "../Songlist/HomepageSongs/homepage.slice";
+import {
+  addHomepageSongTitles,
+  addSongs,
+} from "../Songlist/HomepageSongs/homepage.slice";
 import styles from "./AudioUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -23,6 +26,9 @@ const AudioUploadForm = ({ open, onClose }) => {
   const [newSong, setNewSong] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [addSong] = useMutation(ADD_SONG);
+  const [updateHomepageSongs] = useMutation(UPDATE_HOMEPAGE_SONGS);
+  const songTitles = useSelector((state) => Object.keys(state.homepage.songs));
+  const user = useSelector((state) => state.homepage.user);
 
   const handleFileSelection = (event) => {
     const files = Array.from(event.target.files);
@@ -44,10 +50,31 @@ const AudioUploadForm = ({ open, onClose }) => {
       try {
         progress[file.name] = "Uploading...";
         setUploadProgress({ ...progress });
+        const metadata = await musicMetadata.parseBlob(file);
+        const songTitle =
+          metadata.common.title || file.name.replace(".mp3", "").trim();
+        if (songTitles.includes(songTitle)) {
+          if (user.homepage_songs.includes(songTitle)) {
+            progress[file.name] = "Song already exists";
+          } else {
+            const updatedHomepageSongsList = [
+              ...user.homepage_songs,
+              songTitle,
+            ];
+            dispatch(addHomepageSongTitles(songTitle));
+            await updateHomepageSongs({
+              variables: {
+                user_id: user.id,
+                homepage_songs: updatedHomepageSongsList,
+              },
+            });
+            progress[file.name] = "Uploaded successfully";
+          }
+          continue;
+        }
 
         const audioUrl = await uploadAudioToCloudinary(file);
 
-        const metadata = await musicMetadata.parseBlob(file);
         const image = metadata.common.picture
           ? metadata.common.picture[0].data
           : null;
@@ -57,6 +84,9 @@ const AudioUploadForm = ({ open, onClose }) => {
               new Blob([image], { type: "image/jpeg" })
             )
           : defaultMusicNote;
+
+        dispatch(addHomepageSongTitles(songTitle));
+        const updatedTitles = [...user.homepage_songs, songTitle];
 
         const uploadedSong = {
           title: (
@@ -69,6 +99,8 @@ const AudioUploadForm = ({ open, onClose }) => {
           release_year: String(metadata.common.year || "").trim(),
           cover_art: imageUrl,
           audio_url: audioUrl,
+          user_id: user.id,
+          homepage_songs: updatedTitles,
         };
 
         const result = await addSong({ variables: uploadedSong });
@@ -81,11 +113,7 @@ const AudioUploadForm = ({ open, onClose }) => {
       } catch (error) {
         console.error("Error occurred:", error);
 
-        if (error.message.includes("unique constraint")) {
-          progress[file.name] = "Song already exists";
-        } else {
-          progress[file.name] = `Error Occured. Try Again`;
-        }
+        progress[file.name] = `Error Occurred. Try Again`;
       }
 
       setUploadProgress({ ...progress });

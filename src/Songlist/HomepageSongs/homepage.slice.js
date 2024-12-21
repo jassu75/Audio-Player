@@ -26,10 +26,7 @@ const songsSlice = createSlice({
       state.user.homepage_songs.push(action.payload);
       localStorage.setItem("user", JSON.stringify(state.user));
     },
-    removeSongs: (state, action) => {
-      delete state.songs[action.payload];
-      localStorage.setItem("songsList", JSON.stringify(state.songs));
-    },
+
     setUser: (state, action) => {
       state.user = action.payload;
     },
@@ -39,7 +36,7 @@ const songsSlice = createSlice({
 export const {
   setSongs,
   addSongs,
-  removeSongs,
+  removeHomepageSong,
   setUser,
   setHomepageSongTitles,
   addHomepageSongTitles,

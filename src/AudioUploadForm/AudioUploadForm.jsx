@@ -27,8 +27,9 @@ const AudioUploadForm = ({ open, onClose }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [addSong] = useMutation(ADD_SONG);
   const [updateHomepageSongs] = useMutation(UPDATE_HOMEPAGE_SONGS);
-  const songTitles = useSelector((state) => Object.keys(state.homepage.songs));
+  const allSongs = useSelector((state) => state.homepage.songs);
   const user = useSelector((state) => state.homepage.user);
+  const songTitles = Object.keys(allSongs);
 
   const handleFileSelection = (event) => {
     const files = Array.from(event.target.files);

@@ -7,6 +7,8 @@ import styles from "./homepage.module.css";
 import { useSelector } from "react-redux";
 import UserWelcome from "./UserWelcome";
 import Typography from "@mui/material/Typography";
+import { Backdrop, CircularProgress } from "@mui/material";
+import ErrorPage from "./ErrorPage";
 
 const Homepage = () => {
   const { loading, error } = useSongHashMap();
@@ -14,8 +16,13 @@ const Homepage = () => {
     (state) => state.homepage?.user?.homepage_songs
   );
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading)
+    return (
+      <Backdrop className={styles.loader_backdrop} open={loading}>
+        <CircularProgress className={styles.loader_spinner} />
+      </Backdrop>
+    );
+  if (error) return <ErrorPage />;
 
   return (
     <Grid2 className={styles.container}>

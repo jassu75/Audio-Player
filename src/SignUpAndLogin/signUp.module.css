@@ -43,3 +43,13 @@
 .submit_button {
   padding-top: 20px;
 }
+
+.loader_backdrop {
+  color: #fff;
+  z-index: 1301;
+  backdrop-filter: blur(4px);
+}
+
+.loader_spinner {
+  color: #fff;
+}

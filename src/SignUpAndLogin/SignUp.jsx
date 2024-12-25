@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "./signUp.module.css";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
 import {
   createUserWithEmailAndPassword,
@@ -21,6 +23,7 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
   const dispatch = useDispatch();
 
   const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
@@ -28,6 +31,7 @@ const SignUp = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
 
     try {
       const { data } = await checkExistingUser({
@@ -36,6 +40,7 @@ const SignUp = () => {
 
       if (data && data.users.length > 0) {
         alert("Email already exists. Please login.");
+        setLoading(false);
         return;
       }
 
@@ -49,7 +54,7 @@ const SignUp = () => {
       const newUser = {
         id: user.uid,
         email_id: user.email,
-        username: username,
+        username,
         sign_in_method: "email",
         homepage_songs: [],
       };
@@ -78,43 +83,50 @@ const SignUp = () => {
         alert("An error occurred during registration. Please try again.");
       }
       console.error("Error during registration:", err.message);
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
   return (
-    <form className={styles.signup_form} onSubmit={handleRegister}>
-      <input
-        className={styles.signup_input}
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        className={styles.signup_input}
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        className={styles.signup_input}
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <Grid2 className={styles.submit_button_container}>
-        <ButtonBase type="submit">
-          <Typography className={styles.signup_button} variant="button">
-            Register
-          </Typography>
-        </ButtonBase>
-      </Grid2>
-    </form>
+    <>
+      <form className={styles.signup_form} onSubmit={handleRegister}>
+        <input
+          className={styles.signup_input}
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          className={styles.signup_input}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          className={styles.signup_input}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <Grid2 className={styles.submit_button_container}>
+          <ButtonBase type="submit" disabled={loading}>
+            <Typography className={styles.signup_button} variant="button">
+              Register
+            </Typography>
+          </ButtonBase>
+        </Grid2>
+      </form>
+      <Backdrop className={styles.loader_backdrop} open={loading}>
+        <CircularProgress className={styles.loader_spinner} />
+      </Backdrop>
+    </>
   );
 };
 

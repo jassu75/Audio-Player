@@ -6,6 +6,8 @@ import { auth, googleAuthProvider } from "../config/firebase";
 import styles from "./signIn.module.css";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
 import { CHECK_EXISTING_USER } from "../queries";
@@ -16,6 +18,7 @@ import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let userFromDB = useSelector((state) => state.homepage.user);
@@ -25,6 +28,7 @@ const SignIn = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       if (!userFromDB || userFromDB.email_id !== email) {
@@ -35,6 +39,7 @@ const SignIn = () => {
           userFromDB = data.users[0];
         } else {
           alert("User does not exist. Please register first.");
+          setLoading(false);
           return;
         }
       }
@@ -59,11 +64,14 @@ const SignIn = () => {
       } else {
         console.error("Login failed", err);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const userCredential = await signInWithPopup(auth, googleAuthProvider);
@@ -96,46 +104,55 @@ const SignIn = () => {
       }
     } catch (err) {
       console.error("Google Sign-In failed", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form className={styles.signin_form} onSubmit={handleLogin}>
-      <input
-        className={styles.signin_input}
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        className={styles.signin_input}
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <ButtonBase
-        onClick={handleGoogleSignIn}
-        className={styles.signin_buttons_container}
-      >
-        <img
-          src={GoogleSignIn}
-          alt="Google Sign-In"
-          className={styles.signin_button}
+    <>
+      <form className={styles.signin_form} onSubmit={handleLogin}>
+        <input
+          className={styles.signin_input}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
-      </ButtonBase>
+        <input
+          className={styles.signin_input}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <Grid2 className={styles.submit_button_container}>
-        <ButtonBase type="submit">
-          <Typography className={styles.submit_button} variant="LoginButton">
-            Login
-          </Typography>
+        <ButtonBase
+          onClick={handleGoogleSignIn}
+          className={styles.signin_buttons_container}
+        >
+          <img
+            src={GoogleSignIn}
+            alt="Google Sign-In"
+            className={styles.signin_button}
+          />
         </ButtonBase>
-      </Grid2>
-    </form>
+
+        <Grid2 className={styles.submit_button_container}>
+          <ButtonBase type="submit">
+            <Typography className={styles.submit_button} variant="LoginButton">
+              Login
+            </Typography>
+          </ButtonBase>
+        </Grid2>
+      </form>
+
+      <Backdrop className={styles.loader_backdrop} open={loading}>
+        <CircularProgress className={styles.loader_spinner} />
+      </Backdrop>
+    </>
   );
 };
 

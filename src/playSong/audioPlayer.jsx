@@ -10,9 +10,10 @@ import { useSelector } from "react-redux";
 const AudioPlayer = () => {
   const id = useParams();
   const songId = id.id;
-  const songsList = useSelector((state) => state.homepage.songs);
-  const song = songsList[songId];
-  const songIds = Object.keys(songsList);
+  const user = useSelector((state) => state.homepage.user);
+  const songsList = user.homepage_songs;
+  const allSongs = useSelector((state) => state.homepage.songs);
+  const song = allSongs[songId];
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -38,11 +39,11 @@ const AudioPlayer = () => {
       updateDuration();
 
       const handleEnded = () => {
-        const currentIndex = songIds.indexOf(songId);
-        const nextIndex = (currentIndex + 1) % songIds.length;
-        const nextSongId = songIds[nextIndex];
+        const currentIndex = songsList.indexOf(songId);
+        const nextIndex = (currentIndex + 1) % songsList.length;
+        const nextSongId = songsList[nextIndex];
 
-        const nextSong = songsList[nextSongId];
+        const nextSong = allSongs[nextSongId];
         player.src = nextSong.audio_url;
 
         const playNextSong = () => {
@@ -63,7 +64,7 @@ const AudioPlayer = () => {
         player.removeEventListener("ended", handleEnded);
       };
     }
-  }, [audioPlayer, navigate, songId, songsList, songIds]);
+  }, [audioPlayer, navigate, songId, allSongs, songsList]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -113,9 +114,9 @@ const AudioPlayer = () => {
   };
 
   const backButton = () => {
-    const currentIndex = songIds.indexOf(songId);
-    const prevIndex = (currentIndex - 1 + songIds.length) % songIds.length; // Circular navigation
-    const prevSongId = songIds[prevIndex];
+    const currentIndex = songsList.indexOf(songId);
+    const prevIndex = (currentIndex - 1 + songsList.length) % songsList.length; // Circular navigation
+    const prevSongId = songsList[prevIndex];
 
     setIsPlaying(false);
     navigate(`/songs/${prevSongId}`, { replace: true });
@@ -123,9 +124,9 @@ const AudioPlayer = () => {
   };
 
   const forwardButton = () => {
-    const currentIndex = songIds.indexOf(songId);
-    const nextIndex = (currentIndex + 1) % songIds.length; // Circular navigation
-    const nextSongId = songIds[nextIndex];
+    const currentIndex = songsList.indexOf(songId);
+    const nextIndex = (currentIndex + 1) % songsList.length; // Circular navigation
+    const nextSongId = songsList[nextIndex];
 
     setIsPlaying(false);
     navigate(`/songs/${nextSongId}`, { replace: true });

@@ -10,8 +10,6 @@ export const ADD_SONG = gql`
     $release_year: String!
     $cover_art: String!
     $audio_url: String!
-    $user_id: String!
-    $homepage_songs: jsonb
   ) {
     insert_audio_details(
       objects: {
@@ -29,15 +27,6 @@ export const ADD_SONG = gql`
         id
         title
         artist
-      }
-    }
-    update_users(
-      where: { id: { _eq: $user_id } }
-      _set: { homepage_songs: $homepage_songs }
-    ) {
-      returning {
-        id
-        homepage_songs
       }
     }
   }

@@ -39,7 +39,7 @@ const AudioUploadForm = ({ open, onClose }) => {
   const handleUpload = async () => {
     setIsUploading(true);
     const progress = {};
-
+    const homepageSongList = Array.from(user.homepage_songs);
     for (const fileObj of selectedFiles) {
       const { file } = fileObj;
 
@@ -58,15 +58,12 @@ const AudioUploadForm = ({ open, onClose }) => {
           if (user.homepage_songs.includes(songTitle)) {
             progress[file.name] = "Song already exists";
           } else {
-            const updatedHomepageSongsList = [
-              ...user.homepage_songs,
-              songTitle,
-            ];
+            homepageSongList.push(songTitle);
             dispatch(addHomepageSongTitles(songTitle));
             await updateHomepageSongs({
               variables: {
                 user_id: user.id,
-                homepage_songs: updatedHomepageSongsList,
+                homepage_songs: homepageSongList,
               },
             });
             progress[file.name] = "Uploaded successfully";
@@ -86,9 +83,6 @@ const AudioUploadForm = ({ open, onClose }) => {
             )
           : defaultMusicNote;
 
-        dispatch(addHomepageSongTitles(songTitle));
-        const updatedTitles = [...user.homepage_songs, songTitle];
-
         const uploadedSong = {
           title: (
             metadata.common.title || file.name.replace(".mp3", "")
@@ -100,17 +94,22 @@ const AudioUploadForm = ({ open, onClose }) => {
           release_year: String(metadata.common.year || "").trim(),
           cover_art: imageUrl,
           audio_url: audioUrl,
-          user_id: user.id,
-          homepage_songs: updatedTitles,
         };
 
         const result = await addSong({ variables: uploadedSong });
         const id = result?.data?.insert_audio_details?.returning?.[0]?.id;
-
-        progress[file.name] = "Uploaded successfully";
+        homepageSongList.push(songTitle);
+        dispatch(addHomepageSongTitles(songTitle));
+        await updateHomepageSongs({
+          variables: {
+            user_id: user.id,
+            homepage_songs: homepageSongList,
+          },
+        });
 
         const songWithId = { ...uploadedSong, id };
         setNewSong(songWithId);
+        progress[file.name] = "Uploaded successfully";
       } catch (error) {
         console.error("Error occurred:", error);
 

@@ -9,6 +9,7 @@ import UserWelcome from "./UserWelcome";
 import Typography from "@mui/material/Typography";
 import { Backdrop, CircularProgress } from "@mui/material";
 import ErrorPage from "./ErrorPage";
+import EmptySongsPage from "./EmptySongs";
 
 const Homepage = () => {
   const { loading, error } = useSongHashMap();
@@ -28,12 +29,15 @@ const Homepage = () => {
     <Grid2 className={styles.container}>
       <UserWelcome />
       <TopBar />
+
       <Grid2 className={styles.title}>
         <Typography variant="HomepageTitleText" className={styles.title_text}>
           Your Songs
         </Typography>
       </Grid2>
-      <HomepageSongsList songsList={homepageSongsList} />
+      {!homepageSongsList || Object.keys(homepageSongsList).length !== 0 ?
+        <HomepageSongsList songsList={homepageSongsList} /> : <EmptySongsPage />
+      }
     </Grid2>
   );
 };

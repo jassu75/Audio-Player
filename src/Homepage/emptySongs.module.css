@@ -1,0 +1,23 @@
+.redirect_text_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    gap: 15px;
+    width: 80%;
+    align-self: center;
+}
+
+.redirect_text {
+    color: #D3D3D3;
+    text-align: justify;
+    text-align-last: center;
+    font-style: italic;
+}
+
+.redirect_text_heading {
+    color: #D3D3D3;
+    text-align: justify;
+    text-align-last: center;
+}

@@ -1,0 +1,72 @@
+.modal_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1e1e2f;
+    padding: 25px 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    margin: 100px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    gap: 15px;
+}
+
+.edit_title_text {
+    color: #ffffff;
+}
+
+.input {
+    background-color: #29293e;
+    width: 95%;
+}
+
+.error_message_container {
+    display: flex;
+    width: 95%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.error_text {
+    color: #FF0000;
+}
+
+.action_buttons_container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.cancel_button {
+    border-radius: 8px;
+    background-color: #333333;
+    padding: 10px 20px;
+}
+
+.cancel_button_text {
+    color: #ffffff;
+}
+
+.cancel_button:hover {
+    background-color: #7d3fbe;
+}
+
+.done_button {
+    border-radius: 8px;
+    background-color: #6a8dff;
+    padding: 10px 20px;
+}
+
+.done_button_text {
+    color: #ffffff;
+}
+
+.done_button:hover {
+    background-color: #5472d3;
+}
+
+.disabled_button {
+    background-color: #808080;
+}

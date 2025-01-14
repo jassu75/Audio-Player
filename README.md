@@ -1,7 +1,10 @@
 # Audio Player
 
+## Website Link
+[Visit the Application](https://tejas-music-app.netlify.app/)
+
 ## Introduction
-This application allows users to play their favorite music for free. Users can upload their music files and listen to them seamlessly. The songs will continuously play one after the other. Users can navigate forward and backward between songs.
+This application allows users to play their favorite music for free. Users can upload their music files and listen to them seamlessly. The songs will continuously play one after the other. Users can upload their favorite audio files, navigate forward and backward between songs, delete songs, and much more!
 
 ## Directions
 

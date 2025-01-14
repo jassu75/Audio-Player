@@ -33,4 +33,5 @@ The user needs to choose audio files to upload from their system. Multiple audio
 You can now view and listen to your uploaded songs. Dive into your favorite music. **Cheers!**
 
 ### Deleting a Song
+![image](https://github.com/user-attachments/assets/a4caa23c-78b3-4598-b0b6-746e46920d0a)
 To delete a song from the list, click on the three-dot icon beside the song and then click the **Delete** button. The song will be removed from your list.

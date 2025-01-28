@@ -54,7 +54,7 @@ const SignIn = () => {
       if (user.emailVerified) {
         localStorage.setItem("user", JSON.stringify(userFromDB));
         dispatch(setUser(userFromDB));
-        navigate("/homepage");
+        navigate("/homepage", { replace: true });
       } else {
         alert("Please verify your email and then login");
       }
@@ -83,7 +83,7 @@ const SignIn = () => {
       if (data && data.users.length > 0) {
         localStorage.setItem("user", JSON.stringify(data.users[0]));
         dispatch(setUser(data.users[0]));
-        navigate("/homepage");
+        navigate("/homepage", { replace: true });
       } else {
         const newUser = {
           id: user.uid,
@@ -101,7 +101,7 @@ const SignIn = () => {
         localStorage.setItem("user", JSON.stringify(newUser));
         dispatch(setUser(newUser));
 
-        navigate("/homepage");
+        navigate("/homepage", { replace: true });
       }
     } catch (err) {
       console.error("Google Sign-In failed", err);

@@ -8,7 +8,6 @@ import styles from "./createPlaylistTitle.module.css"
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_PLAYLIST, UPDATE_PLAYLIST_IDS } from "../../mutations";
 import { useMutation } from "@apollo/client";
-import defaultPlaylistArt from "../../assets/Homepage/PlaylistCover.png"
 import { addPlaylistDetails, addPlaylistIds } from "../HomepageSongs/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -22,6 +21,20 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
     const [addPlaylistSong] = useMutation(ADD_PLAYLIST);
     const [updatePlaylistIds] = useMutation(UPDATE_PLAYLIST_IDS);
 
+    const images = [
+        "/images/playlist1.png",
+        "/images/playlist2.png",
+        "/images/playlist3.jpeg",
+        "/images/playlist4.jpeg",
+        "/images/playlist5.png",
+        "/images/playlist6.png",
+        "/images/playlist7.jpeg",
+        "/images/playlist8.jpeg",
+        "/images/playlist9.png",
+        "/images/playlist10.jpeg",
+
+    ]
+
     const handleDone = async () => {
         if (!title) {
             setErrorMessage("Enter a playlist title");
@@ -30,9 +43,11 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
 
             setLoading(true);
             const homepagePlaylists = Array.from(user.playlist_ids);
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+
             const uploadPlaylist = {
                 playlist_title: title,
-                playlist_cover_art: defaultPlaylistArt,
+                playlist_cover_art: randomImage,
                 playlist_songs: []
             }
             const result = await addPlaylistSong({ variables: uploadPlaylist });
@@ -82,7 +97,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
                                 color: "white",
                             },
                             "& .MuiInputLabel-root.Mui-focused": {
-                                color: "white",
+                                color: "yellow",
                             },
                         }} />
                     <Grid2 className={styles.error_message_container}>

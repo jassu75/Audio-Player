@@ -91,6 +91,7 @@ const SignIn = () => {
           username: user.displayName || "New User",
           sign_in_method: "google",
           homepage_songs: [],
+          playlist_ids: [],
         };
 
         await addUser({

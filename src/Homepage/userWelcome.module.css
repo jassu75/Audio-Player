@@ -8,8 +8,11 @@
 
 .welcome_text_container {
   display: flex;
-  max-width: 100%;
-  align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   padding: 10px;
+  align-items: center;
+  gap: 5px;
+  width: 100vw;
+  padding-top: 10px;
+
 }

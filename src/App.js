@@ -6,7 +6,7 @@ import theme from "./theme";
 import AudioPlayer from "./playSong/audioPlayer";
 import UserAuthentication from "./SignUpAndLogin/UserAuthentication";
 import DirectToLogin from "./SignUpAndLogin/DirectToLogin";
-import CreatePlaylistTitle from "./Songlist/HomepageSongs/CreatePlaylistTitle";
+import SelectedPlaylist from "./playSong/SelectedPlaylist";
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -17,7 +17,8 @@ function App() {
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/songs/:id" element={<AudioPlayer />} />
             <Route path="/redirect" element={<DirectToLogin />} />
-            <Route path="/edit" element={<CreatePlaylistTitle />} />
+            <Route path="/playlists/:id" element={<SelectedPlaylist />} />
+
 
           </Routes>
         </div>

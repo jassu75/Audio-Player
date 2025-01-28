@@ -23,15 +23,20 @@ export const CHECK_EXISTING_USER = gql`
       username
       email_id
       homepage_songs
+      playlist_ids
       sign_in_method
     }
   }
 `;
 
-export const GET_HOMEPAGE_SONGS = gql`
-  query GET_HOMEPAGE_SONGS($userId: uuid!) {
-    user(id: $userId) {
-      homepage_songs
+export const GET_PLAYLISTS = gql`
+  query GET_PLAYLISTS {
+    playlist_details {
+      id
+      playlist_title
+      playlist_cover_art
+      playlist_songs
     }
   }
 `;
+

@@ -3,6 +3,8 @@ import Typography from "@mui/material/Typography";
 import styles from "./userWelcome.module.css";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import Grid2 from "@mui/material/Grid2";
+import Avatar from "@mui/material/Avatar";
+import defaultAvatar from "../assets/Homepage/DefaultAvatar.jpeg"
 
 const UserWelcome = () => {
   const { user, loading } = useFetchUserDetails();
@@ -10,13 +12,14 @@ const UserWelcome = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <Grid2 className={styles.welcome_text_container}>
-      {user ? (
+    user ? (
+      <Grid2 className={styles.welcome_text_container}>
+        <Avatar src={defaultAvatar} />
         <Typography variant="UserWelcomeText" className={styles.username_text}>
-          Hello {user.username}
+          {user.username}
         </Typography>
-      ) : null}
-    </Grid2>
+      </Grid2>
+    ) : null
   );
 };
 

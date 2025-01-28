@@ -70,3 +70,9 @@
 .disabled_button {
     background-color: #808080;
 }
+
+.loader_backdrop {
+    color: #fff;
+    z-index: 1301;
+    backdrop-filter: blur(1px);
+}

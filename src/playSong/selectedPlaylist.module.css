@@ -1,0 +1,20 @@
+.playlist_songs {
+    display: flex;
+    flex-direction: column;
+    padding: 9px;
+
+}
+
+.title_text {
+    color: #D3D3D3;
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: underline;
+    padding: 15px;
+}

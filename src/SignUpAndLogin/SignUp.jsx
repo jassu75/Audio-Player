@@ -57,6 +57,7 @@ const SignUp = () => {
         username,
         sign_in_method: "email",
         homepage_songs: [],
+        playlist_ids: []
       };
 
       await addUser({

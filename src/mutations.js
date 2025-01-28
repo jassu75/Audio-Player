@@ -32,9 +32,31 @@ export const ADD_SONG = gql`
   }
 `;
 
-export const DELETE_SONG = gql`
-  mutation DELETE_SONG($id: uuid!) {
-    delete_audio_details_by_pk(id: $id) {
+export const ADD_PLAYLIST = gql`
+  mutation ADD_PLAYLIST(
+    $playlist_title: String!
+    $playlist_cover_art: String!
+    $playlist_songs:jsonb
+  ) {
+    insert_playlist_details(
+      objects: {
+        playlist_title: $playlist_title
+        playlist_cover_art: $playlist_cover_art
+        playlist_songs:$playlist_songs
+      }
+    ) {
+      returning {
+        id
+        playlist_title
+        playlist_cover_art
+      }
+    }
+  }
+`;
+
+export const DELETE_PLAYLIST = gql`
+  mutation DELETE_PLAYLIST($id: uuid!) {
+    delete_playlist_details_by_pk(id: $id) {
       id
     }
   }
@@ -47,6 +69,7 @@ export const ADD_USER = gql`
     $username: String!
     $sign_in_method: String!
     $homepage_songs: jsonb
+    $playlist_ids:jsonb
   ) {
     insert_users(
       objects: {
@@ -55,6 +78,7 @@ export const ADD_USER = gql`
         username: $username
         sign_in_method: $sign_in_method
         homepage_songs: $homepage_songs
+        playlist_ids:$playlist_ids
       }
     ) {
       returning {
@@ -75,6 +99,34 @@ export const UPDATE_HOMEPAGE_SONGS = gql`
       returning {
         id
         homepage_songs
+      }
+    }
+  }
+`;
+
+export const UPDATE_PLAYLIST_SONGS = gql`
+  mutation UPDATE_PLAYLIST_SONGS($playlist_id: uuid!, $playlist_songs: jsonb) {
+    update_playlist_details(
+      where: { id: { _eq: $playlist_id } }
+      _set: { playlist_songs: $playlist_songs }
+    ) {
+      returning {
+        id
+        playlist_songs
+      }
+    }
+  }
+`;
+
+export const UPDATE_PLAYLIST_IDS = gql`
+  mutation UPDATE_PLAYLIST_IDS($user_id: String!, $playlist_ids: jsonb) {
+    update_users(
+      where: { id: { _eq: $user_id } }
+      _set: { playlist_ids: $playlist_ids }
+    ) {
+      returning {
+        id
+        playlist_ids
       }
     }
   }

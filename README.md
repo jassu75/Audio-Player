@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Audio Player
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Website Link
+[Visit the Application](https://tejas-music-app.netlify.app/)
 
-## Available Scripts
+## Introduction
+This application allows users to play their favorite music for free. Users can upload their music files and listen to them seamlessly. The songs will continuously play one after the other. Users can upload their favorite audio files, navigate forward and backward between songs, delete songs, and much more!
 
-In the project directory, you can run:
+## Directions
 
-### `npm start`
+### Signup
+![Signup](https://github.com/user-attachments/assets/55e24145-1987-4e4e-9f24-6c8b503784d7)  
+Users need to sign up using their email ID and create a password. Once done, click the **Signup** button. Alternatively, users can create an account and log in directly using their Google account.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Email Verification
+![Email Verification](https://github.com/user-attachments/assets/c4d03faa-7368-4de7-9079-4ddd9ae23dd3)  
+Users will need to verify their email if they choose the email and password method. Only after verification will they be allowed to log in.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Login
+![Login](https://github.com/user-attachments/assets/23072c9b-60ec-40b6-bc0a-2c3ca1bb198c)  
+Once the email is verified, the user can log into their account through the **Login** page. They can also use their Google account for this process.
 
-### `npm test`
+### Homepage
+![Homepage](https://github.com/user-attachments/assets/c6dc2dfb-6c31-413a-93d5-6bdb8a840f6b)  
+This is how the homepage looks initially. The user can upload audio files of their favorite songs by clicking on the **Upload** button.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Audio Uploader
+![Audio Uploader](https://github.com/user-attachments/assets/905fd053-ceb4-4d9f-b4c9-98c72a605dad)  
+The user needs to choose audio files to upload from their system. Multiple audio files can be selected simultaneously to speed up the process. Once done, click the **Upload** button and wait until all files are uploaded. The upload status will be updated in the window.
 
-### `npm run build`
+### View Your Uploaded Songs
+![Uploaded Songs](https://github.com/user-attachments/assets/17462d87-7b3d-4f9d-afc4-632c7e6a6315)  
+You can now view and listen to your uploaded songs. Dive into your favorite music. **Cheers!**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Deleting a Song
+![image](https://github.com/user-attachments/assets/a4caa23c-78b3-4598-b0b6-746e46920d0a)
+To delete a song from the list, click on the three-dot icon beside the song and then click the **Delete** button. The song will be removed from your list.

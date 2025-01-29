@@ -32,8 +32,7 @@ const useFetchUserDetails = () => {
   }, [user, dispatch]);
 
   return {
-    user: user || (data && data.users.length > 0 ? data.users[0] : "Guest"),
-    loading,
+    user: user || (data && data.users.length > 0 ? data.users[0] : "Guest")
   };
 };
 

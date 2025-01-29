@@ -7,12 +7,23 @@
 }
 
 .welcome_text_container {
+  gap: 5px;
   display: flex;
   flex-direction: row;
-  padding: 10px;
-  align-items: center;
-  gap: 5px;
-  width: 100vw;
-  padding-top: 10px;
+}
 
+.user_welcome_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 98vw;
+  align-items: center;
+  padding: 10px 0 10px 10px;
+}
+
+.refresh_button {
+  width: 30px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  cursor: pointer;
 }

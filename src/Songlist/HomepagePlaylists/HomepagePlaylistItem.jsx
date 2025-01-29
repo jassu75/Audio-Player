@@ -9,6 +9,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useMutation } from "@apollo/client";
 import { DELETE_PLAYLIST, UPDATE_PLAYLIST_IDS } from "../../mutations";
 import { deletePlaylistDetails, setPlaylistIds } from "../HomepageSongs/homepage.slice";
+import CantDeletePlaylist from "./CantDeletePlaylist";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
     const navigate = useNavigate();
@@ -19,6 +20,12 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
     const [deletePlaylist] = useMutation(DELETE_PLAYLIST);
     const [updatePlaylistIds] = useMutation(UPDATE_PLAYLIST_IDS);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+
+    const closeModal = () => setIsModalOpen(false);
+
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -28,10 +35,11 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
     };
 
     const handleDeletePlaylist = async () => {
-        setLoading(true);
         try {
 
             if (!playlistItem?.playlist_songs || playlistItem.playlist_songs.length === 0) {
+                setLoading(true);
+
 
                 const updatedPlaylistIds = user.playlist_ids.filter(
                     (playlistId) => playlistId !== playlistKey
@@ -48,13 +56,17 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
                     },
                 });
                 await deletePlaylist({ variables: { id: playlistKey } });
+                setLoading(false);
 
+            }
+
+            else {
+                openModal();
             }
 
         } catch (error) {
             console.error("Error deleting song:", error);
         }
-        setLoading(false);
         handleMenuClose();
     };
 
@@ -63,68 +75,71 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
     };
 
     return (
-        <div className={styles.playlist_card_container}>
-            <div
-                className={styles.playlist_card}
-                onClick={handlePlaylistClick}
-            >
-                <img
-                    className={styles.playlist_image}
-                    src={playlistItem?.playlist_cover_art}
-                    alt=""
-                />
-                <Grid2 className={styles.playlist_content}>
-                    <Grid2 >
-                        <Typography
-                            variant="homepageSongTitle"
-                            className={styles.playlist_title}
-                        >
-                            {playlistItem?.playlist_title}
-                        </Typography>
+        <>
+            <div className={styles.playlist_card_container}>
+                <div
+                    className={styles.playlist_card}
+                    onClick={handlePlaylistClick}
+                >
+                    <img
+                        className={styles.playlist_image}
+                        src={playlistItem?.playlist_cover_art}
+                        alt=""
+                    />
+                    <Grid2 className={styles.playlist_content}>
+                        <Grid2 >
+                            <Typography
+                                variant="homepageSongTitle"
+                                className={styles.playlist_title}
+                            >
+                                {playlistItem?.playlist_title}
+                            </Typography>
+                        </Grid2>
                     </Grid2>
-                </Grid2>
-            </div>
-            <Grid2 className={styles.playlist_actions}>
-                <IconButton
-                    onClick={handleMenuOpen}
-                    sx={{ color: "White" }}
-                >
-                    <MoreVertIcon />
-                </IconButton>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                    slotProps={{
-                        root: { sx: { ".MuiList-root": { padding: 0 } } },
-                    }}
-                >
-                    <MenuItem onClick={handleDeletePlaylist} className={styles.menu_item}>
-                        {loading ? (
-                            <>
+                </div>
+                <Grid2 className={styles.playlist_actions}>
+                    <IconButton
+                        onClick={handleMenuOpen}
+                        sx={{ color: "White" }}
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                        slotProps={{
+                            root: { sx: { ".MuiList-root": { padding: 0 } } },
+                        }}
+                    >
+                        <MenuItem onClick={handleDeletePlaylist} className={styles.menu_item}>
+                            {loading ? (
+                                <>
+                                    <Typography
+                                        variant="MenuItemText"
+                                        className={styles.menu_item_text}
+                                    >
+                                        Deleting
+                                    </Typography>
+                                    <CircularProgress
+                                        className={styles.loader}
+                                        size={20}
+                                    />
+                                </>
+                            ) : (
                                 <Typography
                                     variant="MenuItemText"
                                     className={styles.menu_item_text}
                                 >
-                                    Deleting
+                                    Delete
                                 </Typography>
-                                <CircularProgress
-                                    className={styles.loader}
-                                    size={20}
-                                />
-                            </>
-                        ) : (
-                            <Typography
-                                variant="MenuItemText"
-                                className={styles.menu_item_text}
-                            >
-                                Delete
-                            </Typography>
-                        )}
-                    </MenuItem>
-                </Menu>
-            </Grid2>
-        </div>
+                            )}
+                        </MenuItem>
+                    </Menu>
+                </Grid2>
+            </div>
+            {isModalOpen ? <CantDeletePlaylist open={isModalOpen} onClose={closeModal} /> : null}
+        </>
     );
 };
 

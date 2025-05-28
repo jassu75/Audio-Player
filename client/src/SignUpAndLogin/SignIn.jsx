@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { useLazyQuery, useMutation } from "@apollo/client";
 import { auth, googleAuthProvider } from "../config/firebase";
 import styles from "./signIn.module.css";
 import Typography from "@mui/material/Typography";
@@ -10,10 +9,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
-import { CHECK_EXISTING_USER } from "../queries";
 import { ADD_USER } from "../mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
+import axios from "axios";
+import { useMutation } from "@apollo/client";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +23,6 @@ const SignIn = () => {
   const dispatch = useDispatch();
   let userFromDB = useSelector((state) => state.homepage.user);
 
-  const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
   const [addUser] = useMutation(ADD_USER);
 
   const handleLogin = async (e) => {
@@ -32,11 +31,20 @@ const SignIn = () => {
 
     try {
       if (!userFromDB || userFromDB.email_id !== email) {
-        const { data } = await checkExistingUser({
-          variables: { email },
-        });
-        if (data && data.users.length > 0) {
-          userFromDB = data.users[0];
+        const data = { email: email };
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        const axiosOptions = {
+          headers: headers,
+        };
+        const response = await axios.post(
+          "/api/checkExistingUser",
+          data,
+          axiosOptions
+        );
+        if (response.data && response.data.users.length > 0) {
+          userFromDB = response.data.users[0];
         } else {
           alert("User does not exist. Please register first.");
           setLoading(false);
@@ -76,13 +84,22 @@ const SignIn = () => {
     try {
       const userCredential = await signInWithPopup(auth, googleAuthProvider);
       const user = userCredential.user;
-      const { data } = await checkExistingUser({
-        variables: { email: user.email },
-      });
+      const data = { email: user.email };
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const axiosOptions = {
+        headers: headers,
+      };
+      const response = await axios.post(
+        "/api/checkExistingUser",
+        data,
+        axiosOptions
+      );
 
-      if (data && data.users.length > 0) {
-        localStorage.setItem("user", JSON.stringify(data.users[0]));
-        dispatch(setUser(data.users[0]));
+      if (response.data && response.data.users.length > 0) {
+        localStorage.setItem("user", JSON.stringify(response.data.users[0]));
+        dispatch(setUser(response.data.users[0]));
         navigate("/homepage", { replace: true });
       } else {
         const newUser = {

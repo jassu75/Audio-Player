@@ -10,13 +10,13 @@ import {
   sendEmailVerification,
   signOut,
 } from "firebase/auth";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
-import { CHECK_EXISTING_USER } from "../queries";
 import { ADD_USER } from "../mutations";
 import { useDispatch } from "react-redux";
 import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
+import axios from "axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -26,7 +26,6 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const dispatch = useDispatch();
 
-  const [checkExistingUser] = useLazyQuery(CHECK_EXISTING_USER);
   const [addUser] = useMutation(ADD_USER);
 
   const handleRegister = async (e) => {
@@ -34,11 +33,20 @@ const SignUp = () => {
     setLoading(true); // Start loading
 
     try {
-      const { data } = await checkExistingUser({
-        variables: { email },
-      });
+      const data = { email: email };
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const axiosOptions = {
+        headers: headers,
+      };
+      const response = await axios.post(
+        "/api/checkExistingUser",
+        data,
+        axiosOptions
+      );
 
-      if (data && data.users.length > 0) {
+      if (response.data && response.data.users.length > 0) {
         alert("Email already exists. Please login.");
         setLoading(false);
         return;
@@ -57,7 +65,7 @@ const SignUp = () => {
         username,
         sign_in_method: "email",
         homepage_songs: [],
-        playlist_ids: []
+        playlist_ids: [],
       };
 
       await addUser({

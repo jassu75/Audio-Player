@@ -1,39 +1,44 @@
-import { useQuery } from "@apollo/client";
-import { CHECK_EXISTING_USER } from "../queries";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
 import { auth } from "../config/firebase";
-import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
+import { useEffect } from "react";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
-
-  const [user, setUserState] = useState(
-    () => JSON.parse(localStorage.getItem("user")) || null
-  );
-
-  const { data, loading } = useQuery(CHECK_EXISTING_USER, {
-    variables: { email: auth.currentUser?.email },
-    skip: !!user || !auth.currentUser?.email,
-    onCompleted: (fetchedData) => {
-      if (fetchedData && fetchedData.users.length > 0) {
-        const userDetails = fetchedData.users[0];
-        setUserState(userDetails);
-        localStorage.setItem("user", JSON.stringify(userDetails));
-        dispatch(setUser(userDetails));
-      }
-    },
-  });
+  const user = useSelector((state) => state.homepage.user);
 
   useEffect(() => {
-    if (user) {
-      dispatch(setUser(user));
-    }
-  }, [user, dispatch]);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!user && firebaseUser?.email) {
+        try {
+          const data = { email: firebaseUser?.email };
+          const headers = {
+            "Content-Type": "application/json",
+          };
+          const axiosOptions = {
+            headers: headers,
+          };
+          const response = await axios.post(
+            "/api/checkExistingUser",
+            data,
+            axiosOptions
+          );
 
-  return {
-    user: user || (data && data.users.length > 0 ? data.users[0] : "Guest")
-  };
+          if (response.data?.users?.length > 0) {
+            const userDetails = response.data.users[0];
+            localStorage.setItem("user", JSON.stringify(userDetails));
+            dispatch(setUser(userDetails));
+          }
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [dispatch, user]);
 };
 
 export default useFetchUserDetails;

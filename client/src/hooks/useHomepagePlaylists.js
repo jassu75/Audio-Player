@@ -1,29 +1,49 @@
-import { useQuery } from "@apollo/client";
-import { GET_PLAYLISTS } from "../queries";
 import { useDispatch, useSelector } from "react-redux";
 import { setPlaylistDetails } from "../Songlist/HomepageSongs/homepage.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const useHomepagePlaylists = () => {
-    const { data, loading, error } = useQuery(GET_PLAYLISTS);
-    const dispatch = useDispatch();
-    const playlistSongs = useSelector((state) => state.homepage.playlists);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
+  const playlistSongs = useSelector((state) => state.homepage.playlists);
 
-    useEffect(() => {
-        if (data?.playlist_details && Object.keys(playlistSongs).length === 0) {
-            const playlistHashMap = data.playlist_details.reduce((acc, song) => {
-                const { id, ...rest } = song;
-                acc[id] = rest;
-                return acc;
-            }, {});
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+        const url = "/api/getPlaylists";
+        const response = await axios.get(url);
+        if (
+          response.data?.playlist_details &&
+          Object.keys(playlistSongs).length === 0
+        ) {
+          const playlistHashMap = response.data.playlist_details.reduce(
+            (acc, song) => {
+              const { id, ...rest } = song;
+              acc[id] = rest;
+              return acc;
+            },
+            {}
+          );
 
-            dispatch(setPlaylistDetails(playlistHashMap));
+          dispatch(setPlaylistDetails(playlistHashMap));
 
-            localStorage.setItem("playlists", JSON.stringify(playlistHashMap));
+          localStorage.setItem("playlists", JSON.stringify(playlistHashMap));
         }
-    }, [data]);
+      } catch (error) {
+        setError(true);
+        console.error("Error fetching songs", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlaylists();
+  }, [dispatch]);
 
-    return { loading, error };
+  return { loading, error };
 };
 
 export default useHomepagePlaylists;

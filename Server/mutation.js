@@ -1,6 +1,4 @@
-import { gql } from "@apollo/client";
-
-export const ADD_SONG = gql`
+export const ADD_SONG = `
   mutation ADD_SONG(
     $title: String!
     $artist: String!
@@ -32,17 +30,17 @@ export const ADD_SONG = gql`
   }
 `;
 
-export const ADD_PLAYLIST = gql`
+export const ADD_PLAYLIST = `
   mutation ADD_PLAYLIST(
     $playlist_title: String!
     $playlist_cover_art: String!
-    $playlist_songs:jsonb
+    $playlist_songs: jsonb
   ) {
     insert_playlist_details(
       objects: {
         playlist_title: $playlist_title
         playlist_cover_art: $playlist_cover_art
-        playlist_songs:$playlist_songs
+        playlist_songs: $playlist_songs
       }
     ) {
       returning {
@@ -54,7 +52,7 @@ export const ADD_PLAYLIST = gql`
   }
 `;
 
-export const DELETE_PLAYLIST = gql`
+export const DELETE_PLAYLIST = `
   mutation DELETE_PLAYLIST($id: uuid!) {
     delete_playlist_details_by_pk(id: $id) {
       id
@@ -62,35 +60,7 @@ export const DELETE_PLAYLIST = gql`
   }
 `;
 
-export const ADD_USER = gql`
-  mutation ADD_USER(
-    $id: String!
-    $email_id: String!
-    $username: String!
-    $sign_in_method: String!
-    $homepage_songs: jsonb
-    $playlist_ids:jsonb
-  ) {
-    insert_users(
-      objects: {
-        id: $id
-        email_id: $email_id
-        username: $username
-        sign_in_method: $sign_in_method
-        homepage_songs: $homepage_songs
-        playlist_ids:$playlist_ids
-      }
-    ) {
-      returning {
-        id
-        email_id
-        username
-      }
-    }
-  }
-`;
-
-export const UPDATE_HOMEPAGE_SONGS = gql`
+export const UPDATE_HOMEPAGE_SONGS = `
   mutation UPDATE_HOMEPAGE_SONGS($user_id: String!, $homepage_songs: jsonb) {
     update_users(
       where: { id: { _eq: $user_id } }
@@ -104,7 +74,7 @@ export const UPDATE_HOMEPAGE_SONGS = gql`
   }
 `;
 
-export const UPDATE_PLAYLIST_SONGS = gql`
+export const UPDATE_PLAYLIST_SONGS = `
   mutation UPDATE_PLAYLIST_SONGS($playlist_id: uuid!, $playlist_songs: jsonb) {
     update_playlist_details(
       where: { id: { _eq: $playlist_id } }
@@ -118,7 +88,7 @@ export const UPDATE_PLAYLIST_SONGS = gql`
   }
 `;
 
-export const UPDATE_PLAYLIST_IDS = gql`
+export const UPDATE_PLAYLIST_IDS = `
   mutation UPDATE_PLAYLIST_IDS($user_id: String!, $playlist_ids: jsonb) {
     update_users(
       where: { id: { _eq: $user_id } }
@@ -127,6 +97,34 @@ export const UPDATE_PLAYLIST_IDS = gql`
       returning {
         id
         playlist_ids
+      }
+    }
+  }
+`;
+
+export const ADD_USER = `
+  mutation ADD_USER(
+    $id: String!
+    $email_id: String!
+    $username: String!
+    $sign_in_method: String!
+    $homepage_songs: jsonb
+    $playlist_ids: jsonb
+  ) {
+    insert_users(
+      objects: {
+        id: $id
+        email_id: $email_id
+        username: $username
+        sign_in_method: $sign_in_method
+        homepage_songs: $homepage_songs
+        playlist_ids: $playlist_ids
+      }
+    ) {
+      returning {
+        id
+        email_id
+        username
       }
     }
   }

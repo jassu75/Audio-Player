@@ -7,16 +7,14 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useMutation } from "@apollo/client";
-import { UPDATE_HOMEPAGE_SONGS } from "../../mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { setHomepageSongTitles } from "./homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress"; // Import the loader
+import axios from "axios";
 
 const HomepageSong = ({ songKey, song }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [updateHomepageSongs] = useMutation(UPDATE_HOMEPAGE_SONGS);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.homepage.user);
@@ -39,12 +37,17 @@ const HomepageSong = ({ songKey, song }) => {
       const updatedHomepageSongs = user.homepage_songs.filter(
         (songTitle) => songTitle !== songKey
       );
-      await updateHomepageSongs({
-        variables: {
+      await axios.post(
+        "/api/updateHomepageSong",
+        {
           user_id: user.id,
           homepage_songs: updatedHomepageSongs,
         },
-      });
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       dispatch(setHomepageSongTitles(updatedHomepageSongs));
     } catch (error) {
       console.error("Error deleting song:", error);

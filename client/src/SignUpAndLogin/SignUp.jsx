@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./signUp.module.css";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -10,10 +10,8 @@ import {
   sendEmailVerification,
   signOut,
 } from "firebase/auth";
-import { useMutation } from "@apollo/client";
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
-import { ADD_USER } from "../mutations";
 import { useDispatch } from "react-redux";
 import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
 import axios from "axios";
@@ -26,26 +24,18 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const dispatch = useDispatch();
 
-  const [addUser] = useMutation(ADD_USER);
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true); // Start loading
 
     try {
-      const data = { email: email };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      const axiosOptions = {
-        headers: headers,
-      };
       const response = await axios.post(
         "/api/checkExistingUser",
-        data,
-        axiosOptions
+        { email },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
-
       if (response.data && response.data.users.length > 0) {
         alert("Email already exists. Please login.");
         setLoading(false);
@@ -68,9 +58,13 @@ const SignUp = () => {
         playlist_ids: [],
       };
 
-      await addUser({
-        variables: newUser,
-      });
+      await axios.post(
+        "/api/addUser",
+        { newUser },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       localStorage.setItem("user", JSON.stringify(newUser));
       dispatch(setUser(newUser));
 

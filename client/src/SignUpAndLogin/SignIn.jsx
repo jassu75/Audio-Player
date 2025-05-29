@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, googleAuthProvider } from "../config/firebase";
@@ -9,11 +9,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
-import { ADD_USER } from "../mutations";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
 import axios from "axios";
-import { useMutation } from "@apollo/client";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -23,25 +21,18 @@ const SignIn = () => {
   const dispatch = useDispatch();
   let userFromDB = useSelector((state) => state.homepage.user);
 
-  const [addUser] = useMutation(ADD_USER);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       if (!userFromDB || userFromDB.email_id !== email) {
-        const data = { email: email };
-        const headers = {
-          "Content-Type": "application/json",
-        };
-        const axiosOptions = {
-          headers: headers,
-        };
         const response = await axios.post(
           "/api/checkExistingUser",
-          data,
-          axiosOptions
+          { email },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
         );
         if (response.data && response.data.users.length > 0) {
           userFromDB = response.data.users[0];
@@ -84,17 +75,12 @@ const SignIn = () => {
     try {
       const userCredential = await signInWithPopup(auth, googleAuthProvider);
       const user = userCredential.user;
-      const data = { email: user.email };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      const axiosOptions = {
-        headers: headers,
-      };
       const response = await axios.post(
         "/api/checkExistingUser",
-        data,
-        axiosOptions
+        { email: user.email },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
 
       if (response.data && response.data.users.length > 0) {
@@ -110,11 +96,13 @@ const SignIn = () => {
           homepage_songs: [],
           playlist_ids: [],
         };
-
-        await addUser({
-          variables: newUser,
-        });
-
+        await axios.post(
+          "/api/addUser",
+          { newUser },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         localStorage.setItem("user", JSON.stringify(newUser));
         dispatch(setUser(newUser));
 

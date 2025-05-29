@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import UploadFile from "@mui/icons-material/UploadFile";
 import * as musicMetadata from "music-metadata-browser";
-import { useMutation } from "@apollo/client";
-import { ADD_SONG, UPDATE_HOMEPAGE_SONGS } from "../mutations";
 import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
+import axios from "axios";
 import {
   addHomepageSongTitles,
   addSongs,
@@ -25,8 +24,6 @@ const AudioUploadForm = ({ open, onClose }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [newSong, setNewSong] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [addSong] = useMutation(ADD_SONG);
-  const [updateHomepageSongs] = useMutation(UPDATE_HOMEPAGE_SONGS);
   const allSongs = useSelector((state) => state.homepage.songs);
   const user = useSelector((state) => state.homepage.user);
   const songTitles = Object.keys(allSongs);
@@ -60,12 +57,16 @@ const AudioUploadForm = ({ open, onClose }) => {
           } else {
             homepageSongList.push(songTitle);
             dispatch(addHomepageSongTitles(songTitle));
-            await updateHomepageSongs({
-              variables: {
+            await axios.post(
+              "/api/updateHomepageSong",
+              {
                 user_id: user.id,
                 homepage_songs: homepageSongList,
               },
-            });
+              {
+                headers: { "Content-Type": "application/json" },
+              }
+            );
             progress[file.name] = "Uploaded successfully";
           }
           continue;
@@ -96,16 +97,26 @@ const AudioUploadForm = ({ open, onClose }) => {
           audio_url: audioUrl,
         };
 
-        const result = await addSong({ variables: uploadedSong });
-        const id = result?.data?.insert_audio_details?.returning?.[0]?.id;
+        const response = await axios.post(
+          "/api/addSong",
+          { uploadedSong },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        const id = response.data?.insert_audio_details?.returning?.[0]?.id;
         homepageSongList.push(songTitle);
         dispatch(addHomepageSongTitles(songTitle));
-        await updateHomepageSongs({
-          variables: {
+        await axios.post(
+          "/api/updateHomepageSong",
+          {
             user_id: user.id,
             homepage_songs: homepageSongList,
           },
-        });
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
 
         const songWithId = { ...uploadedSong, id };
         setNewSong(songWithId);

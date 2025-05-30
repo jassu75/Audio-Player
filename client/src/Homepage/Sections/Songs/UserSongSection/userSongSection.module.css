@@ -1,0 +1,18 @@
+.homepage_songs {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 9px 9px 9px;
+}
+
+.title_text {
+  color: #d3d3d3;
+}
+
+.title {
+  padding: 0 15px 15px 15px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}

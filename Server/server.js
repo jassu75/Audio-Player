@@ -15,6 +15,8 @@ import updateHomepageSong from "./routes/mutationRoutes/updateHomepageSongs.js";
 import updatePlaylistSong from "./routes/mutationRoutes/updatePlaylistSongs.js";
 import updatePlaylistId from "./routes/mutationRoutes/updatePlaylistId.js";
 
+import fetchTopSongs from "./routes/jamendoRoutes/fetchTopSongs.js";
+
 const app = express();
 dotenv.config();
 app.use(express.json());
@@ -31,6 +33,7 @@ app.listen(process.env.PORT, () => {
 app.use(checkExistingUserRoute);
 app.use(getSongs);
 app.use(getPlaylists);
+
 app.use(addUser);
 app.use(addSong);
 app.use(addPlaylist);
@@ -38,6 +41,8 @@ app.use(deletePlaylist);
 app.use(updateHomepageSong);
 app.use(updatePlaylistSong);
 app.use(updatePlaylistId);
+
+app.use(fetchTopSongs);
 
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(buildFilePath, "index.html"));

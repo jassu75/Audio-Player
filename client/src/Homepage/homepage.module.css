@@ -4,29 +4,3 @@
   height: 100vh;
   padding: 3px;
 }
-
-.homepage_songs {
-  display: flex;
-  flex-direction: column;
-  padding: 9px;
-
-}
-
-.homepage_playlists {
-  display: flex;
-  flex-direction: column;
-  padding: 9px;
-}
-
-.title_text {
-  color: #D3D3D3;
-}
-
-.title {
-  padding: 0 15px 15px 15px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-}

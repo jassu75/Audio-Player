@@ -6,12 +6,16 @@ import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
+import useJamendoSongs from "../hooks/useJamendoSongs";
+import { Backdrop, CircularProgress } from "@mui/material";
+import ErrorPage from "../Homepage/ErrorPage";
 
 const JamendoAudioPlayer = () => {
+  const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const id = useParams();
   const [songId, setSongId] = useState(id.id);
   const songsList = useSelector((state) => state.homepage.jamendoSongs);
-  const song = songsList[songId];
+  const song = songsList?.find((song) => song.id === songId);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -37,12 +41,11 @@ const JamendoAudioPlayer = () => {
       updateDuration();
 
       const handleEnded = () => {
-        const songKeys = Object.keys(songsList).sort(); // consistent order
-        const currentIndex = songKeys.indexOf(songId);
-        const nextIndex = (currentIndex + 1) % songKeys.length;
-        const nextSongId = songKeys[nextIndex];
+        const currentIndex = songsList.findIndex((song) => song.id === songId);
+        const nextIndex = (currentIndex + 1) % songsList.length;
+        const nextSongId = songsList[nextIndex].id;
         setSongId(nextSongId);
-        const nextSong = songsList[nextSongId];
+        const nextSong = songsList[nextIndex];
 
         player.src = nextSong.audio_url;
 
@@ -114,10 +117,9 @@ const JamendoAudioPlayer = () => {
   };
 
   const backButton = () => {
-    const songKeys = Object.keys(songsList);
-    const currentIndex = songKeys.indexOf(String(songId));
+    const currentIndex = songsList.findIndex((song) => song.id === songId);
     const prevSongId =
-      songKeys[(currentIndex - 1 + songKeys.length) % songKeys.length];
+      songsList[(currentIndex - 1 + songsList.length) % songsList.length].id;
 
     setSongId(prevSongId);
     setIsPlaying(false);
@@ -126,9 +128,8 @@ const JamendoAudioPlayer = () => {
   };
 
   const forwardButton = () => {
-    const songKeys = Object.keys(songsList);
-    const currentIndex = songKeys.indexOf(String(songId));
-    const nextSongId = songKeys[(currentIndex + 1) % songKeys.length];
+    const currentIndex = songsList.findIndex((song) => song.id === songId);
+    const nextSongId = songsList[(currentIndex + 1) % songsList.length].id;
 
     setSongId(nextSongId);
 
@@ -137,12 +138,20 @@ const JamendoAudioPlayer = () => {
     resetProgressBar();
   };
 
+  if (jamendoSongsLoading)
+    return (
+      <Backdrop className={styles.loader_backdrop} open={jamendoSongsLoading}>
+        <CircularProgress className={styles.loader_spinner} />
+      </Backdrop>
+    );
+  if (jamendoSongsError) return <ErrorPage />;
+
   return (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
       <Grid2 className={styles.song_details}>
         <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{song.title}</Typography>
+          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
         </Grid2>
         <Grid2 className={styles.song_artist}>
           <Typography variant="audioPlayerSongArtist">

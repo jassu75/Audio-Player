@@ -3,7 +3,7 @@
 }
 
 .container {
-  padding-top: 9px;
+  padding: 9px;
 }
 .song_list {
   display: flex;

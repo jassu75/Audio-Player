@@ -3,7 +3,7 @@ import styles from "../SignUpAndLogin/directToLogin.module.css";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { CircularProgress } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ErrorPage = () => {
   const [loading, setLoading] = useState(false);

@@ -21,9 +21,30 @@
   padding: 10px 0 10px 10px;
 }
 
-.refresh_button {
-  width: 30px;
-  aspect-ratio: 1;
-  object-fit: cover;
-  cursor: pointer;
+.upload_button {
+  color: #ffffff;
+  font-size: 35px;
+}
+
+.upload_actions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.menu_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.menu_item_text {
+  color: #000000;
+}
+
+.divider {
+  border-top: 1px solid #000000;
 }

@@ -1,4 +1,7 @@
-import { ButtonBase, Grid2, Typography } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
+import ButtonBase from "@mui/material/ButtonBase";
+
 import styles from "./homepageSongSection.module.css";
 import { useState } from "react";
 import UserSongSection from "../UserSongSection/UserSongSection";

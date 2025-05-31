@@ -1,5 +1,4 @@
 import { Grid2, Typography } from "@mui/material";
-import PlaylistUploadButton from "../../../CustomButtons/PlaylistCreationButton";
 import { useSelector } from "react-redux";
 import styles from "./homepagePlaylistSection.module.css";
 import HomepagePlaylist from "../../../Songlist/HomepagePlaylists/HomepagePlaylist";
@@ -15,7 +14,6 @@ const HomepagePlaylistSection = () => {
         <Typography variant="HomepageTitleText" className={styles.title_text}>
           Your Playlists
         </Typography>
-        <PlaylistUploadButton />
       </Grid2>
       {!homepagePlaylists || Object.keys(homepagePlaylists).length !== 0 ? (
         <HomepagePlaylist playlistDetails={homepagePlaylists} />

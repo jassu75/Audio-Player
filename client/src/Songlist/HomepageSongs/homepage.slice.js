@@ -5,6 +5,7 @@ const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   playlists: JSON.parse(localStorage.getItem("playlists")) || {},
   jamendoSongs: null,
+  audiusAlbums: null,
 };
 
 const songsSlice = createSlice({
@@ -68,6 +69,10 @@ const songsSlice = createSlice({
     setJamendoSongs: (state, action) => {
       state.jamendoSongs = action.payload;
     },
+
+    setAudiusAlbums: (state, action) => {
+      state.audiusAlbums = action.payload;
+    },
   },
 });
 
@@ -86,5 +91,6 @@ export const {
   setPlaylistSongs,
   addPlaylistSongs,
   setJamendoSongs,
+  setAudiusAlbums,
 } = songsSlice.actions;
 export default songsSlice.reducer;

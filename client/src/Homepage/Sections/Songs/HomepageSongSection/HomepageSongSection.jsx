@@ -30,7 +30,7 @@ const HomepageSongSection = () => {
             }`}
             variant="SignInAndSignUpButton"
           >
-            Jamendo Songs
+            Popular Songs
           </Typography>
         </ButtonBase>
       </nav>

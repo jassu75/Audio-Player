@@ -1,0 +1,33 @@
+.album_card_container {
+  position: relative;
+}
+
+.album_card {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  cursor: pointer;
+  padding: 5px;
+  width: 170px;
+  position: relative;
+}
+
+.album_image {
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px #ffffff solid;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.album_content {
+  padding-left: 7px;
+}
+
+.album_title {
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

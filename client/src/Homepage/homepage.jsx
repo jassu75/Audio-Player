@@ -9,17 +9,26 @@ import useHomepagePlaylists from "../hooks/useHomepagePlaylists";
 import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
 import HomepageSongSection from "./Sections/Songs/HomepageSongSection/HomepageSongSection";
 import useJamendoSongs from "../hooks/useJamendoSongs";
+import useAudiusAlbums from "../hooks/useAudiusAlbums";
+import HomepageAlbumSection from "./Sections/Albums/HomepageAlbumSection";
 
 const Homepage = () => {
   const { homepageSongsLoading, homepageSongsError } = useHomepageSongs();
   const { homepagePlaylistsLoading, homepagePlaylistsError } =
     useHomepagePlaylists();
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
+  const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
 
   const loading =
-    homepageSongsLoading || homepagePlaylistsLoading || jamendoSongsLoading;
+    homepageSongsLoading ||
+    homepagePlaylistsLoading ||
+    jamendoSongsLoading ||
+    audiusAlbumsLoading;
   const error =
-    homepageSongsError || homepagePlaylistsError || jamendoSongsError;
+    homepageSongsError ||
+    homepagePlaylistsError ||
+    jamendoSongsError ||
+    audiusAlbumsError;
 
   if (loading)
     return (
@@ -34,6 +43,7 @@ const Homepage = () => {
       <UserWelcome />
 
       <HomepagePlaylistSection />
+      <HomepageAlbumSection />
 
       <HomepageSongSection />
     </Grid2>

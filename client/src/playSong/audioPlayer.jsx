@@ -54,7 +54,7 @@ const AudioPlayer = () => {
 
         player.addEventListener("canplaythrough", playNextSong, { once: true });
 
-        navigate(`/songs/${nextSongId}`, { replace: true });
+        navigate(`/user/song/${nextSongId}`, { replace: true });
         resetProgressBar();
       };
 
@@ -119,7 +119,7 @@ const AudioPlayer = () => {
     const prevSongId = songsList[prevIndex];
 
     setIsPlaying(false);
-    navigate(`/songs/${prevSongId}`, { replace: true });
+    navigate(`/user/song/${prevSongId}`, { replace: true });
     resetProgressBar();
   };
 
@@ -129,7 +129,7 @@ const AudioPlayer = () => {
     const nextSongId = songsList[nextIndex];
 
     setIsPlaying(false);
-    navigate(`/songs/${nextSongId}`, { replace: true });
+    navigate(`/user/song/${nextSongId}`, { replace: true });
     resetProgressBar();
   };
 

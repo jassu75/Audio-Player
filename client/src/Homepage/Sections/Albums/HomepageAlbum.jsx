@@ -7,7 +7,7 @@ const HomepageAlbum = ({ albumKey, album }) => {
   const navigate = useNavigate();
 
   const handleAlbumClick = () => {
-    navigate(`/jamendo/albums/${albumKey}`);
+    navigate(`/album/${albumKey}`);
   };
 
   return (

@@ -20,7 +20,7 @@ const HomepageSong = ({ songKey, song }) => {
   const user = useSelector((state) => state.homepage.user);
 
   const handleSongClick = () => {
-    navigate(`/songs/${songKey}`);
+    navigate(`/user/song/${songKey}`);
   };
 
   const handleMenuOpen = (event) => {

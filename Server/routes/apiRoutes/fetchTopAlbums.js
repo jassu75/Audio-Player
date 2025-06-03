@@ -8,6 +8,7 @@ router.get("/api/audius/fetchTopAlbums", async (req, res) => {
     const url = `${audiusUrl}/v1/playlists/trending`;
     const params = {
       time: "allTime",
+      limit: 30,
     };
 
     const response = await axios.get(url, { params: params });

@@ -16,8 +16,8 @@ function App() {
           <Routes>
             <Route path="/" element={<UserAuthentication />} />
             <Route path="/homepage" element={<Homepage />} />
-            <Route path="/songs/:id" element={<AudioPlayer />} />
-            <Route path="/jamendo/songs/:id" element={<JamendoAudioPlayer />} />
+            <Route path="/user/song/:id" element={<AudioPlayer />} />
+            <Route path="/song/:id" element={<JamendoAudioPlayer />} />
             <Route path="/redirect" element={<DirectToLogin />} />
             <Route path="/playlists/:id" element={<SelectedPlaylist />} />
           </Routes>

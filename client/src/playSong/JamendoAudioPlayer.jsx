@@ -57,7 +57,7 @@ const JamendoAudioPlayer = () => {
 
         player.addEventListener("canplaythrough", playNextSong, { once: true });
 
-        navigate(`/jamendo/songs/${nextSongId}`, { replace: true });
+        navigate(`/song/${nextSongId}`, { replace: true });
         resetProgressBar();
       };
 
@@ -123,7 +123,7 @@ const JamendoAudioPlayer = () => {
 
     setSongId(prevSongId);
     setIsPlaying(false);
-    navigate(`/jamendo/songs/${prevSongId}`, { replace: true });
+    navigate(`/song/${prevSongId}`, { replace: true });
     resetProgressBar();
   };
 
@@ -134,7 +134,7 @@ const JamendoAudioPlayer = () => {
     setSongId(nextSongId);
 
     setIsPlaying(false);
-    navigate(`/jamendo/songs/${nextSongId}`, { replace: true });
+    navigate(`/song/${nextSongId}`, { replace: true });
     resetProgressBar();
   };
 

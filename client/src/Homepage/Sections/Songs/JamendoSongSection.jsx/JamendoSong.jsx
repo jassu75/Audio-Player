@@ -7,7 +7,7 @@ const JamendoSong = ({ songKey, song }) => {
   const navigate = useNavigate();
 
   const handleSongClick = () => {
-    navigate(`/jamendo/songs/${songKey}`);
+    navigate(`/song/${songKey}`);
   };
 
   return (

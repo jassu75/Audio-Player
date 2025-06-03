@@ -22,7 +22,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
   const playlistSongList = Array.from(playlistSongs);
 
   const handleSongClick = () => {
-    navigate(`/songs/${songKey}`);
+    navigate(`/user/song/${songKey}`);
   };
 
   const handleMenuOpen = (event) => {

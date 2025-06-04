@@ -7,7 +7,7 @@ const HomepageAlbum = ({ albumKey, album }) => {
   const navigate = useNavigate();
 
   const handleAlbumClick = () => {
-    navigate(`/album/${albumKey}`);
+    navigate(`/album/${encodeURIComponent(album.title)}-${albumKey}`);
   };
 
   return (

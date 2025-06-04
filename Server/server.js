@@ -18,6 +18,7 @@ import updatePlaylistId from "./routes/mutationRoutes/updatePlaylistId.js";
 
 import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
+import fetchAlbumSongs from "./routes/apiRoutes/fetchAlbumSongs.js";
 
 const app = express();
 dotenv.config();
@@ -42,6 +43,7 @@ app.use(updatePlaylistId);
 
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);
+app.use(fetchAlbumSongs);
 
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(buildFilePath, "index.html"));
@@ -51,7 +53,7 @@ const startServer = async () => {
   const response = await axios.get("https://api.audius.co");
   app.locals.audiusUrl = response.data.data[0];
   app.listen(process.env.PORT, () => {
-    console.log("Server started successfully", process.env.PORT);
+    console.log("Server started successfully", app.locals.audiusUrl);
   });
 };
 

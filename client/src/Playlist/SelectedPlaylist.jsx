@@ -8,8 +8,7 @@ import PlaylistUploadButton from "../CustomButtons/PlaylistUploadButton";
 import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 
 const SelectedPlaylist = () => {
-  const id = useParams();
-  const playlistId = id.id;
+  const { playlistId } = useParams();
   const allPlaylist = useSelector((state) => state.homepage.playlists);
   const playlistSongs = allPlaylist[playlistId].playlist_songs;
   const playlistTitle = allPlaylist[playlistId].playlist_title;

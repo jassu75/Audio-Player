@@ -1,18 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./audioPlayer.module.css";
+import styles from "./audiusAudioPlayer.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
+import useAudiusAlbumSong from "../hooks/useAudiusAlbumSongs";
+import { Backdrop, CircularProgress } from "@mui/material";
+import ErrorPage from "../Homepage/ErrorPage";
 
-const AudioPlayer = () => {
-  const { songId } = useParams();
-  const user = useSelector((state) => state.homepage.user);
-  const songsList = user.homepage_songs;
-  const allSongs = useSelector((state) => state.homepage.songs);
-  const song = allSongs[songId];
+const AudiusAudioPlayer = () => {
+  const { playlistId, songId } = useParams();
+  const { audiusAlbumSongLoading, audiusAlbumSongError } =
+    useAudiusAlbumSong(playlistId);
+
+  const [id, setId] = useState(songId);
+  const songsList = useSelector((state) => state.homepage.audiusSongs);
+  const song = songsList?.find((song) => song.id === id);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -38,11 +43,12 @@ const AudioPlayer = () => {
       updateDuration();
 
       const handleEnded = () => {
-        const currentIndex = songsList.indexOf(songId);
+        const currentIndex = songsList.findIndex((song) => song.id === id);
         const nextIndex = (currentIndex + 1) % songsList.length;
-        const nextSongId = songsList[nextIndex];
+        const nextSongId = songsList[nextIndex].id;
+        setId(nextSongId);
+        const nextSong = songsList[nextIndex];
 
-        const nextSong = allSongs[nextSongId];
         player.src = nextSong.audio_url;
 
         const playNextSong = () => {
@@ -53,7 +59,7 @@ const AudioPlayer = () => {
 
         player.addEventListener("canplaythrough", playNextSong, { once: true });
 
-        navigate(`/user/song/${nextSongId}`, { replace: true });
+        navigate(`/album/${playlistId}/song/${nextSongId}`, { replace: true });
         resetProgressBar();
       };
 
@@ -63,7 +69,7 @@ const AudioPlayer = () => {
         player.removeEventListener("ended", handleEnded);
       };
     }
-  }, [audioPlayer, navigate, songId, allSongs, songsList]);
+  }, [audioPlayer, navigate, id, songsList]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -113,31 +119,44 @@ const AudioPlayer = () => {
   };
 
   const backButton = () => {
-    const currentIndex = songsList.indexOf(songId);
-    const prevIndex = (currentIndex - 1 + songsList.length) % songsList.length; // Circular navigation
-    const prevSongId = songsList[prevIndex];
+    const currentIndex = songsList.findIndex((song) => song.id === id);
+    const prevSongId =
+      songsList[(currentIndex - 1 + songsList.length) % songsList.length].id;
 
+    setId(prevSongId);
     setIsPlaying(false);
-    navigate(`/user/song/${prevSongId}`, { replace: true });
+    navigate(`/album/${playlistId}/song/${prevSongId}`, { replace: true });
     resetProgressBar();
   };
 
   const forwardButton = () => {
-    const currentIndex = songsList.indexOf(songId);
-    const nextIndex = (currentIndex + 1) % songsList.length; // Circular navigation
-    const nextSongId = songsList[nextIndex];
+    const currentIndex = songsList.findIndex((song) => song.id === id);
+    const nextSongId = songsList[(currentIndex + 1) % songsList.length].id;
+
+    setId(nextSongId);
 
     setIsPlaying(false);
-    navigate(`/user/song/${nextSongId}`, { replace: true });
+    navigate(`/album/${playlistId}/song/${nextSongId}`, { replace: true });
     resetProgressBar();
   };
+
+  if (audiusAlbumSongLoading)
+    return (
+      <Backdrop
+        className={styles.loader_backdrop}
+        open={audiusAlbumSongLoading}
+      >
+        <CircularProgress className={styles.loader_spinner} />
+      </Backdrop>
+    );
+  if (audiusAlbumSongError) return <ErrorPage />;
 
   return (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
       <Grid2 className={styles.song_details}>
         <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{songId}</Typography>
+          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
         </Grid2>
         <Grid2 className={styles.song_artist}>
           <Typography variant="audioPlayerSongArtist">
@@ -193,4 +212,4 @@ const AudioPlayer = () => {
   );
 };
 
-export default AudioPlayer;
+export default AudiusAudioPlayer;

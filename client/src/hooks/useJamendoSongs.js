@@ -12,21 +12,19 @@ const useJamendoSongs = () => {
   useEffect(() => {
     const fetchJamendoSongs = async () => {
       try {
-        if (!jamendoSongs) {
-          setJamendoSongsLoading(true);
-          const response = await axios.get("/api/jamendo/fetchTopSongs");
-          const refinedSongs = response.data.results.map((song) => ({
-            id: song.id,
-            title: song.name,
-            duration: song.duration,
-            album: song.name,
-            audio_url: song.audio,
-            cover_art: song.album_image,
-            release_year: song.releasedate.split("-")[0],
-            artist: song.artist_name,
-          }));
-          dispatch(setJamendoSongs(refinedSongs));
-        }
+        setJamendoSongsLoading(true);
+        const response = await axios.get("/api/jamendo/fetchTopSongs");
+        const refinedSongs = response.data.results.map((song) => ({
+          id: song.id,
+          title: song.name,
+          duration: song.duration,
+          album: song.name,
+          audio_url: song.audio,
+          cover_art: song.album_image,
+          release_year: song.releasedate.split("-")[0],
+          artist: song.artist_name,
+        }));
+        dispatch(setJamendoSongs(refinedSongs));
       } catch (error) {
         setJamendoSongsError(true);
         console.error("Error fetching jamendo songs", error);
@@ -34,7 +32,9 @@ const useJamendoSongs = () => {
         setJamendoSongsLoading(false);
       }
     };
-    fetchJamendoSongs();
+    if (!jamendoSongs) {
+      fetchJamendoSongs();
+    }
   }, []);
 
   return { jamendoSongsLoading, jamendoSongsError };

@@ -7,7 +7,7 @@ router.get("/api/audius/fetchTopAlbums", async (req, res) => {
     const audiusUrl = req.app.locals.audiusUrl;
     const url = `${audiusUrl}/v1/playlists/trending`;
     const params = {
-      time: "allTime",
+      time: "month",
       limit: 30,
     };
 

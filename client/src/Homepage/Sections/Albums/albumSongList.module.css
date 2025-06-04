@@ -1,0 +1,25 @@
+.song_list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.song_list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.song_list::-webkit-scrollbar-track {
+  background: #4d4d4d;
+}
+
+.song_list::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 2px solid #29293e;
+}
+
+.song_list::-webkit-scrollbar-thumb:hover {
+  background-color: #ddd;
+}

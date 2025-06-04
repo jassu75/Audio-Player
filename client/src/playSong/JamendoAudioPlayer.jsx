@@ -12,10 +12,10 @@ import ErrorPage from "../Homepage/ErrorPage";
 
 const JamendoAudioPlayer = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
-  const id = useParams();
-  const [songId, setSongId] = useState(id.id);
+  const { songId } = useParams();
+  const [id, setId] = useState(songId);
   const songsList = useSelector((state) => state.homepage.jamendoSongs);
-  const song = songsList?.find((song) => song.id === songId);
+  const song = songsList?.find((song) => song.id === id);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -41,10 +41,10 @@ const JamendoAudioPlayer = () => {
       updateDuration();
 
       const handleEnded = () => {
-        const currentIndex = songsList.findIndex((song) => song.id === songId);
+        const currentIndex = songsList.findIndex((song) => song.id === id);
         const nextIndex = (currentIndex + 1) % songsList.length;
         const nextSongId = songsList[nextIndex].id;
-        setSongId(nextSongId);
+        setId(nextSongId);
         const nextSong = songsList[nextIndex];
 
         player.src = nextSong.audio_url;
@@ -67,7 +67,7 @@ const JamendoAudioPlayer = () => {
         player.removeEventListener("ended", handleEnded);
       };
     }
-  }, [audioPlayer, navigate, songId, songsList]);
+  }, [audioPlayer, navigate, id, songsList]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -117,21 +117,21 @@ const JamendoAudioPlayer = () => {
   };
 
   const backButton = () => {
-    const currentIndex = songsList.findIndex((song) => song.id === songId);
+    const currentIndex = songsList.findIndex((song) => song.id === id);
     const prevSongId =
       songsList[(currentIndex - 1 + songsList.length) % songsList.length].id;
 
-    setSongId(prevSongId);
+    setId(prevSongId);
     setIsPlaying(false);
     navigate(`/song/${prevSongId}`, { replace: true });
     resetProgressBar();
   };
 
   const forwardButton = () => {
-    const currentIndex = songsList.findIndex((song) => song.id === songId);
+    const currentIndex = songsList.findIndex((song) => song.id === id);
     const nextSongId = songsList[(currentIndex + 1) % songsList.length].id;
 
-    setSongId(nextSongId);
+    setId(nextSongId);
 
     setIsPlaying(false);
     navigate(`/song/${nextSongId}`, { replace: true });

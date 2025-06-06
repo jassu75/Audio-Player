@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import EmptySongsPage from "../Homepage/EmptyPages/EmptySongs";
 import styles from "./selectedPlaylist.module.css";
-import PlaylistUploadButton from "../CustomButtons/PlaylistUploadButton";
+import PlaylistUploadButton from "../CustomButtons/PlaylistUploadButton/PlaylistUploadButton";
 import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 
 const SelectedPlaylist = () => {

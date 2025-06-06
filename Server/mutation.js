@@ -60,6 +60,14 @@ export const DELETE_PLAYLIST = `
   }
 `;
 
+export const DELETE_USER = `
+  mutation DELETE_USER($email: String!) {
+    delete_users_by_pk(email_id: $email) {
+      email_id
+    }
+  }
+`;
+
 export const UPDATE_HOMEPAGE_SONGS = `
   mutation UPDATE_HOMEPAGE_SONGS($user_id: String!, $homepage_songs: jsonb) {
     update_users(

@@ -1,5 +1,5 @@
+import "./Config/config.js";
 import express from "express";
-import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import axios from "axios";
@@ -11,7 +11,10 @@ import getPlaylists from "./routes/queryRoutes/getPlaylists.js";
 import addUser from "./routes/mutationRoutes/addUser.js";
 import addSong from "./routes/mutationRoutes/addSong.js";
 import addPlaylist from "./routes/mutationRoutes/addPlaylist.js";
+
 import deletePlaylist from "./routes/mutationRoutes/deletePlaylist.js";
+import deleteUser from "./routes/mutationRoutes/deleteUser.js";
+
 import updateHomepageSong from "./routes/mutationRoutes/updateHomepageSongs.js";
 import updatePlaylistSong from "./routes/mutationRoutes/updatePlaylistSongs.js";
 import updatePlaylistId from "./routes/mutationRoutes/updatePlaylistId.js";
@@ -21,7 +24,6 @@ import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
 import fetchAlbumSongs from "./routes/apiRoutes/fetchAlbumSongs.js";
 
 const app = express();
-dotenv.config();
 app.use(express.json());
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,7 +38,10 @@ app.use(getPlaylists);
 app.use(addUser);
 app.use(addSong);
 app.use(addPlaylist);
+
 app.use(deletePlaylist);
+app.use(deleteUser);
+
 app.use(updateHomepageSong);
 app.use(updatePlaylistSong);
 app.use(updatePlaylistId);

@@ -1,0 +1,27 @@
+.upload_button {
+  color: #ffffff;
+  font-size: 35px;
+}
+
+.upload_actions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.menu_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.menu_item_text {
+  color: #000000;
+}
+
+.divider {
+  background-color: #000000;
+}

@@ -1,0 +1,49 @@
+.username_text {
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+  max-width: 60vw;
+}
+
+.welcome_text_container {
+  gap: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.upload_button {
+  color: #ffffff;
+  font-size: 35px;
+}
+
+.upload_actions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.menu_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.signout_text {
+  color: #000000;
+}
+
+.deleteacount_text {
+  color: #ff0000;
+}
+
+.divider {
+  background-color: #000000;
+}
+.loader {
+  color: #000000;
+}

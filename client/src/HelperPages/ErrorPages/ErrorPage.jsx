@@ -1,5 +1,5 @@
 import Grid2 from "@mui/material/Grid2";
-import styles from "../SignUpAndLogin/directToLogin.module.css";
+import styles from "./errorPage.module.css";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";

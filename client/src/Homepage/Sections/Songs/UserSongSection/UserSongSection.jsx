@@ -1,7 +1,7 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./userSongSection.module.css";
 import HomepageSongsList from "../../../../Songlist/HomepageSongs/homepageSongsList";
-import EmptyHomePage from "../../../EmptyPages/EmptyHomepage";
+import EmptyHomePage from "../../../../HelperPages/EmptyPages/EmptyHomepage";
 import { useSelector } from "react-redux";
 
 const UserSongSection = () => {

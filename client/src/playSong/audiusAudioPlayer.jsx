@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import useAudiusAlbumSong from "../hooks/useAudiusAlbumSongs";
 import { Backdrop, CircularProgress } from "@mui/material";
-import ErrorPage from "../Homepage/ErrorPage";
+import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 
 const AudiusAudioPlayer = () => {
   const { playlistId, songId } = useParams();

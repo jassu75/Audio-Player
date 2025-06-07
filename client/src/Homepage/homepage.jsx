@@ -4,7 +4,7 @@ import styles from "./homepage.module.css";
 import UserWelcome from "./Sections/UserWelcome/UserWelcome";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
-import ErrorPage from "./ErrorPage";
+import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import useHomepagePlaylists from "../hooks/useHomepagePlaylists";
 import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
 import HomepageSongSection from "./Sections/Songs/HomepageSongSection/HomepageSongSection";

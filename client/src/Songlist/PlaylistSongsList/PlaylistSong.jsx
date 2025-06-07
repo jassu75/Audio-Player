@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import styles from "./PlaylistSong.module.css";
+import styles from "./playlistSong.module.css";
 import Grid2 from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";

@@ -70,7 +70,6 @@ const SignIn = () => {
 
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
       const userCredential = await signInWithPopup(auth, googleAuthProvider);
@@ -111,7 +110,6 @@ const SignIn = () => {
     } catch (err) {
       console.error("Google Sign-In failed", err);
     } finally {
-      setLoading(false);
     }
   };
 

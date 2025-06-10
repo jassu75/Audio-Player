@@ -17,7 +17,7 @@ const useAudiusAlbums = () => {
         const refinedAlbums = response.data.data.map((album) => ({
           id: album.id,
           title: album.playlist_name,
-          cover_art: album.artwork["480x480"],
+          cover_art: album.artwork["150x150"],
         }));
         dispatch(setAudiusAlbums(refinedAlbums));
       } catch (error) {

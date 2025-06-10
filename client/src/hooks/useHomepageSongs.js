@@ -30,8 +30,6 @@ const useHomepageSongs = () => {
           );
 
           dispatch(setSongs(songsHashMap));
-
-          localStorage.setItem("songsList", JSON.stringify(songsHashMap));
         }
       } catch (error) {
         setError(true);

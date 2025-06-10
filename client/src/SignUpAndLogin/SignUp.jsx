@@ -65,7 +65,6 @@ const SignUp = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      localStorage.setItem("user", JSON.stringify(newUser));
       dispatch(setUser(newUser));
 
       await sendEmailVerification(user);

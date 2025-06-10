@@ -28,7 +28,6 @@ const useFetchUserDetails = () => {
 
           if (response.data?.users?.length > 0) {
             const userDetails = response.data.users[0];
-            localStorage.setItem("user", JSON.stringify(userDetails));
             dispatch(setUser(userDetails));
           }
         } catch (error) {

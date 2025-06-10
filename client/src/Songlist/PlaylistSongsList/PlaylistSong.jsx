@@ -100,21 +100,11 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
           <MenuItem onClick={handleDeleteSong} className={styles.menu_item}>
             {loading ? (
               <>
-                <Typography
-                  variant="MenuItemText"
-                  className={styles.menu_item_text}
-                >
-                  Deleting
-                </Typography>
+                <Typography variant="MenuItemText">Deleting</Typography>
                 <CircularProgress className={styles.loader} size={20} />
               </>
             ) : (
-              <Typography
-                variant="MenuItemText"
-                className={styles.menu_item_text}
-              >
-                Delete
-              </Typography>
+              <Typography variant="MenuItemText">Delete</Typography>
             )}
           </MenuItem>
         </Menu>

@@ -30,8 +30,6 @@ const useHomepagePlaylists = () => {
           );
 
           dispatch(setPlaylistDetails(playlistHashMap));
-
-          localStorage.setItem("playlists", JSON.stringify(playlistHashMap));
         }
       } catch (error) {
         setError(true);

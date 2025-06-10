@@ -51,7 +51,6 @@ const SignIn = () => {
       const user = userCredential.user;
 
       if (user.emailVerified) {
-        localStorage.setItem("user", JSON.stringify(userFromDB));
         dispatch(setUser(userFromDB));
         navigate("/homepage", { replace: true });
       } else {
@@ -83,7 +82,6 @@ const SignIn = () => {
       );
 
       if (response.data && response.data.users.length > 0) {
-        localStorage.setItem("user", JSON.stringify(response.data.users[0]));
         dispatch(setUser(response.data.users[0]));
         navigate("/homepage", { replace: true });
       } else {
@@ -102,7 +100,6 @@ const SignIn = () => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        localStorage.setItem("user", JSON.stringify(newUser));
         dispatch(setUser(newUser));
 
         navigate("/homepage", { replace: true });

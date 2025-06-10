@@ -49,22 +49,12 @@ const HomepageUploadButton = () => {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleUploadSong} className={styles.menu_item}>
-            <Typography
-              variant="MenuItemText"
-              className={styles.menu_item_text}
-            >
-              Upload Song
-            </Typography>
+            <Typography variant="MenuItemText">Upload Song</Typography>
           </MenuItem>
           <Divider className={styles.divider} />
 
           <MenuItem onClick={handleUploadPlaylist} className={styles.menu_item}>
-            <Typography
-              variant="MenuItemText"
-              className={styles.menu_item_text}
-            >
-              Upload Playlist
-            </Typography>
+            <Typography variant="MenuItemText">Upload Playlist</Typography>
           </MenuItem>
         </Menu>
       </Grid2>

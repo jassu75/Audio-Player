@@ -153,7 +153,7 @@ const AudioPlayer = () => {
       <img src={song?.cover_art} alt="" className={styles.song_image} />
       <Grid2 className={styles.song_details}>
         <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{songId}</Typography>
+          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
         </Grid2>
         <Grid2 className={styles.song_artist}>
           <Typography variant="audioPlayerSongArtist">

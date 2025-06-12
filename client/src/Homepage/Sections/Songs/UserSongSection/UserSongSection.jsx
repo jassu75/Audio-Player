@@ -1,17 +1,25 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./userSongSection.module.css";
-import HomepageSongsList from "../../../../Songlist/HomepageSongs/homepageSongsList";
 import EmptyHomePage from "../../../../HelperPages/EmptyPages/EmptyHomepage";
 import { useSelector } from "react-redux";
+import HomepageSong from "../../../../Songlist/HomepageSongs/HomepageSong";
 
 const UserSongSection = () => {
-  const homepageSongsList = useSelector(
-    (state) => state.homepage?.user?.homepage_songs
-  );
+  const userSongs = useSelector((state) => state.homepage.user?.homepage_songs);
+  const allSongs = useSelector((state) => state.homepage.songs);
+
   return (
     <Grid2 className={styles.homepage_songs}>
-      {!homepageSongsList || Object.keys(homepageSongsList).length !== 0 ? (
-        <HomepageSongsList songsList={homepageSongsList} />
+      {userSongs && Object.keys(userSongs).length !== 0 ? (
+        <Grid2 className={styles.song_list}>
+          {userSongs.map((songId) => (
+            <HomepageSong
+              key={songId}
+              songKey={songId}
+              song={allSongs?.[songId]}
+            />
+          ))}
+        </Grid2>
       ) : (
         <EmptyHomePage />
       )}

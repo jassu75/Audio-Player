@@ -13,7 +13,7 @@ const useAudiusAlbums = () => {
     const fetchAudiusAlbums = async () => {
       try {
         setAudiusAlbumsLoading(true);
-        const response = await axios.get("/api/audius/fetchTopAlbums");
+        const response = await axios.get("/json/audius.json");
         const refinedAlbums = response.data.data.map((album) => ({
           id: album.id,
           title: album.playlist_name,

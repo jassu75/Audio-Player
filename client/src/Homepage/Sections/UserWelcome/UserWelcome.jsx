@@ -1,12 +1,10 @@
 import styles from "./userWelcome.module.css";
-import useFetchUserDetails from "../../../hooks/useFetchUserDetails";
 import Grid2 from "@mui/material/Grid2";
 import { useSelector } from "react-redux";
 import HomepageUploadButton from "../../../CustomButtons/HomepageUploadButton/HomepageUploadButton";
 import Profile from "./Profile";
 
 const UserWelcome = () => {
-  useFetchUserDetails();
   const user = useSelector((state) => state.homepage.user);
 
   return user ? (

@@ -33,6 +33,7 @@ const Profile = ({ username }) => {
       setSignOutLoading(true);
       await signOut(auth);
       localStorage.clear();
+      sessionStorage.clear();
       navigate("/", { replace: true });
     } catch (error) {
       console.error("error logging out user", error);
@@ -58,6 +59,7 @@ const Profile = ({ username }) => {
           }
         );
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/", { replace: true });
       }
     } catch (error) {
@@ -87,18 +89,11 @@ const Profile = ({ username }) => {
         <MenuItem onClick={handleSignout} className={styles.menu_item}>
           {signOutLoading ? (
             <>
-              <Typography
-                variant="MenuItemText"
-                className={styles.signout_text}
-              >
-                Signing Out
-              </Typography>
+              <Typography variant="MenuItemText">Signing Out</Typography>
               <CircularProgress className={styles.loader} size={20} />
             </>
           ) : (
-            <Typography variant="MenuItemText" className={styles.signout_text}>
-              Sign Out
-            </Typography>
+            <Typography variant="MenuItemText">Sign Out</Typography>
           )}
         </MenuItem>
         <Divider className={styles.divider} />

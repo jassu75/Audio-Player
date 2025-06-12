@@ -1,43 +1,135 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
+import {
+  setPlaylistDetails,
+  setSongs,
+  setUser,
+} from "../Songlist/HomepageSongs/homepage.slice";
 import { auth } from "../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.homepage.user);
+  const songsList = useSelector((state) => state.homepage.songs);
+  const playlists = useSelector((state) => state.homepage.playlists);
+
+  const [loading, setLoading] = useState({
+    user: false,
+    songs: false,
+    playlists: false,
+  });
+  const [error, setError] = useState({
+    user: false,
+    songs: false,
+    playlists: false,
+  });
+
+  const allSongIds = useMemo(() => {
+    const playlistSongIds = Object.values(playlists || {}).flatMap(
+      (p) => p.playlist_songs || []
+    );
+    return user ? [...(user.homepage_songs || []), ...playlistSongIds] : [];
+  }, [user, playlists]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!user && firebaseUser?.email) {
         try {
-          const data = { email: firebaseUser?.email };
-          const headers = {
-            "Content-Type": "application/json",
-          };
-          const axiosOptions = {
-            headers: headers,
-          };
+          setLoading((prev) => ({ ...prev, user: true }));
+          setError((prev) => ({ ...prev, user: false }));
+
           const response = await axios.post(
             "/api/checkExistingUser",
-            data,
-            axiosOptions
+            { email: firebaseUser.email },
+            { headers: { "Content-Type": "application/json" } }
           );
 
           if (response.data?.users?.length > 0) {
-            const userDetails = response.data.users[0];
-            dispatch(setUser(userDetails));
+            dispatch(setUser(response.data.users[0]));
           }
         } catch (error) {
+          setError((prev) => ({ ...prev, user: true }));
           console.error("Error fetching user details:", error);
+        } finally {
+          setLoading((prev) => ({ ...prev, user: false }));
         }
       }
     });
 
     return () => unsubscribe();
   }, [dispatch, user]);
+
+  useEffect(() => {
+    const fetchSongs = async (song_ids) => {
+      try {
+        setLoading((prev) => ({ ...prev, songs: true }));
+        setError((prev) => ({ ...prev, songs: false }));
+
+        const response = await axios.post(
+          "/api/getSongs",
+          { song_ids },
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        const songsHashMap = response.data.audio_details.reduce((acc, song) => {
+          const { id, ...rest } = song;
+          acc[id] = rest;
+          return acc;
+        }, {});
+        dispatch(setSongs(songsHashMap));
+      } catch (error) {
+        setError((prev) => ({ ...prev, songs: true }));
+        console.error("Error fetching songs", error);
+      } finally {
+        setLoading((prev) => ({ ...prev, songs: false }));
+      }
+    };
+
+    if (user && playlists && !songsList) {
+      fetchSongs(allSongIds);
+    }
+  }, [user, playlists, songsList, allSongIds, dispatch]);
+
+  useEffect(() => {
+    const fetchPlaylists = async (playlist_ids) => {
+      try {
+        setLoading((prev) => ({ ...prev, playlists: true }));
+        setError((prev) => ({ ...prev, playlists: false }));
+
+        const response = await axios.post(
+          "/api/getPlaylists",
+          { playlist_ids },
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        const playlistHashMap = response.data.playlist_details.reduce(
+          (acc, playlist) => {
+            const { id, ...rest } = playlist;
+            acc[id] = rest;
+            return acc;
+          },
+          {}
+        );
+        dispatch(setPlaylistDetails(playlistHashMap));
+      } catch (error) {
+        setError((prev) => ({ ...prev, playlists: true }));
+        console.error("Error fetching playlists", error);
+      } finally {
+        setLoading((prev) => ({ ...prev, playlists: false }));
+      }
+    };
+
+    if (user && !playlists) {
+      fetchPlaylists(user.playlist_ids);
+    }
+  }, [user, dispatch]);
+
+  return {
+    userLoading: loading.user || loading.songs || loading.playlists,
+    userError: error.user || error.songs || error.playlists,
+  };
 };
 
 export default useFetchUserDetails;

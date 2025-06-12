@@ -30,6 +30,14 @@ export const ADD_SONG = `
   }
 `;
 
+export const DELETE_SONG = `
+mutation DELETE_SONG($id:uuid!){
+  delete_audio_details_by_pk(id:$id){
+    id
+  }
+}
+`;
+
 export const ADD_PLAYLIST = `
   mutation ADD_PLAYLIST(
     $playlist_title: String!

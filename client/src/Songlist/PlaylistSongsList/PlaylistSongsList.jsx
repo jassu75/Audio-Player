@@ -14,7 +14,7 @@ const PlaylistSongsList = ({ playlistId, songsList }) => {
               key={value}
               playlistId={playlistId}
               songKey={value}
-              song={allSongs[value]}
+              song={allSongs?.[value]}
             />
           ))
         : null}

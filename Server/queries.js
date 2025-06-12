@@ -12,8 +12,8 @@ export const CHECK_EXISTING_USER = `
 `;
 
 export const GET_SONGS = `
-  query GET_SONGS {
-    audio_details {
+ query GET_SONGS($song_ids: [uuid!]) {
+    audio_details(where: {id: {_in: $song_ids}}) {
       id
       title
       artist
@@ -28,8 +28,8 @@ export const GET_SONGS = `
 `;
 
 export const GET_PLAYLISTS = `
-  query GET_PLAYLISTS {
-    playlist_details {
+  query GET_PLAYLISTS($playlist_ids: [uuid!]) {
+    playlist_details(where: {id: {_in: $playlist_ids}}) {
       id
       playlist_title
       playlist_cover_art

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import styles from "./homepageSong.module.css";
 import Grid2 from "@mui/material/Grid2";
@@ -8,7 +8,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
-import { setHomepageSongTitles } from "./homepage.slice";
+import { deleteSong, setHomepageSongTitles } from "./homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress"; // Import the loader
 import axios from "axios";
 
@@ -34,8 +34,8 @@ const HomepageSong = ({ songKey, song }) => {
   const handleDeleteSong = async () => {
     setLoading(true);
     try {
-      const updatedHomepageSongs = user.homepage_songs.filter(
-        (songTitle) => songTitle !== songKey
+      const updatedHomepageSongs = user?.homepage_songs.filter(
+        (songId) => songId !== songKey
       );
       await axios.post(
         "/api/updateHomepageSong",
@@ -47,8 +47,16 @@ const HomepageSong = ({ songKey, song }) => {
           headers: { "Content-Type": "application/json" },
         }
       );
-
       dispatch(setHomepageSongTitles(updatedHomepageSongs));
+
+      await axios.post(
+        "/api/deletesong",
+        { id: songKey },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      dispatch(deleteSong(songKey));
     } catch (error) {
       console.error("Error deleting song:", error);
     }
@@ -66,7 +74,7 @@ const HomepageSong = ({ songKey, song }) => {
               variant="homepageSongTitle"
               className={styles.song_title}
             >
-              {songKey}
+              {song?.title}
             </Typography>
           </Grid2>
           <Grid2 className={styles.song_artist}>

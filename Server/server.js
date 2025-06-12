@@ -14,6 +14,7 @@ import addPlaylist from "./routes/mutationRoutes/addPlaylist.js";
 
 import deletePlaylist from "./routes/mutationRoutes/deletePlaylist.js";
 import deleteUser from "./routes/mutationRoutes/deleteUser.js";
+import deleteSong from "./routes/mutationRoutes/deleteSong.js";
 
 import updateHomepageSong from "./routes/mutationRoutes/updateHomepageSongs.js";
 import updatePlaylistSong from "./routes/mutationRoutes/updatePlaylistSongs.js";
@@ -41,6 +42,7 @@ app.use(addPlaylist);
 
 app.use(deletePlaylist);
 app.use(deleteUser);
+app.use(deleteSong);
 
 app.use(updateHomepageSong);
 app.use(updatePlaylistSong);

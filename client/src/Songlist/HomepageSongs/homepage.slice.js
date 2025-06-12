@@ -17,9 +17,9 @@ const checkExpired = (key, defaultValue) => {
 };
 
 const initialState = {
-  songs: JSON.parse(localStorage.getItem("songsList")) || {},
+  songs: JSON.parse(localStorage.getItem("songsList")) || null,
   user: JSON.parse(sessionStorage.getItem("user")) || null,
-  playlists: JSON.parse(localStorage.getItem("playlists")) || {},
+  playlists: JSON.parse(localStorage.getItem("playlists")) || null,
   jamendoSongs: checkExpired("jamendoSongs", null),
   audiusAlbums: checkExpired("audiusAlbums", null),
   audiusSongs: null,
@@ -34,8 +34,15 @@ const songsSlice = createSlice({
       localStorage.setItem("songsList", JSON.stringify(action.payload));
     },
     addSongs: (state, action) => {
-      const { title, ...songWithoutTitle } = action.payload;
-      state.songs[title] = songWithoutTitle;
+      const { id, ...songWithoutId } = action.payload;
+      if (!state.songs) {
+        state.songs = {};
+      }
+      state.songs[id] = songWithoutId;
+      localStorage.setItem("songsList", JSON.stringify(state.songs));
+    },
+    deleteSong: (state, action) => {
+      delete state.songs[action.payload];
       localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
 
@@ -45,6 +52,9 @@ const songsSlice = createSlice({
     },
     addPlaylistDetails: (state, action) => {
       const { id, ...playlistWithoutId } = action.payload;
+      if (!state.playlists) {
+        state.playlists = {};
+      }
       state.playlists[id] = playlistWithoutId;
       localStorage.setItem("playlists", JSON.stringify(state.playlists));
     },
@@ -56,8 +66,11 @@ const songsSlice = createSlice({
       state.user.homepage_songs = action.payload;
       sessionStorage.setItem("user", JSON.stringify(state.user));
     },
-    addHomepageSongTitles: (state, action) => {
-      state.user.homepage_songs.push(action.payload);
+    addHomepageSongId: (state, action) => {
+      state.user.homepage_songs = [
+        ...state.user.homepage_songs,
+        action.payload,
+      ];
       sessionStorage.setItem("user", JSON.stringify(state.user));
     },
     setPlaylistSongs: (state, action) => {
@@ -66,8 +79,8 @@ const songsSlice = createSlice({
       localStorage.setItem("playlists", JSON.stringify(state.playlists));
     },
     addPlaylistSongs: (state, action) => {
-      const { id, playlistSongTitle } = action.payload;
-      state.playlists[id].playlist_songs.push(playlistSongTitle);
+      const { id, playlistSongId } = action.payload;
+      state.playlists[id].playlist_songs.push(playlistSongId);
       localStorage.setItem("playlists", JSON.stringify(state.playlists));
     },
     setPlaylistIds: (state, action) => {
@@ -113,12 +126,13 @@ export const {
   removeHomepageSong,
   setUser,
   setHomepageSongTitles,
-  addHomepageSongTitles,
+  addHomepageSongId,
   setPlaylistIds,
   addPlaylistIds,
   addPlaylistDetails,
   setPlaylistDetails,
   deletePlaylistDetails,
+  deleteSong,
   setPlaylistSongs,
   addPlaylistSongs,
   setJamendoSongs,

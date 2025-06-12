@@ -7,7 +7,7 @@ import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
 import axios from "axios";
 import {
-  addHomepageSongTitles,
+  addHomepageSongId,
   addSongs,
 } from "../Songlist/HomepageSongs/homepage.slice";
 import styles from "./AudioUploadForm.module.css";
@@ -26,8 +26,10 @@ const AudioUploadForm = ({ open, onClose }) => {
   const [isUploading, setIsUploading] = useState(false);
   const allSongs = useSelector((state) => state.homepage.songs);
   const user = useSelector((state) => state.homepage.user);
-  const songTitles = Object.keys(allSongs);
-
+  const homepageSongs = user?.homepage_songs;
+  const songTitles = homepageSongs
+    .map((songId) => allSongs[songId]?.title)
+    .filter(Boolean);
   const handleFileSelection = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files.map((file) => ({ file, status: "Upload Pending" })));
@@ -36,7 +38,7 @@ const AudioUploadForm = ({ open, onClose }) => {
   const handleUpload = async () => {
     setIsUploading(true);
     const progress = {};
-    const homepageSongList = Array.from(user.homepage_songs);
+    const homepageSongList = Array.from(user?.homepage_songs);
     for (const fileObj of selectedFiles) {
       const { file } = fileObj;
 
@@ -52,75 +54,58 @@ const AudioUploadForm = ({ open, onClose }) => {
         const songTitle =
           metadata.common.title || file.name.replace(".mp3", "").trim();
         if (songTitles.includes(songTitle)) {
-          if (user.homepage_songs.includes(songTitle)) {
-            progress[file.name] = "Song already exists";
-          } else {
-            homepageSongList.push(songTitle);
-            dispatch(addHomepageSongTitles(songTitle));
-            await axios.post(
-              "/api/updateHomepageSong",
-              {
-                user_id: user.id,
-                homepage_songs: homepageSongList,
-              },
-              {
-                headers: { "Content-Type": "application/json" },
-              }
-            );
-            progress[file.name] = "Uploaded successfully";
-          }
-          continue;
+          progress[file.name] = "Song already exists";
+        } else {
+          const audioUrl = await uploadAudioToCloudinary(file);
+
+          const image = metadata.common.picture
+            ? metadata.common.picture[0].data
+            : null;
+
+          const imageUrl = image
+            ? await uploadImageToCloudinary(
+                new Blob([image], { type: "image/jpeg" })
+              )
+            : defaultMusicNote;
+
+          const uploadedSong = {
+            title: (
+              metadata.common.title || file.name.replace(".mp3", "")
+            ).trim(),
+            artist: (metadata.common.artist || "").trim(),
+            album: (metadata.common.album || "").trim(),
+            duration: Math.round(metadata.format.duration || 0),
+            genre: metadata.common.genre || "",
+            release_year: String(metadata.common.year || "").trim(),
+            cover_art: imageUrl,
+            audio_url: audioUrl,
+          };
+
+          const response = await axios.post(
+            "/api/addSong",
+            { uploadedSong },
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          const id = response.data?.insert_audio_details?.returning?.[0]?.id;
+          homepageSongList.push(id);
+          dispatch(addHomepageSongId(id));
+          await axios.post(
+            "/api/updateHomepageSong",
+            {
+              user_id: user.id,
+              homepage_songs: homepageSongList,
+            },
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          const songWithId = { ...uploadedSong, id };
+          setNewSong(songWithId);
+          progress[file.name] = "Uploaded successfully";
         }
-
-        const audioUrl = await uploadAudioToCloudinary(file);
-
-        const image = metadata.common.picture
-          ? metadata.common.picture[0].data
-          : null;
-
-        const imageUrl = image
-          ? await uploadImageToCloudinary(
-              new Blob([image], { type: "image/jpeg" })
-            )
-          : defaultMusicNote;
-
-        const uploadedSong = {
-          title: (
-            metadata.common.title || file.name.replace(".mp3", "")
-          ).trim(),
-          artist: (metadata.common.artist || "").trim(),
-          album: (metadata.common.album || "").trim(),
-          duration: Math.round(metadata.format.duration || 0),
-          genre: metadata.common.genre || "",
-          release_year: String(metadata.common.year || "").trim(),
-          cover_art: imageUrl,
-          audio_url: audioUrl,
-        };
-
-        const response = await axios.post(
-          "/api/addSong",
-          { uploadedSong },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const id = response.data?.insert_audio_details?.returning?.[0]?.id;
-        homepageSongList.push(songTitle);
-        dispatch(addHomepageSongTitles(songTitle));
-        await axios.post(
-          "/api/updateHomepageSong",
-          {
-            user_id: user.id,
-            homepage_songs: homepageSongList,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
-        const songWithId = { ...uploadedSong, id };
-        setNewSong(songWithId);
-        progress[file.name] = "Uploaded successfully";
       } catch (error) {
         console.error("Error occurred:", error);
 

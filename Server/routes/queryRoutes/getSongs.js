@@ -4,9 +4,10 @@ import client from "../../Config/hasura.js";
 
 const router = Router();
 
-router.get("/api/getSongs", async (req, res) => {
+router.post("/api/getSongs", async (req, res) => {
   try {
-    const response = await client.request(GET_SONGS);
+    const { song_ids } = req.body;
+    const response = await client.request(GET_SONGS, { song_ids });
 
     res.status(200).json(response);
   } catch (error) {

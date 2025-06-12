@@ -8,7 +8,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
-import { setPlaylistSongs } from "../HomepageSongs/homepage.slice";
+import { deleteSong, setPlaylistSongs } from "../HomepageSongs/homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 
@@ -37,7 +37,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
     setLoading(true);
     try {
       const updatedPlaylistSongs = playlistSongList.filter(
-        (songTitle) => songTitle !== songKey
+        (songId) => songId !== songKey
       );
       await axios.post(
         "/api/updatePlaylistSong",
@@ -55,6 +55,14 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
           playlistSongs: updatedPlaylistSongs,
         })
       );
+      await axios.post(
+        "/api/deletesong",
+        { id: songKey },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      dispatch(deleteSong(songKey));
     } catch (error) {
       console.error("Error deleting song:", error);
     }
@@ -72,7 +80,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
               variant="homepageSongTitle"
               className={styles.song_title}
             >
-              {songKey}
+              {song?.title}
             </Typography>
           </Grid2>
           <Grid2 className={styles.song_artist}>

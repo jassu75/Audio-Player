@@ -1,4 +1,6 @@
 import { useState } from "react";
+import axios from "axios";
+import { auth } from "../config/firebase";
 
 const useCloudinaryAudioUpload = () => {
   const [loading, setLoading] = useState(false);
@@ -7,26 +9,21 @@ const useCloudinaryAudioUpload = () => {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "audio_upload");
+      const token = await auth.currentUser.getIdToken();
+      if (token) {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/dcr1wsbyi/raw/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error("Error response:", data);
-        throw new Error(data.error?.message || "Failed to upload audio.");
+        const response = await axios.post(
+          "/api/cloudinary/uploadaudio",
+          formData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const audioUrl = response.data.audioUrl;
+        return audioUrl;
       }
-
-      return data.secure_url;
     } catch (error) {
       console.error("Error occurred during audio upload:", error);
     } finally {

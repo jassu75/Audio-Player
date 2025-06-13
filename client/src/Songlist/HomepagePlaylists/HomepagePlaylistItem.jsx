@@ -62,7 +62,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
         );
         await axios.post(
           "/api/deletePlaylist",
-          { id: playlistKey },
+          { ids: [playlistKey] },
           {
             headers: { "Content-Type": "application/json" },
           }

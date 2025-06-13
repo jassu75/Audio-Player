@@ -24,6 +24,9 @@ import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
 import fetchAlbumSongs from "./routes/apiRoutes/fetchAlbumSongs.js";
 
+import uploadCloudinaryImage from "./Cloudinary/uploadImage.js";
+import uploadCloudinaryAudio from "./Cloudinary/uploadAudio.js";
+
 const app = express();
 app.use(express.json());
 
@@ -51,6 +54,9 @@ app.use(updatePlaylistId);
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);
 app.use(fetchAlbumSongs);
+
+app.use(uploadCloudinaryImage);
+app.use(uploadCloudinaryAudio);
 
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(buildFilePath, "index.html"));

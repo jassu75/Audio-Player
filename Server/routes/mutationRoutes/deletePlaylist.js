@@ -6,8 +6,8 @@ const router = Router();
 
 router.post("/api/deletePlaylist", async (req, res) => {
   try {
-    const { id } = req.body;
-    const response = await client.request(DELETE_PLAYLIST, { id });
+    const { ids } = req.body;
+    const response = await client.request(DELETE_PLAYLIST, { ids });
 
     res.status(200).json(response);
   } catch (error) {

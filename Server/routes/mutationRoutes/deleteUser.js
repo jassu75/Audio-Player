@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { DELETE_USER } from "../../mutation.js";
+import { DELETE_PLAYLIST, DELETE_SONG, DELETE_USER } from "../../mutation.js";
 import client from "../../Config/hasura.js";
 import firebaseAuthenticate from "../../MiddleWare/firebaseAuthenticate.js";
 import admin from "../../Config/firebase.js";
@@ -10,6 +10,9 @@ router.post("/api/deleteuser", firebaseAuthenticate, async (req, res) => {
   try {
     const email = req.user.email;
     const uid = req.user.uid;
+    const { songIds, playlistIds } = req.body;
+    await client.request(DELETE_SONG, { ids: songIds });
+    await client.request(DELETE_PLAYLIST, { ids: playlistIds });
     await client.request(DELETE_USER, { email });
     await admin.auth().deleteUser(uid);
 

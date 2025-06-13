@@ -13,12 +13,17 @@ import { auth } from "../../../config/firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../Songlist/HomepageSongs/homepage.slice";
 
 const Profile = ({ username }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [signOutLoading, setSignOutLoading] = useState(false);
   const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
+  const allSongs = useSelector((state) => state.homepage.songs);
+  const playlists = useSelector((state) => state.homepage.playlists);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,6 +39,7 @@ const Profile = ({ username }) => {
       await signOut(auth);
       localStorage.clear();
       sessionStorage.clear();
+      dispatch(logout());
       navigate("/", { replace: true });
     } catch (error) {
       console.error("error logging out user", error);
@@ -48,9 +54,12 @@ const Profile = ({ username }) => {
       setDeleteAccountLoading(true);
       const token = await auth.currentUser?.getIdToken();
       if (token) {
+        const songIds = Object.keys(allSongs);
+        const playlistIds = Object.keys(playlists);
+
         await axios.post(
           "/api/deleteuser",
-          {},
+          { songIds, playlistIds },
           {
             headers: {
               "Content-Type": "application/json",
@@ -60,6 +69,8 @@ const Profile = ({ username }) => {
         );
         localStorage.clear();
         sessionStorage.clear();
+        dispatch(logout());
+
         navigate("/", { replace: true });
       }
     } catch (error) {

@@ -51,7 +51,7 @@ const HomepageSong = ({ songKey, song }) => {
 
       await axios.post(
         "/api/deletesong",
-        { id: songKey },
+        { ids: [songKey] },
         {
           headers: { "Content-Type": "application/json" },
         }

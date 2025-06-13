@@ -6,8 +6,8 @@ const router = Router();
 
 router.post("/api/deletesong", async (req, res) => {
   try {
-    const { id } = req.body;
-    const response = await client.request(DELETE_SONG, { id });
+    const { ids } = req.body;
+    const response = await client.request(DELETE_SONG, { ids });
 
     res.status(200).json(response);
   } catch (error) {

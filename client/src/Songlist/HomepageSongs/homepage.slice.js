@@ -117,6 +117,7 @@ const songsSlice = createSlice({
     setAudiusSongs: (state, action) => {
       state.audiusSongs = action.payload;
     },
+    logout: () => initialState,
   },
 });
 
@@ -138,5 +139,6 @@ export const {
   setJamendoSongs,
   setAudiusSongs,
   setAudiusAlbums,
+  logout,
 } = songsSlice.actions;
 export default songsSlice.reducer;

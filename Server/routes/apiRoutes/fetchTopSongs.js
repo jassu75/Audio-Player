@@ -6,7 +6,7 @@ router.get("/api/jamendo/fetchTopSongs", async (req, res) => {
   try {
     const url = "https://api.jamendo.com/v3.0/tracks";
     const params = {
-      client_id: process.env.CLIENT_ID,
+      client_id: process.env.JAMENDO_CLIENT_ID,
       format: "jsonpretty",
       order: "popularity_total",
       limit: 30,

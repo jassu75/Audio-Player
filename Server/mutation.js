@@ -31,9 +31,12 @@ export const ADD_SONG = `
 `;
 
 export const DELETE_SONG = `
-mutation DELETE_SONG($id:uuid!){
-  delete_audio_details_by_pk(id:$id){
-    id
+mutation DELETE_SONGS($ids: [uuid!]!) {
+  delete_audio_details(where: {id: {_in: $ids}}) {
+    affected_rows
+    returning {
+      id
+    }
   }
 }
 `;
@@ -61,11 +64,14 @@ export const ADD_PLAYLIST = `
 `;
 
 export const DELETE_PLAYLIST = `
-  mutation DELETE_PLAYLIST($id: uuid!) {
-    delete_playlist_details_by_pk(id: $id) {
+mutation DELETE_PLAYLISTS($ids: [uuid!]!) {
+  delete_playlist_details(where: {id: {_in: $ids}}) {
+    affected_rows
+    returning {
       id
     }
   }
+}
 `;
 
 export const DELETE_USER = `

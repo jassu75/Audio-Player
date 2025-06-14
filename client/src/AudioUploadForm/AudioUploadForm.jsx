@@ -56,17 +56,17 @@ const AudioUploadForm = ({ open, onClose }) => {
         if (songTitles.includes(songTitle)) {
           progress[file.name] = "Song already exists";
         } else {
-          const audioUrl = await uploadAudioToCloudinary(file);
+          const audioDetails = await uploadAudioToCloudinary(file);
 
           const image = metadata.common.picture
             ? metadata.common.picture[0].data
             : null;
 
-          const imageUrl = image
+          const imageDetails = image
             ? await uploadImageToCloudinary(
                 new Blob([image], { type: "image/jpeg" })
               )
-            : defaultMusicNote;
+            : { coverArt: defaultMusicNote, coverArtId: "static" };
 
           const uploadedSong = {
             title: (
@@ -77,8 +77,10 @@ const AudioUploadForm = ({ open, onClose }) => {
             duration: Math.round(metadata.format.duration || 0),
             genre: metadata.common.genre || "",
             release_year: String(metadata.common.year || "").trim(),
-            cover_art: imageUrl,
-            audio_url: audioUrl,
+            cover_art: imageDetails.coverArt,
+            audio_url: audioDetails.audioUrl,
+            cover_art_id: imageDetails.coverArtId,
+            audio_url_id: audioDetails.audioUrlId,
           };
 
           const response = await axios.post(

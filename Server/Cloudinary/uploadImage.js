@@ -25,8 +25,8 @@ router.post(
           folder: "Tejas Musify/Image",
         });
         res.status(200).json({
-          imageUrl: response.secure_url,
-          publicId: response.public_id,
+          coverArt: response.secure_url,
+          coverArtId: response.public_id,
         });
       }
     } catch (err) {

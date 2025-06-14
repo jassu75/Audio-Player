@@ -57,9 +57,17 @@ const Profile = ({ username }) => {
         const songIds = Object.keys(allSongs);
         const playlistIds = Object.keys(playlists);
 
+        const assets = [];
+        for (const song of Object.values(allSongs)) {
+          if (song.cover_art_id !== "static") {
+            assets.push({ id: song.cover_art_id, type: "image" });
+          }
+          assets.push({ id: song.audio_url_id, type: "video" });
+        }
+
         await axios.post(
           "/api/deleteuser",
-          { songIds, playlistIds },
+          { songIds, playlistIds, assets },
           {
             headers: {
               "Content-Type": "application/json",

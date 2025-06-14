@@ -28,7 +28,7 @@ router.post(
         });
         res.status(200).json({
           audioUrl: response.secure_url,
-          publicId: response.public_id,
+          audioUrlId: response.public_id,
         });
       }
     } catch (err) {

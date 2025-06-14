@@ -23,6 +23,8 @@ export const GET_SONGS = `
       release_year
       cover_art
       audio_url
+      cover_art_id
+      audio_url_id
     }
   }
 `;

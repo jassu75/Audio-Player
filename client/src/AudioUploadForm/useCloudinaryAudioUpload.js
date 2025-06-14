@@ -21,8 +21,7 @@ const useCloudinaryAudioUpload = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        const audioUrl = response.data.audioUrl;
-        return audioUrl;
+        return response.data;
       }
     } catch (error) {
       console.error("Error occurred during audio upload:", error);

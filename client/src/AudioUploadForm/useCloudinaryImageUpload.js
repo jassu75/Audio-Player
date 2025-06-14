@@ -20,8 +20,7 @@ const useCloudinaryImageUpload = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        const imageUrl = response.data.imageUrl;
-        return imageUrl;
+        return response.data;
       }
     } catch (error) {
       console.error("Error occurred during image upload:", error);

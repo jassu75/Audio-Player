@@ -48,10 +48,17 @@ const HomepageSong = ({ songKey, song }) => {
         }
       );
       dispatch(setHomepageSongTitles(updatedHomepageSongs));
+      const assets = [
+        { id: song.cover_art_id, type: "image" },
+        { id: song.audio_url_id, type: "video" },
+      ].filter((asset) => asset.id !== "static");
 
       await axios.post(
         "/api/deletesong",
-        { ids: [songKey] },
+        {
+          songIds: [songKey],
+          assets: assets,
+        },
         {
           headers: { "Content-Type": "application/json" },
         }

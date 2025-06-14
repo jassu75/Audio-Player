@@ -7,8 +7,8 @@ import styles from "./selectedPlaylist.module.css";
 import PlaylistUploadButton from "../CustomButtons/PlaylistUploadButton/PlaylistUploadButton";
 import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
-import { Backdrop, CircularProgress } from "@mui/material";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
+import PlaylistSkeleton from "../Skeletons/PlaylistSkeleton";
 
 const SelectedPlaylist = () => {
   const { playlistId } = useParams();
@@ -18,11 +18,7 @@ const SelectedPlaylist = () => {
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
 
   if (userLoading) {
-    return (
-      <Backdrop className={styles.loader_backdrop} open={userLoading}>
-        <CircularProgress className={styles.loader_spinner} />
-      </Backdrop>
-    );
+    return <PlaylistSkeleton />;
   }
 
   if (userError) {

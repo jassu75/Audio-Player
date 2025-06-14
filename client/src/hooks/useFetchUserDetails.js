@@ -8,12 +8,14 @@ import { auth } from "../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.homepage.user);
   const songsList = useSelector((state) => state.homepage.songs);
   const playlists = useSelector((state) => state.homepage.playlists);
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState({
     user: false,
@@ -35,7 +37,9 @@ const useFetchUserDetails = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (!user && firebaseUser?.email) {
+      if (!firebaseUser) {
+        navigate("/", { replace: true });
+      } else if (!user && firebaseUser.email) {
         try {
           setLoading((prev) => ({ ...prev, user: true }));
           setError((prev) => ({ ...prev, user: false }));
@@ -59,7 +63,7 @@ const useFetchUserDetails = () => {
     });
 
     return () => unsubscribe();
-  }, [dispatch, user]);
+  }, [dispatch, user, navigate]);
 
   useEffect(() => {
     const fetchSongs = async (song_ids) => {

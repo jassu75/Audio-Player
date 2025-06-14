@@ -18,13 +18,3 @@
   text-decoration: underline;
   padding: 15px;
 }
-
-.loader_spinner {
-  color: #ffffff;
-}
-
-.loader_backdrop {
-  color: #fff;
-  z-index: 1301;
-  backdrop-filter: blur(4px);
-}

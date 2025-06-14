@@ -18,10 +18,11 @@ const Homepage = () => {
   const loading = userLoading || jamendoSongsLoading || audiusAlbumsLoading;
   const error = userError || jamendoSongsError;
 
-  if (loading) return <HomepageSkeleton />;
   if (error) return <ErrorPage />;
 
-  return (
+  return loading ? (
+    <HomepageSkeleton />
+  ) : (
     <Grid2 className={styles.container}>
       <UserWelcome />
 

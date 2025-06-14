@@ -7,8 +7,8 @@ import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import useJamendoSongs from "../hooks/useJamendoSongs";
-import { Backdrop, CircularProgress } from "@mui/material";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
+import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 
 const JamendoAudioPlayer = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
@@ -138,12 +138,7 @@ const JamendoAudioPlayer = () => {
     resetProgressBar();
   };
 
-  if (jamendoSongsLoading)
-    return (
-      <Backdrop className={styles.loader_backdrop} open={jamendoSongsLoading}>
-        <CircularProgress className={styles.loader_spinner} />
-      </Backdrop>
-    );
+  if (jamendoSongsLoading) return <AudioPlayerSkeleton />;
   if (jamendoSongsError) return <ErrorPage />;
 
   return (

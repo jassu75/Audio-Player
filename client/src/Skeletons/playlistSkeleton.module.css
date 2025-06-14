@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  padding: 3px;
+  overflow: hidden;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0 20px 0;
+}
+
+.song {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 98%;
+  overflow: hidden;
+  padding: 10px;
+}

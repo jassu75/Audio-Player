@@ -3,9 +3,9 @@ import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import styles from "./selectedAlbum.module.css";
 import useAudiusAlbumSong from "../../../hooks/useAudiusAlbumSongs";
-import { Backdrop, CircularProgress } from "@mui/material";
 import AlbumSongList from "./AlbumSongList";
 import EmptyAlbum from "../../../HelperPages/EmptyPages/EmptyAlbum";
+import PlaylistSkeleton from "../../../Skeletons/PlaylistSkeleton";
 
 const SelectedAlbum = () => {
   const { slug } = useParams();
@@ -16,15 +16,7 @@ const SelectedAlbum = () => {
   const { audiusAlbumSongLoading, audiusAlbumSongError } =
     useAudiusAlbumSong(playlistId);
 
-  if (audiusAlbumSongLoading)
-    return (
-      <Backdrop
-        className={styles.loader_backdrop}
-        open={audiusAlbumSongLoading}
-      >
-        <CircularProgress className={styles.loader_spinner} />
-      </Backdrop>
-    );
+  if (audiusAlbumSongLoading) return <PlaylistSkeleton />;
   if (audiusAlbumSongError) return <EmptyAlbum />;
 
   return (

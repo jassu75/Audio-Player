@@ -7,8 +7,8 @@ import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
-import { Backdrop, CircularProgress } from "@mui/material";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
+import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 
 const AudioPlayer = () => {
   const { songId } = useParams();
@@ -137,11 +137,7 @@ const AudioPlayer = () => {
   };
 
   if (userLoading) {
-    return (
-      <Backdrop className={styles.loader_backdrop} open={userLoading}>
-        <CircularProgress className={styles.loader_spinner} />
-      </Backdrop>
-    );
+    return <AudioPlayerSkeleton />;
   }
 
   if (userError) {

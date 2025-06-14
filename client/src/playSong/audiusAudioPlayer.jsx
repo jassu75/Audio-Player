@@ -7,8 +7,8 @@ import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import useAudiusAlbumSong from "../hooks/useAudiusAlbumSongs";
-import { Backdrop, CircularProgress } from "@mui/material";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
+import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 
 const AudiusAudioPlayer = () => {
   const { playlistId, songId } = useParams();
@@ -140,15 +140,7 @@ const AudiusAudioPlayer = () => {
     resetProgressBar();
   };
 
-  if (audiusAlbumSongLoading)
-    return (
-      <Backdrop
-        className={styles.loader_backdrop}
-        open={audiusAlbumSongLoading}
-      >
-        <CircularProgress className={styles.loader_spinner} />
-      </Backdrop>
-    );
+  if (audiusAlbumSongLoading) return <AudioPlayerSkeleton />;
   if (audiusAlbumSongError) return <ErrorPage />;
 
   return (

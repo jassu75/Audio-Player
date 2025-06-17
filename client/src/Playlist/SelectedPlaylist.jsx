@@ -9,11 +9,12 @@ import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import PlaylistSkeleton from "../Skeletons/PlaylistSkeleton";
+import { playlistsSelector } from "../redux/selectors/homepage.selector";
 
 const SelectedPlaylist = () => {
   const { playlistId } = useParams();
   const { userLoading, userError } = useFetchUserDetails();
-  const allPlaylist = useSelector((state) => state.homepage.playlists);
+  const allPlaylist = useSelector(playlistsSelector);
   const playlistSongs = allPlaylist?.[playlistId]?.playlist_songs;
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
 

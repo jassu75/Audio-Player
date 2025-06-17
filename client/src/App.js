@@ -10,6 +10,8 @@ import SelectedPlaylist from "./Playlist/SelectedPlaylist";
 import JamendoAudioPlayer from "./playSong/JamendoAudioPlayer";
 import SelectedAlbum from "./Homepage/Sections/Albums/SelectedAlbum";
 import AudiusAudioPlayer from "./playSong/audiusAudioPlayer";
+import Search from "./Search/Search";
+import PlaylistAudioPlayer from "./playSong/playlistAudioPlayer";
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -19,6 +21,10 @@ function App() {
             <Route path="/" element={<UserAuthentication />} />
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/user/song/:songId" element={<AudioPlayer />} />
+            <Route
+              path="/user/playlist/:playlistId/song/:songId"
+              element={<PlaylistAudioPlayer />}
+            />
             <Route path="/song/:songId" element={<JamendoAudioPlayer />} />
             <Route path="/redirect" element={<DirectToLogin />} />
             <Route
@@ -30,6 +36,7 @@ function App() {
               path="/album/:playlistId/song/:songId"
               element={<AudiusAudioPlayer />}
             />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </div>
       </Router>

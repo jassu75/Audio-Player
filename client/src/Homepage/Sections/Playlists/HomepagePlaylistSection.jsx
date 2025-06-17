@@ -2,9 +2,10 @@ import { Grid2, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import styles from "./homepagePlaylistSection.module.css";
 import HomepagePlaylistItem from "../../../Songlist/HomepagePlaylists/HomepagePlaylistItem";
+import { playlistsSelector } from "../../../redux/selectors/homepage.selector";
 
 const HomepagePlaylistSection = () => {
-  const homepagePlaylists = useSelector((state) => state.homepage.playlists);
+  const homepagePlaylists = useSelector(playlistsSelector);
   return homepagePlaylists && Object.keys(homepagePlaylists).length !== 0 ? (
     <Grid2 className={styles.homepage_playlists}>
       <Grid2 className={styles.title}>

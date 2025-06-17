@@ -9,16 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addPlaylistDetails,
   addPlaylistIds,
-} from "../HomepageSongs/homepage.slice";
+} from "../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
+import { userSelector } from "../../redux/selectors/homepage.selector";
 
 const CreatePlaylistTitle = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
-  const user = useSelector((state) => state.homepage.user);
+  const user = useSelector(userSelector);
   const [errorMessage, setErrorMessage] = useState("");
 
   const images = [

@@ -2,9 +2,10 @@ import { Grid2, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import styles from "./homepageAlbumSection.module.css";
 import HomepageAlbum from "./HomepageAlbum";
+import { audiusAlbumsSelector } from "../../../redux/selectors/homepage.selector";
 
 const HomepageAlbumSection = () => {
-  const homepageAlbumList = useSelector((state) => state.homepage.audiusAlbums);
+  const homepageAlbumList = useSelector(audiusAlbumsSelector);
   return (
     <Grid2 className={styles.homepage_albums}>
       <Grid2 className={styles.title}>

@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setJamendoSongs } from "../Songlist/HomepageSongs/homepage.slice";
+import { setJamendoSongs } from "../redux/slices/homepage.slice";
+import { jamendoSongsSelector } from "../redux/selectors/homepage.selector";
 
 const useJamendoSongs = () => {
   const [jamendoSongsLoading, setJamendoSongsLoading] = useState(false);
   const [jamendoSongsError, setJamendoSongsError] = useState(false);
   const dispatch = useDispatch();
-  const jamendoSongs = useSelector((state) => state.homepage.jamendoSongs);
+  const jamendoSongs = useSelector(jamendoSongsSelector);
 
   useEffect(() => {
     const fetchJamendoSongs = async () => {

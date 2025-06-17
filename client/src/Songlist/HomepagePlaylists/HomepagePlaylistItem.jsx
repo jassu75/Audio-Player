@@ -9,16 +9,17 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   deletePlaylistDetails,
   setPlaylistIds,
-} from "../HomepageSongs/homepage.slice";
+} from "../../redux/slices/homepage.slice";
 import CantDeletePlaylist from "./CantDeletePlaylist";
 import axios from "axios";
+import { userSelector } from "../../redux/selectors/homepage.selector";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.homepage.user);
+  const user = useSelector(userSelector);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 

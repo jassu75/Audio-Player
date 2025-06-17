@@ -6,15 +6,16 @@ import * as musicMetadata from "music-metadata-browser";
 import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
 import axios from "axios";
-import {
-  addHomepageSongId,
-  addSongs,
-} from "../Songlist/HomepageSongs/homepage.slice";
+import { addHomepageSongId, addSongs } from "../redux/slices/homepage.slice";
 import styles from "./AudioUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import defaultMusicNote from "../assets/AudioUploadForm/defaultMusicImage.webp";
+import {
+  songsSelector,
+  userSelector,
+} from "../redux/selectors/homepage.selector";
 
 const AudioUploadForm = ({ open, onClose }) => {
   const dispatch = useDispatch();
@@ -24,8 +25,8 @@ const AudioUploadForm = ({ open, onClose }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [newSong, setNewSong] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const allSongs = useSelector((state) => state.homepage.songs);
-  const user = useSelector((state) => state.homepage.user);
+  const allSongs = useSelector(songsSelector);
+  const user = useSelector(userSelector);
   const homepageSongs = user?.homepage_songs;
   const songTitles = homepageSongs
     .map((songId) => allSongs[songId]?.title)

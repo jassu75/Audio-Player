@@ -3,10 +3,14 @@ import styles from "./userSongSection.module.css";
 import EmptyHomePage from "../../../../HelperPages/EmptyPages/EmptyHomepage";
 import { useSelector } from "react-redux";
 import HomepageSong from "../../../../Songlist/HomepageSongs/HomepageSong";
+import {
+  songsSelector,
+  userSongsSelector,
+} from "../../../../redux/selectors/homepage.selector";
 
 const UserSongSection = () => {
-  const userSongs = useSelector((state) => state.homepage.user?.homepage_songs);
-  const allSongs = useSelector((state) => state.homepage.songs);
+  const userSongs = useSelector(userSongsSelector);
+  const allSongs = useSelector(songsSelector);
 
   return (
     <Grid2 className={styles.homepage_songs}>

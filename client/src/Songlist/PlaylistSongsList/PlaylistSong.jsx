@@ -8,21 +8,25 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteSong, setPlaylistSongs } from "../HomepageSongs/homepage.slice";
+import {
+  deleteSong,
+  setPlaylistSongs,
+} from "../../redux/slices/homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
+import { playlistsSelector } from "../../redux/selectors/homepage.selector";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const allPlaylistSongs = useSelector((state) => state.homepage.playlists);
+  const allPlaylistSongs = useSelector(playlistsSelector);
   const playlistSongs = allPlaylistSongs[playlistId]?.playlist_songs;
   const playlistSongList = Array.from(playlistSongs);
 
   const handleSongClick = () => {
-    navigate(`/user/song/${songKey}`);
+    navigate(`/user/playlist/${playlistId}/song/${songKey}?list=playlist`);
   };
 
   const handleMenuOpen = (event) => {

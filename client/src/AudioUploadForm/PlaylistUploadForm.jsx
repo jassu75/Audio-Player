@@ -5,16 +5,17 @@ import UploadFile from "@mui/icons-material/UploadFile";
 import * as musicMetadata from "music-metadata-browser";
 import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
-import {
-  addPlaylistSongs,
-  addSongs,
-} from "../Songlist/HomepageSongs/homepage.slice";
+import { addPlaylistSongs, addSongs } from "../redux/slices/homepage.slice";
 import styles from "./playlistUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import defaultMusicNote from "../assets/AudioUploadForm/defaultMusicImage.webp";
 import axios from "axios";
+import {
+  playlistsSelector,
+  songsSelector,
+} from "../redux/selectors/homepage.selector";
 
 const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const dispatch = useDispatch();
@@ -24,8 +25,8 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [newSong, setNewSong] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const allSongs = useSelector((state) => state.homepage.songs);
-  const userPlaylists = useSelector((state) => state.homepage.playlists);
+  const allSongs = useSelector(songsSelector);
+  const userPlaylists = useSelector(playlistsSelector);
 
   const playlistSongs = userPlaylists[playlistId]?.playlist_songs;
 

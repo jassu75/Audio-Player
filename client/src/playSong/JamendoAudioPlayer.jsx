@@ -9,12 +9,13 @@ import { useSelector } from "react-redux";
 import useJamendoSongs from "../hooks/useJamendoSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
+import { jamendoSongsSelector } from "../redux/selectors/homepage.selector";
 
 const JamendoAudioPlayer = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const { songId } = useParams();
   const [id, setId] = useState(songId);
-  const songsList = useSelector((state) => state.homepage.jamendoSongs);
+  const songsList = useSelector(jamendoSongsSelector);
   const song = songsList?.find((song) => song.id === id);
 
   const [isPlaying, setIsPlaying] = useState(false);

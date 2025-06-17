@@ -13,7 +13,7 @@ import {
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
+import { setUser } from "../redux/slices/homepage.slice";
 import axios from "axios";
 
 const SignUp = () => {

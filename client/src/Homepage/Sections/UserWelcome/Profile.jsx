@@ -14,7 +14,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../Songlist/HomepageSongs/homepage.slice";
+import { logout } from "../../../redux/slices/homepage.slice";
+import {
+  playlistsSelector,
+  songsSelector,
+} from "../../../redux/selectors/homepage.selector";
 
 const Profile = ({ username }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -22,8 +26,8 @@ const Profile = ({ username }) => {
   const dispatch = useDispatch();
   const [signOutLoading, setSignOutLoading] = useState(false);
   const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
-  const allSongs = useSelector((state) => state.homepage.songs);
-  const playlists = useSelector((state) => state.homepage.playlists);
+  const allSongs = useSelector(songsSelector);
+  const playlists = useSelector(playlistsSelector);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

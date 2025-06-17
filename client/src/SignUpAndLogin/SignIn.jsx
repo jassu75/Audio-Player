@@ -10,8 +10,9 @@ import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../Songlist/HomepageSongs/homepage.slice";
+import { setUser } from "../redux/slices/homepage.slice";
 import axios from "axios";
+import { userSelector } from "../redux/selectors/homepage.selector";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let userFromDB = useSelector((state) => state.homepage.user);
+  let userFromDB = useSelector(userSelector);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,6 +73,7 @@ const SignIn = () => {
 
     try {
       const userCredential = await signInWithPopup(auth, googleAuthProvider);
+      setLoading(true);
       const user = userCredential.user;
       const response = await axios.post(
         "/api/checkExistingUser",
@@ -107,6 +109,7 @@ const SignIn = () => {
     } catch (err) {
       console.error("Google Sign-In failed", err);
     } finally {
+      setLoading(false);
     }
   };
 

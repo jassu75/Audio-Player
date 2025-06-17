@@ -8,19 +8,23 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteSong, setHomepageSongTitles } from "./homepage.slice";
+import {
+  deleteSong,
+  setHomepageSongTitles,
+} from "../../redux/slices/homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress"; // Import the loader
 import axios from "axios";
+import { userSelector } from "../../redux/selectors/homepage.selector";
 
 const HomepageSong = ({ songKey, song }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.homepage.user);
+  const user = useSelector(userSelector);
 
   const handleSongClick = () => {
-    navigate(`/user/song/${songKey}`);
+    navigate(`/user/song/${songKey}?list=homepage`);
   };
 
   const handleMenuOpen = (event) => {

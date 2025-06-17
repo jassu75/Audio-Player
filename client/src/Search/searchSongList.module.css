@@ -1,0 +1,7 @@
+.songlist_container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 60px;
+  gap: 15px;
+  width: 100%;
+}

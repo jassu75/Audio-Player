@@ -3,18 +3,23 @@ import {
   setPlaylistDetails,
   setSongs,
   setUser,
-} from "../Songlist/HomepageSongs/homepage.slice";
+} from "../redux/slices/homepage.slice";
 import { auth } from "../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  playlistsSelector,
+  songsSelector,
+  userSelector,
+} from "../redux/selectors/homepage.selector";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.homepage.user);
-  const songsList = useSelector((state) => state.homepage.songs);
-  const playlists = useSelector((state) => state.homepage.playlists);
+  const user = useSelector(userSelector);
+  const songsList = useSelector(songsSelector);
+  const playlists = useSelector(playlistsSelector);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState({

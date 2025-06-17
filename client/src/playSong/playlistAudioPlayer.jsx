@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import styles from "./audioPlayer.module.css";
+import { useState, useRef, useEffect, useMemo } from "react";
+import styles from "./playlistAudioPlayer.module.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
@@ -9,21 +9,20 @@ import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
-import {
-  homepageSongsSelector,
-  searchSongsSelector,
-} from "../redux/selectors/homepage.selector";
+import { playlistSongsSelector } from "../redux/selectors/homepage.selector";
 
-const AudioPlayer = () => {
+const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
-  const { songId } = useParams();
+  const { songId, playlistId } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const source = queryParams.get("list");
-  const lists = {
-    homepage: homepageSongsSelector,
-    search: searchSongsSelector,
-  };
+  const playlistSongs = useMemo(
+    () => playlistSongsSelector(playlistId),
+    [playlistId]
+  );
+
+  const lists = { playlist: playlistSongs };
   const songsList = useSelector(lists[source]);
   const song = songsList[songId];
 
@@ -66,7 +65,10 @@ const AudioPlayer = () => {
 
         player.addEventListener("canplaythrough", playNextSong, { once: true });
 
-        navigate(`/user/song/${nextSongId}?list=${source}`, { replace: true });
+        navigate(
+          `/user/playlist/${playlistId}/song/${nextSongId}?list=${source}`,
+          { replace: true }
+        );
         resetProgressBar();
       };
 
@@ -132,7 +134,9 @@ const AudioPlayer = () => {
     const prevSongId = songIds[prevIndex];
 
     setIsPlaying(false);
-    navigate(`/user/song/${prevSongId}?list=${source}`, { replace: true });
+    navigate(`/user/playlist/${playlistId}/song/${prevSongId}?list=${source}`, {
+      replace: true,
+    });
     resetProgressBar();
   };
 
@@ -143,7 +147,9 @@ const AudioPlayer = () => {
     const nextSongId = songIds[nextIndex];
 
     setIsPlaying(false);
-    navigate(`/user/song/${nextSongId}?list=${source}`, { replace: true });
+    navigate(`/user/playlist/${playlistId}/song/${nextSongId}?list=${source}`, {
+      replace: true,
+    });
     resetProgressBar();
   };
 
@@ -216,4 +222,4 @@ const AudioPlayer = () => {
   );
 };
 
-export default AudioPlayer;
+export default PlaylistAudioPlayer;

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import useAudiusAlbumSong from "../hooks/useAudiusAlbumSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
+import { audiusSongsSelector } from "../redux/selectors/homepage.selector";
 
 const AudiusAudioPlayer = () => {
   const { playlistId, songId } = useParams();
@@ -16,7 +17,7 @@ const AudiusAudioPlayer = () => {
     useAudiusAlbumSong(playlistId);
 
   const [id, setId] = useState(songId);
-  const songsList = useSelector((state) => state.homepage.audiusSongs);
+  const songsList = useSelector(audiusSongsSelector);
   const song = songsList?.find((song) => song.id === id);
 
   const [isPlaying, setIsPlaying] = useState(false);

@@ -48,3 +48,22 @@ export const searchSongsSelector = createSelector([songsSelector], (songs) => {
     })
   );
 });
+
+export const filteredSearchSongSelector = (query) =>
+  createSelector([songsSelector], (songs) => {
+    if (!query || !songs) return [];
+
+    const titles = new Set();
+    const searchText = query.toLowerCase();
+
+    return Object.fromEntries(
+      Object.entries(songs).filter(([_id, song]) => {
+        const title = song.title?.toLowerCase() || "";
+        if (title.includes(searchText) && !titles.has(title)) {
+          titles.add(title);
+          return true;
+        }
+        return false;
+      })
+    );
+  });

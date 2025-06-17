@@ -1,40 +1,41 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./search.module.css";
 import { TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { filterSongs } from "../utils/search.utils";
 import { useSelector } from "react-redux";
 import SearchSongList from "./SearchSongList";
-import { songsSelector } from "../redux/selectors/homepage.selector";
+import { filteredSearchSongSelector } from "../redux/selectors/homepage.selector";
+import { useSearchParams } from "react-router-dom";
+import useFetchUserDetails from "../hooks/useFetchUserDetails";
+import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
+import SearchSkeleton from "../Skeletons/SearchSkeleton";
+import EmptySearch from "./EmptySearch";
 
 const Search = () => {
-  const [searchText, setSearchText] = useState("");
-  const [songsList, setSongsList] = useState(null);
-  const allSongs = useSelector(songsSelector);
+  const { userLoading, userError } = useFetchUserDetails();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchText = searchParams.get("searchtext") || "";
 
   const handleSearch = (e) => {
-    setSearchText(e.target.value);
+    setSearchParams({ searchtext: e.target.value }, { replace: true });
   };
+  const songsListSelector = useMemo(
+    () => filteredSearchSongSelector(searchText),
+    [searchText]
+  );
+  const songsList = useSelector(songsListSelector);
 
-  useEffect(() => {
-    if (searchText) {
-      const searchDebounceId = setTimeout(() => {
-        const result = filterSongs(allSongs, searchText);
-        setSongsList(result);
-      }, 500);
-      return () => clearTimeout(searchDebounceId);
-    } else {
-      setSongsList(null);
-    }
-  }, [searchText, allSongs]);
+  if (userError) return <ErrorPage />;
 
-  return (
+  return userLoading ? (
+    <SearchSkeleton />
+  ) : (
     <Grid2 className={styles.container}>
       <Grid2 className={styles.search_container}>
         <Grid2 className={styles.search_bar_container}>
           <SearchIcon className={styles.search_icon} />
-
           <TextField
             variant="outlined"
             placeholder="Search your uploaded songs..."
@@ -45,6 +46,8 @@ const Search = () => {
         </Grid2>
         {songsList && Object.keys(songsList).length > 0 ? (
           <SearchSongList songsList={songsList} />
+        ) : searchText ? (
+          <EmptySearch />
         ) : null}
       </Grid2>
     </Grid2>

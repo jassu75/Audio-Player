@@ -100,6 +100,7 @@ const SignUp = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          autoComplete="name"
         />
         <input
           className={styles.signup_input}
@@ -108,6 +109,7 @@ const SignUp = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
         />
         <input
           className={styles.signup_input}
@@ -116,6 +118,7 @@ const SignUp = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete="new-password"
         />
         <Grid2 className={styles.submit_button_container}>
           <ButtonBase type="submit" disabled={loading}>

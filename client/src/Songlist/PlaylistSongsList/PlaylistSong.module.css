@@ -31,6 +31,10 @@
 .song_artist {
   color: white;
   font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .song_content {

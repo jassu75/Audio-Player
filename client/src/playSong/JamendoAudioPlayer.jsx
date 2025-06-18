@@ -10,6 +10,9 @@ import useJamendoSongs from "../hooks/useJamendoSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import { jamendoSongsSelector } from "../redux/selectors/homepage.selector";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
+import IconButton from "@mui/material/IconButton";
 
 const JamendoAudioPlayer = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
@@ -17,6 +20,7 @@ const JamendoAudioPlayer = () => {
   const [id, setId] = useState(songId);
   const songsList = useSelector(jamendoSongsSelector);
   const song = songsList?.find((song) => song.id === id);
+  const [shuffle, setShuffle] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -42,8 +46,19 @@ const JamendoAudioPlayer = () => {
       updateDuration();
 
       const handleEnded = () => {
-        const currentIndex = songsList.findIndex((song) => song.id === id);
-        const nextIndex = (currentIndex + 1) % songsList.length;
+        let nextIndex;
+        if (shuffle) {
+          do {
+            nextIndex = Math.floor(Math.random() * songsList.length);
+          } while (
+            songsList?.[nextIndex]?.id === songId &&
+            songsList.length > 1
+          );
+        } else {
+          const currentIndex = songsList.findIndex((song) => song.id === id);
+          nextIndex = (currentIndex + 1) % songsList.length;
+        }
+
         const nextSongId = songsList[nextIndex].id;
         setId(nextSongId);
         const nextSong = songsList[nextIndex];
@@ -139,22 +154,38 @@ const JamendoAudioPlayer = () => {
     resetProgressBar();
   };
 
+  const handleShuffle = () => {
+    const prevValue = shuffle;
+    setShuffle(!prevValue);
+  };
+
   if (jamendoSongsLoading) return <AudioPlayerSkeleton />;
   if (jamendoSongsError) return <ErrorPage />;
 
   return (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
-      <Grid2 className={styles.song_details}>
-        <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
+      <Grid2 className={styles.song_content}>
+        <Grid2 className={styles.song_details}>
+          <Grid2 className={styles.song_title}>
+            <Typography variant="audioPlayerSongTitle">
+              {song?.title}
+            </Typography>
+          </Grid2>
+          <Grid2 className={styles.song_artist}>
+            <Typography variant="audioPlayerSongArtist">
+              {song?.artist}
+            </Typography>
+          </Grid2>
         </Grid2>
-        <Grid2 className={styles.song_artist}>
-          <Typography variant="audioPlayerSongArtist">
-            {song?.artist}
-          </Typography>
-        </Grid2>
+        <IconButton
+          onClick={handleShuffle}
+          title={shuffle ? "Shuffle On" : "Shuffle Off"}
+        >
+          {shuffle ? <ShuffleOnIcon /> : <ShuffleIcon />}
+        </IconButton>
       </Grid2>
+
       <Grid2 className={styles.audio_buttons}>
         <audio
           ref={audioPlayer}

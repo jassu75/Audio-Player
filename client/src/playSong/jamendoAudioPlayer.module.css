@@ -92,6 +92,12 @@
   cursor: pointer;
 }
 
+.song_content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 /* progress bar - safari */
 .progressBar::-webkit-slider-runnable-track {
   background: var(--bar-bg);

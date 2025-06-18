@@ -17,6 +17,12 @@
   object-fit: cover;
 }
 
+.song_content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .audio_buttons {
   display: flex;
   flex-direction: row;

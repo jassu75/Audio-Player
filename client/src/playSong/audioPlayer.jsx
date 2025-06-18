@@ -3,7 +3,8 @@ import styles from "./audioPlayer.module.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
-
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
@@ -13,8 +14,10 @@ import {
   homepageSongsSelector,
   searchSongsSelector,
 } from "../redux/selectors/homepage.selector";
+import { IconButton } from "@mui/material";
 
 const AudioPlayer = () => {
+  const [shuffle, setShuffle] = useState(false);
   const { userLoading, userError } = useFetchUserDetails();
   const { songId } = useParams();
   const location = useLocation();
@@ -52,12 +55,18 @@ const AudioPlayer = () => {
 
       const handleEnded = () => {
         const songIds = Object.keys(songsList);
-        const currentIndex = songIds.indexOf(songId);
-        const nextIndex = (currentIndex + 1) % songIds.length;
-        const nextSongId = songIds[nextIndex];
+        let nextSongId;
+        if (shuffle) {
+          do {
+            nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
+          } while (nextSongId === songId && songIds.length > 1);
+        } else {
+          const currentIndex = songIds.indexOf(songId);
+          const nextIndex = (currentIndex + 1) % songIds.length;
+          nextSongId = songIds[nextIndex];
+        }
         const nextSong = songsList[nextSongId];
         player.src = nextSong.audio_url;
-
         const playNextSong = () => {
           player.play().catch((error) => {
             console.error("Error playing audio:", error);
@@ -147,6 +156,11 @@ const AudioPlayer = () => {
     resetProgressBar();
   };
 
+  const handleShuffle = () => {
+    const prevValue = shuffle;
+    setShuffle(!prevValue);
+  };
+
   if (userLoading) {
     return <AudioPlayerSkeleton />;
   }
@@ -158,16 +172,27 @@ const AudioPlayer = () => {
   return (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
-      <Grid2 className={styles.song_details}>
-        <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
+      <Grid2 className={styles.song_content}>
+        <Grid2 className={styles.song_details}>
+          <Grid2 className={styles.song_title}>
+            <Typography variant="audioPlayerSongTitle">
+              {song?.title}
+            </Typography>
+          </Grid2>
+          <Grid2 className={styles.song_artist}>
+            <Typography variant="audioPlayerSongArtist">
+              {song?.artist}
+            </Typography>
+          </Grid2>
         </Grid2>
-        <Grid2 className={styles.song_artist}>
-          <Typography variant="audioPlayerSongArtist">
-            {song?.artist}
-          </Typography>
-        </Grid2>
+        <IconButton
+          onClick={handleShuffle}
+          title={shuffle ? "Shuffle On" : "Shuffle Off"}
+        >
+          {shuffle ? <ShuffleOnIcon /> : <ShuffleIcon />}
+        </IconButton>
       </Grid2>
+
       <Grid2 className={styles.audio_buttons}>
         <audio
           ref={audioPlayer}

@@ -10,6 +10,9 @@ import { useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import { playlistSongsSelector } from "../redux/selectors/homepage.selector";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
+import IconButton from "@mui/material/IconButton";
 
 const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -21,6 +24,7 @@ const PlaylistAudioPlayer = () => {
     () => playlistSongsSelector(playlistId),
     [playlistId]
   );
+  const [shuffle, setShuffle] = useState(false);
 
   const lists = { playlist: playlistSongs };
   const songsList = useSelector(lists[source]);
@@ -51,9 +55,17 @@ const PlaylistAudioPlayer = () => {
 
       const handleEnded = () => {
         const songIds = Object.keys(songsList);
-        const currentIndex = songIds.indexOf(songId);
-        const nextIndex = (currentIndex + 1) % songIds.length;
-        const nextSongId = songIds[nextIndex];
+        let nextSongId;
+        if (shuffle) {
+          do {
+            nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
+          } while (nextSongId === songId && songIds.length > 1);
+        } else {
+          const currentIndex = songIds.indexOf(songId);
+          const nextIndex = (currentIndex + 1) % songIds.length;
+          nextSongId = songIds[nextIndex];
+        }
+
         const nextSong = songsList[nextSongId];
         player.src = nextSong.audio_url;
 
@@ -153,6 +165,11 @@ const PlaylistAudioPlayer = () => {
     resetProgressBar();
   };
 
+  const handleShuffle = () => {
+    const prevValue = shuffle;
+    setShuffle(!prevValue);
+  };
+
   if (userLoading) {
     return <AudioPlayerSkeleton />;
   }
@@ -164,16 +181,27 @@ const PlaylistAudioPlayer = () => {
   return (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
-      <Grid2 className={styles.song_details}>
-        <Grid2 className={styles.song_title}>
-          <Typography variant="audioPlayerSongTitle">{song?.title}</Typography>
+      <Grid2 className={styles.song_content}>
+        <Grid2 className={styles.song_details}>
+          <Grid2 className={styles.song_title}>
+            <Typography variant="audioPlayerSongTitle">
+              {song?.title}
+            </Typography>
+          </Grid2>
+          <Grid2 className={styles.song_artist}>
+            <Typography variant="audioPlayerSongArtist">
+              {song?.artist}
+            </Typography>
+          </Grid2>
         </Grid2>
-        <Grid2 className={styles.song_artist}>
-          <Typography variant="audioPlayerSongArtist">
-            {song?.artist}
-          </Typography>
-        </Grid2>
+        <IconButton
+          onClick={handleShuffle}
+          title={shuffle ? "Shuffle On" : "Shuffle Off"}
+        >
+          {shuffle ? <ShuffleOnIcon /> : <ShuffleIcon />}
+        </IconButton>
       </Grid2>
+
       <Grid2 className={styles.audio_buttons}>
         <audio
           ref={audioPlayer}

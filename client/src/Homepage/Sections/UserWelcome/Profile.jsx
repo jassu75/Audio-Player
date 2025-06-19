@@ -42,7 +42,6 @@ const Profile = ({ username }) => {
       setSignOutLoading(true);
       await signOut(auth);
       localStorage.clear();
-      sessionStorage.clear();
       dispatch(logout());
       navigate("/", { replace: true });
     } catch (error) {
@@ -80,7 +79,6 @@ const Profile = ({ username }) => {
           }
         );
         localStorage.clear();
-        sessionStorage.clear();
         dispatch(logout());
 
         navigate("/", { replace: true });

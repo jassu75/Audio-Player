@@ -44,7 +44,7 @@
 }
 
 .loader {
-  color: #000000;
+  color: #ffffff;
 }
 
 .menu_item {
@@ -52,4 +52,11 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
+}
+
+.divider {
+  background-color: #666666;
+}
+.delete_item_text {
+  color: #ff7f7f;
 }

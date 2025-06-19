@@ -4,84 +4,43 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
-import styles from "./createPlaylistTitle.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addPlaylistDetails,
-  addPlaylistIds,
-} from "../../redux/slices/homepage.slice";
+import styles from "./renamePlaylistTitle.module.css";
+import { useDispatch } from "react-redux";
+import { renamePlaylist } from "../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { userSelector } from "../../redux/selectors/homepage.selector";
 
-const CreatePlaylistTitle = ({ open, onClose }) => {
+const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
-  const user = useSelector(userSelector);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const images = [
-    "/images/playlist1.png",
-    "/images/playlist2.png",
-    "/images/playlist3.jpeg",
-    "/images/playlist4.jpeg",
-    "/images/playlist5.png",
-    "/images/playlist6.png",
-    "/images/playlist7.jpeg",
-    "/images/playlist8.jpeg",
-    "/images/playlist9.png",
-    "/images/playlist10.jpeg",
-  ];
 
   const handleInput = (e) => {
     setErrorMessage(false);
     setTitle(e.target.value);
   };
 
-  const handleDone = async () => {
-    try {
-      if (!title) {
-        setErrorMessage("Enter a playlist title");
-      } else {
+  const handleRename = async () => {
+    if (!title) {
+      setErrorMessage("Enter a playlist title");
+    } else if (title === playlistTitle) {
+      setErrorMessage("Please enter a different playlist title");
+    } else {
+      try {
         setLoading(true);
-        const homepagePlaylists = Array.from(user.playlist_ids);
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-
-        const uploadPlaylist = {
-          playlist_title: title,
-          playlist_cover_art: randomImage,
-          playlist_songs: [],
-        };
-        const response = await axios.post(
-          "/api/addPlaylist",
-          { uploadPlaylist },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const id = response.data?.insert_playlist_details?.returning?.[0]?.id;
-        uploadPlaylist.id = id;
-        homepagePlaylists.push(id);
-        dispatch(addPlaylistIds(id));
-        dispatch(addPlaylistDetails(uploadPlaylist));
-        await axios.post(
-          "/api/updatePlaylistId",
-          {
-            user_id: user.id,
-            playlist_ids: homepagePlaylists,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        const payload = { playlistId: playlistId, newTitle: title };
+        dispatch(renamePlaylist(payload));
+        await axios.post("/api/updateplaylisttitle", payload, {
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (error) {
+        console.error("Error renaming playlist song", error);
+      } finally {
+        setLoading(false);
+        onClose();
       }
-    } catch (error) {
-      console.error("Error creating playlist", error);
-    } finally {
-      setLoading(false);
-      onClose();
     }
   };
 
@@ -99,6 +58,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
             onChange={handleInput}
             fullWidth
             className={styles.input}
+            placeholder={playlistTitle}
             slotProps={{
               htmlInput: {
                 maxLength: 32,
@@ -138,7 +98,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
                 </Typography>
               </Grid2>
             </ButtonBase>
-            <ButtonBase onClick={handleDone} disabled={loading}>
+            <ButtonBase onClick={handleRename} disabled={loading}>
               <Grid2
                 className={`${styles.done_button} ${loading}
  ? styles.disabled_button : ""
@@ -164,4 +124,4 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
   );
 };
 
-export default CreatePlaylistTitle;
+export default RenamePlaylistTitle;

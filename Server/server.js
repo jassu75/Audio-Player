@@ -19,6 +19,8 @@ import deleteSong from "./routes/mutationRoutes/deleteSong.js";
 import updateHomepageSong from "./routes/mutationRoutes/updateHomepageSongs.js";
 import updatePlaylistSong from "./routes/mutationRoutes/updatePlaylistSongs.js";
 import updatePlaylistId from "./routes/mutationRoutes/updatePlaylistId.js";
+import updateSongTitle from "./routes/mutationRoutes/updateSongTitle.js";
+import updatePlaylistTitle from "./routes/mutationRoutes/updatePlaylistTitle.js";
 
 import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
@@ -50,6 +52,8 @@ app.use(deleteSong);
 app.use(updateHomepageSong);
 app.use(updatePlaylistSong);
 app.use(updatePlaylistId);
+app.use(updateSongTitle);
+app.use(updatePlaylistTitle);
 
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);

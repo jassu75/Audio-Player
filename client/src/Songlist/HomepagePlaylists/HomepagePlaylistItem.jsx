@@ -4,7 +4,12 @@ import styles from "./homepagePlaylistItem.module.css";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CircularProgress, IconButton, Menu, MenuItem } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   deletePlaylistDetails,
@@ -13,19 +18,17 @@ import {
 import CantDeletePlaylist from "./CantDeletePlaylist";
 import axios from "axios";
 import { userSelector } from "../../redux/selectors/homepage.selector";
+import RenamePlaylistTitle from "./RenamePlaylistTitle";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [renameLoading, setRenameLoading] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-
-  const closeModal = () => setIsModalOpen(false);
+  const [cantDeleteModal, setCantDeleteModal] = useState(false);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,7 +44,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
         !playlistItem?.playlist_songs ||
         playlistItem.playlist_songs.length === 0
       ) {
-        setLoading(true);
+        setDeleteLoading(true);
 
         const updatedPlaylistIds = user.playlist_ids.filter(
           (playlistId) => playlistId !== playlistKey
@@ -68,13 +71,19 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        setLoading(false);
       } else {
-        openModal();
+        setCantDeleteModal(true);
       }
     } catch (error) {
-      console.error("Error deleting song:", error);
+      console.error("Error deleting Playlist", error);
+    } finally {
+      setDeleteLoading(false);
+      handleMenuClose();
     }
+  };
+
+  const handleRenameSong = () => {
+    setRenameLoading(true);
     handleMenuClose();
   };
 
@@ -115,23 +124,61 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
             }}
           >
             <MenuItem
-              onClick={handleDeletePlaylist}
+              disabled={deleteLoading || renameLoading}
+              onClick={handleRenameSong}
               className={styles.menu_item}
             >
-              {loading ? (
+              {renameLoading ? (
                 <>
-                  <Typography variant="MenuItemText">Deleting</Typography>
+                  <Typography variant="MenuItemText">Renaming</Typography>
                   <CircularProgress className={styles.loader} size={20} />
                 </>
               ) : (
-                <Typography variant="MenuItemText">Delete</Typography>
+                <Typography variant="MenuItemText">Rename</Typography>
+              )}
+            </MenuItem>
+            <Divider className={styles.divider} />
+
+            <MenuItem
+              disabled={renameLoading || deleteLoading}
+              onClick={handleDeletePlaylist}
+              className={styles.menu_item}
+            >
+              {deleteLoading ? (
+                <>
+                  <Typography
+                    variant="MenuItemText"
+                    className={styles.delete_item_text}
+                  >
+                    Deleting
+                  </Typography>
+                  <CircularProgress className={styles.loader} size={20} />
+                </>
+              ) : (
+                <Typography
+                  variant="MenuItemText"
+                  className={styles.delete_item_text}
+                >
+                  Delete
+                </Typography>
               )}
             </MenuItem>
           </Menu>
         </Grid2>
       </div>
-      {isModalOpen ? (
-        <CantDeletePlaylist open={isModalOpen} onClose={closeModal} />
+      {cantDeleteModal ? (
+        <CantDeletePlaylist
+          open={cantDeleteModal}
+          onClose={() => setCantDeleteModal(false)}
+        />
+      ) : null}
+      {renameLoading ? (
+        <RenamePlaylistTitle
+          open={renameLoading}
+          onClose={() => setRenameLoading(false)}
+          playlistId={playlistKey}
+          playlistTitle={playlistItem.playlist_title}
+        />
       ) : null}
     </>
   );

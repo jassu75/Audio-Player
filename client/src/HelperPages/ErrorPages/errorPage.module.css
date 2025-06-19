@@ -7,6 +7,10 @@
   gap: 15px;
 }
 
+.loader {
+  color: #ffffff;
+}
+
 .redirect_text {
   color: #ffffff;
   text-align: justify;

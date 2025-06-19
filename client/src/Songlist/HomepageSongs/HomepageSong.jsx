@@ -15,11 +15,14 @@ import {
 import CircularProgress from "@mui/material/CircularProgress"; // Import the loader
 import axios from "axios";
 import { userSelector } from "../../redux/selectors/homepage.selector";
+import RenameSongTitle from "../PlaylistSongsList/RenameSongTitle";
+import { Divider } from "@mui/material";
 
 const HomepageSong = ({ songKey, song }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [renameLoading, setRenameLoading] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
 
@@ -36,7 +39,7 @@ const HomepageSong = ({ songKey, song }) => {
   };
 
   const handleDeleteSong = async () => {
-    setLoading(true);
+    setDeleteLoading(true);
     try {
       const updatedHomepageSongs = user?.homepage_songs.filter(
         (songId) => songId !== songKey
@@ -70,59 +73,106 @@ const HomepageSong = ({ songKey, song }) => {
       dispatch(deleteSong(songKey));
     } catch (error) {
       console.error("Error deleting song:", error);
+    } finally {
+      setDeleteLoading(false);
+      handleMenuClose();
     }
-    setLoading(false);
-    handleMenuClose();
   };
 
+  const handleRenameSong = () => {
+    setRenameLoading(true);
+    handleMenuClose();
+  };
+  const closeRenameModal = () => setRenameLoading(false);
+
   return (
-    <Grid2 className={styles.song_card}>
-      <Grid2 className={styles.song_card_info} onClick={handleSongClick}>
-        <img className={styles.song_image} src={song?.cover_art} alt="" />
-        <Grid2 className={styles.song_content}>
-          <Grid2 className={styles.song_title}>
-            <Typography
-              variant="homepageSongTitle"
-              className={styles.song_title}
-            >
-              {song?.title}
-            </Typography>
-          </Grid2>
-          <Grid2 className={styles.song_artist}>
-            <Typography
-              variant="homepageSongArtist"
-              className={styles.song_artist}
-            >
-              {song?.artist}
-            </Typography>
+    <>
+      <Grid2 className={styles.song_card}>
+        <Grid2 className={styles.song_card_info} onClick={handleSongClick}>
+          <img className={styles.song_image} src={song?.cover_art} alt="" />
+          <Grid2 className={styles.song_content}>
+            <Grid2 className={styles.song_title}>
+              <Typography
+                variant="homepageSongTitle"
+                className={styles.song_title}
+              >
+                {song?.title}
+              </Typography>
+            </Grid2>
+            <Grid2 className={styles.song_artist}>
+              <Typography
+                variant="homepageSongArtist"
+                className={styles.song_artist}
+              >
+                {song?.artist}
+              </Typography>
+            </Grid2>
           </Grid2>
         </Grid2>
+        <Grid2 className={styles.song_actions}>
+          <IconButton onClick={handleMenuOpen} sx={{ color: "White" }}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            slotProps={{
+              root: { sx: { ".MuiList-root": { padding: 0 } } },
+            }}
+          >
+            <MenuItem
+              disabled={deleteLoading || renameLoading}
+              onClick={handleRenameSong}
+              className={styles.menu_item}
+            >
+              {renameLoading ? (
+                <>
+                  <Typography variant="MenuItemText">Renaming</Typography>
+                  <CircularProgress className={styles.loader} size={20} />
+                </>
+              ) : (
+                <Typography variant="MenuItemText">Rename</Typography>
+              )}
+            </MenuItem>
+            <Divider className={styles.divider} />
+
+            <MenuItem
+              disabled={renameLoading || deleteLoading}
+              onClick={handleDeleteSong}
+              className={styles.menu_item}
+            >
+              {deleteLoading ? (
+                <>
+                  <Typography
+                    variant="MenuItemText"
+                    className={styles.delete_item_text}
+                  >
+                    Deleting
+                  </Typography>
+                  <CircularProgress className={styles.loader} size={20} />
+                </>
+              ) : (
+                <Typography
+                  variant="MenuItemText"
+                  className={styles.delete_item_text}
+                >
+                  Delete
+                </Typography>
+              )}
+            </MenuItem>
+          </Menu>
+        </Grid2>
       </Grid2>
-      <Grid2 className={styles.song_actions}>
-        <IconButton onClick={handleMenuOpen} sx={{ color: "White" }}>
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          slotProps={{
-            root: { sx: { ".MuiList-root": { padding: 0 } } },
-          }}
-        >
-          <MenuItem onClick={handleDeleteSong} className={styles.menu_item}>
-            {loading ? (
-              <>
-                <Typography variant="MenuItemText">Deleting</Typography>
-                <CircularProgress className={styles.loader} size={20} />
-              </>
-            ) : (
-              <Typography variant="MenuItemText">Delete</Typography>
-            )}
-          </MenuItem>
-        </Menu>
-      </Grid2>
-    </Grid2>
+      {renameLoading ? (
+        <RenameSongTitle
+          open={renameLoading}
+          onClose={closeRenameModal}
+          songId={songKey}
+          songTitle={song.title}
+        />
+      ) : null}
+    </>
   );
 };
 

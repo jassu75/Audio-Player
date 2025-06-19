@@ -155,3 +155,27 @@ export const ADD_USER = `
     }
   }
 `;
+
+export const UPDATE_SONG_TITLE = `
+mutation UPDATE_SONG_TITLE($id: uuid!, $title: String!) {
+  update_audio_details_by_pk(
+    pk_columns: { id: $id }
+    _set: { title: $title }
+  ) {
+    id
+    title
+  }
+}
+`;
+
+export const UPDATE_PLAYLIST_TITLE = `
+mutation UPDATE_PLAYLIST_TITLE($id: uuid!, $playlist_title: String!) {
+  update_playlist_details_by_pk(
+    pk_columns: { id:$id }
+    _set: { playlist_title: $playlist_title }
+  ) {
+    id
+    playlist_title
+  }
+}
+`;

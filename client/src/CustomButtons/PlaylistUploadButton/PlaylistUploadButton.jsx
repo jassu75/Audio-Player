@@ -16,13 +16,11 @@ const PlaylistUploadButton = ({ playlistId }) => {
         <img src={uploadButton} className={styles.upload_button} alt=""></img>
       </ButtonBase>
 
-      {isModalOpen && (
-        <PlaylistUploadForm
-          playlistId={playlistId}
-          open={isModalOpen}
-          onClose={closeModal}
-        />
-      )}
+      <PlaylistUploadForm
+        playlistId={playlistId}
+        open={isModalOpen}
+        onClose={closeModal}
+      />
     </div>
   );
 };

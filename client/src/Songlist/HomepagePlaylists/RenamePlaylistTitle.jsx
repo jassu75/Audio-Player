@@ -115,11 +115,9 @@ const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
           </Grid2>
         </Grid2>
       </Modal>
-      {loading ? (
-        <Backdrop className={styles.loader_backdrop} open={loading}>
-          <CircularProgress className={styles.loader_spinner} />
-        </Backdrop>
-      ) : null}
+      <Backdrop className={styles.loader_backdrop} open={loading}>
+        <CircularProgress className={styles.loader_spinner} />
+      </Backdrop>
     </>
   );
 };

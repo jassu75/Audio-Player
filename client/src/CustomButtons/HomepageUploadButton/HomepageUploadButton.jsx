@@ -58,16 +58,12 @@ const HomepageUploadButton = () => {
           </MenuItem>
         </Menu>
       </Grid2>
-      {isSongModalOpen && (
-        <AudioUploadform open={isSongModalOpen} onClose={closeSongModal} />
-      )}
+      <AudioUploadform open={isSongModalOpen} onClose={closeSongModal} />
 
-      {isPlaylistModalOpen && (
-        <CreatePlaylistTitle
-          open={isPlaylistModalOpen}
-          onClose={closePlaylistModal}
-        />
-      )}
+      <CreatePlaylistTitle
+        open={isPlaylistModalOpen}
+        onClose={closePlaylistModal}
+      />
     </>
   );
 };

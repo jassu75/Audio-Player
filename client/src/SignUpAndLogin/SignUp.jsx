@@ -13,6 +13,7 @@ import {
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ShowMessage from "../DialogBoxes/ShowMessage";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -20,6 +21,10 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageTitile, setMessageTitle] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -34,7 +39,9 @@ const SignUp = () => {
         }
       );
       if (response.data?.users?.length > 0) {
-        alert("Email already exists. Please login.");
+        setMessageTitle("User already Exists!");
+        setMessage(" Please Login");
+        setShowMessage(true);
       } else {
         try {
           const userCredential = await createUserWithEmailAndPassword(
@@ -70,19 +77,25 @@ const SignUp = () => {
           navigate("/redirect");
         } catch (err) {
           if (err.code === "auth/email-already-in-use") {
-            alert("Email already exists. Please login.");
+            setMessageTitle("User already Exists!");
+            setMessage("Please Login");
           } else if (err.code === "auth/weak-password") {
-            alert("Password is too weak. Please use a stronger password.");
+            setMessageTitle("Password is too Weak!");
+            setMessage("Please use a Stronger Password");
           } else if (err.code === "auth/invalid-email") {
-            alert("Invalid email format.");
+            setMessageTitle("Invalid email format!");
+            setMessage("Enter a valid Email");
           } else {
-            alert("An error occurred during registration. Please try again.");
+            setMessageTitle("Error Occured!");
+            setMessage("Please try again");
           }
+          setShowMessage(true);
         }
       }
     } catch (err) {
-      alert("An error occurred during registration. Please try again.");
-
+      setMessageTitle("Registration Failed!");
+      setMessage("Please try again");
+      setShowMessage(true);
       console.error("Error during registration:", err.message);
     } finally {
       setLoading(false);
@@ -130,6 +143,12 @@ const SignUp = () => {
       <Backdrop className={styles.loader_backdrop} open={loading}>
         <CircularProgress className={styles.loader_spinner} />
       </Backdrop>
+      <ShowMessage
+        open={showMessage}
+        messageTitle={messageTitile}
+        message={message}
+        onClose={() => setShowMessage(false)}
+      />
     </>
   );
 };

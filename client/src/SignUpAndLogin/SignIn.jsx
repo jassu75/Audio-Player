@@ -12,6 +12,7 @@ import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { userSelector } from "../redux/selectors/homepage.selector";
+import ShowMessage from "../DialogBoxes/ShowMessage";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -19,6 +20,9 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   let userFromDB = useSelector(userSelector);
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageTitile, setMessageTitle] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -45,20 +49,31 @@ const SignIn = () => {
             if (user.emailVerified) {
               navigate("/homepage", { replace: true });
             } else {
-              alert("Please verify your email and then login");
+              setMessageTitle("Email not Verfied!");
+              setMessage("Please verify your email and then login");
+              setShowMessage(true);
             }
           } catch (err) {
             if (err.code === "auth/invalid-credential") {
-              alert("Incorrect Email ID or Password");
+              setMessageTitle("Incorrect Credentials!");
+              setMessage("Email ID or Password is Invalid");
             } else {
+              setMessageTitle("Login Failed!");
+              setMessage("Please try again");
               console.error("Login failed", err);
             }
+            setShowMessage(true);
           }
         } else {
-          alert("User does not exist. Please register first.");
+          setMessageTitle("User does not exist!");
+          setMessage("Please register first");
+          setShowMessage(true);
         }
       }
     } catch (err) {
+      setMessageTitle("Login Failed!");
+      setMessage("Please try again");
+      setShowMessage(true);
       console.error("Login failed", err);
     } finally {
       setLoading(false);
@@ -102,6 +117,9 @@ const SignIn = () => {
         navigate("/homepage", { replace: true });
       }
     } catch (err) {
+      setMessageTitle("Login Failed!");
+      setMessage("Please try again");
+      setShowMessage(true);
       console.error("Google Sign-In failed", err);
     } finally {
       setLoading(false);
@@ -153,6 +171,12 @@ const SignIn = () => {
       <Backdrop className={styles.loader_backdrop} open={loading}>
         <CircularProgress className={styles.loader_spinner} />
       </Backdrop>
+      <ShowMessage
+        open={showMessage}
+        messageTitle={messageTitile}
+        message={message}
+        onClose={() => setShowMessage(false)}
+      />
     </>
   );
 };

@@ -164,14 +164,12 @@ const HomepageSong = ({ songKey, song }) => {
           </Menu>
         </Grid2>
       </Grid2>
-      {renameLoading ? (
-        <RenameSongTitle
-          open={renameLoading}
-          onClose={closeRenameModal}
-          songId={songKey}
-          songTitle={song.title}
-        />
-      ) : null}
+      <RenameSongTitle
+        open={renameLoading}
+        onClose={closeRenameModal}
+        songId={songKey}
+        songTitle={song.title}
+      />
     </>
   );
 };

@@ -15,10 +15,10 @@ import {
   deletePlaylistDetails,
   setPlaylistIds,
 } from "../../redux/slices/homepage.slice";
-import CantDeletePlaylist from "./CantDeletePlaylist";
 import axios from "axios";
 import { userSelector } from "../../redux/selectors/homepage.selector";
 import RenamePlaylistTitle from "./RenamePlaylistTitle";
+import ShowMessage from "../../DialogBoxes/ShowMessage";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const navigate = useNavigate();
@@ -166,20 +166,18 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
           </Menu>
         </Grid2>
       </div>
-      {cantDeleteModal ? (
-        <CantDeletePlaylist
-          open={cantDeleteModal}
-          onClose={() => setCantDeleteModal(false)}
-        />
-      ) : null}
-      {renameLoading ? (
-        <RenamePlaylistTitle
-          open={renameLoading}
-          onClose={() => setRenameLoading(false)}
-          playlistId={playlistKey}
-          playlistTitle={playlistItem.playlist_title}
-        />
-      ) : null}
+      <ShowMessage
+        open={cantDeleteModal}
+        onClose={() => setCantDeleteModal(false)}
+        messageTitle="Cant delete Playlist!"
+        message="Please delete the songs in the playlist before proceeding"
+      />
+      <RenamePlaylistTitle
+        open={renameLoading}
+        onClose={() => setRenameLoading(false)}
+        playlistId={playlistKey}
+        playlistTitle={playlistItem.playlist_title}
+      />
     </>
   );
 };

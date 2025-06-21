@@ -79,6 +79,11 @@ const theme = createTheme({
       fontSize: "22px",
       fontWeight: 500,
     },
+    recentlyPlayedText: {
+      fontFamily: "Montserrat, sans-serif",
+      fontSize: "12px",
+      fontWeight: 600,
+    },
   },
 });
 

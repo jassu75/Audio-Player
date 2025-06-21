@@ -1,6 +1,6 @@
 export const CHECK_EXISTING_USER = `
-  query CHECK_EXISTING_USER($email: String!) {
-    users(where: { email_id: { _eq: $email } }) {
+query CHECK_EXISTING_USER($id: String!) {
+    users:users_by_pk(id:$id) {
       id
       username
       email_id
@@ -8,7 +8,18 @@ export const CHECK_EXISTING_USER = `
       playlist_ids
       sign_in_method
     }
+    user_preferences:user_preferences_by_pk(id:$id) {
+      recently_played
+    }
   }
+`;
+
+export const VERIFY_EMAIL = `
+query VERIFY_EMAIL($email_id: String) {
+  users(where: { email_id: { _eq: $email_id } }) {
+    email_id
+  }
+}
 `;
 
 export const GET_SONGS = `

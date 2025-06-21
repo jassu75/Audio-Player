@@ -6,13 +6,15 @@ import useFetchUserDetails from "../hooks/useFetchUserDetails";
 
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import { playlistSongsSelector } from "../redux/selectors/homepage.selector";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
+import useRecentlyPlayed from "../hooks/useRecentlyPlayed";
+import { addRecentlyPlayed } from "../redux/slices/homepage.slice";
 
 const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -20,6 +22,8 @@ const PlaylistAudioPlayer = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const source = queryParams.get("list");
+  const dispatch = useDispatch();
+
   const playlistSongs = useMemo(
     () => playlistSongsSelector(playlistId),
     [playlistId]
@@ -38,6 +42,12 @@ const PlaylistAudioPlayer = () => {
   const audioPlayer = useRef(); // Reference to the audio component
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
+
+  useRecentlyPlayed();
+
+  useEffect(() => {
+    dispatch(addRecentlyPlayed(songId));
+  }, [dispatch, songId]);
 
   useEffect(() => {
     const player = audioPlayer.current;

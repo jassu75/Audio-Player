@@ -11,6 +11,7 @@ import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import SearchSkeleton from "../Skeletons/SearchSkeleton";
 import EmptySearch from "./EmptySearch";
+import RecentlyPlayed from "./RecentlyPlayed";
 
 const Search = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -48,7 +49,9 @@ const Search = () => {
           <SearchSongList songsList={songsList} />
         ) : searchText ? (
           <EmptySearch />
-        ) : null}
+        ) : (
+          <RecentlyPlayed />
+        )}
       </Grid2>
     </Grid2>
   );

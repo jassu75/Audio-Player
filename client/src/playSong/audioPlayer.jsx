@@ -7,7 +7,7 @@ import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import {
@@ -15,6 +15,8 @@ import {
   searchSongsSelector,
 } from "../redux/selectors/homepage.selector";
 import { IconButton } from "@mui/material";
+import { addRecentlyPlayed } from "../redux/slices/homepage.slice";
+import useRecentlyPlayed from "../hooks/useRecentlyPlayed";
 
 const AudioPlayer = () => {
   const [shuffle, setShuffle] = useState(false);
@@ -23,6 +25,7 @@ const AudioPlayer = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const source = queryParams.get("list");
+  const dispatch = useDispatch();
   const lists = {
     homepage: homepageSongsSelector,
     search: searchSongsSelector,
@@ -38,6 +41,8 @@ const AudioPlayer = () => {
   const audioPlayer = useRef(); // Reference to the audio component
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
+
+  useRecentlyPlayed();
 
   useEffect(() => {
     const player = audioPlayer.current;
@@ -86,6 +91,10 @@ const AudioPlayer = () => {
       };
     }
   }, [audioPlayer, navigate, songId, songsList]);
+
+  useEffect(() => {
+    dispatch(addRecentlyPlayed(songId));
+  }, [dispatch, songId]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPlaylistDetails,
+  setRecentlyPlayed,
   setSongs,
   setUser,
 } from "../redux/slices/homepage.slice";
@@ -44,20 +45,22 @@ const useFetchUserDetails = () => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
         navigate("/", { replace: true });
-      } else if (!user && firebaseUser.email) {
+      } else if (!user && firebaseUser.uid) {
         try {
           setLoading((prev) => ({ ...prev, user: true }));
           setError((prev) => ({ ...prev, user: false }));
 
           const response = await axios.post(
             "/api/checkExistingUser",
-            { email: firebaseUser.email },
+            { id: firebaseUser.uid },
             { headers: { "Content-Type": "application/json" } }
           );
 
-          if (response.data?.users?.length > 0) {
-            dispatch(setUser(response.data.users[0]));
-          }
+          dispatch(setUser(response.data?.users));
+
+          dispatch(
+            setRecentlyPlayed(response.data?.user_preferences.recently_played)
+          );
         } catch (error) {
           setError((prev) => ({ ...prev, user: true }));
           console.error("Error fetching user details:", error);

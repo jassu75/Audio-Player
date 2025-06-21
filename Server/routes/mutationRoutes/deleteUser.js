@@ -9,7 +9,6 @@ const router = Router();
 
 router.post("/api/deleteuser", firebaseAuthenticate, async (req, res) => {
   try {
-    const email = req.user.email;
     const uid = req.user.uid;
     const { songIds, playlistIds, assets } = req.body;
     await client.request(DELETE_SONG, { ids: songIds });
@@ -17,7 +16,7 @@ router.post("/api/deleteuser", firebaseAuthenticate, async (req, res) => {
     if (assets.length > 0) {
       await deleteAssets(assets);
     }
-    await client.request(DELETE_USER, { email });
+    await client.request(DELETE_USER, { id: uid });
     await admin.auth().deleteUser(uid);
 
     res.status(200).json("User Deleted Successfully");

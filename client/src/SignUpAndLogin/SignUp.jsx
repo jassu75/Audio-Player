@@ -12,8 +12,6 @@ import {
 } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/slices/homepage.slice";
 import axios from "axios";
 
 const SignUp = () => {
@@ -21,72 +19,73 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const response = await axios.post(
-        "/api/checkExistingUser",
-        { email },
+        "/api/verifyemail",
+        { email_id: email },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-      if (response.data && response.data.users.length > 0) {
+      if (response.data?.users?.length > 0) {
         alert("Email already exists. Please login.");
-        setLoading(false);
-        return;
-      }
-
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      const newUser = {
-        id: user.uid,
-        email_id: user.email,
-        username,
-        sign_in_method: "email",
-        homepage_songs: [],
-        playlist_ids: [],
-      };
-
-      await axios.post(
-        "/api/addUser",
-        { newUser },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      dispatch(setUser(newUser));
-
-      await sendEmailVerification(user);
-      await signOut(auth);
-
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      navigate("/redirect");
-    } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
-        alert("Email already exists. Please login.");
-      } else if (err.code === "auth/weak-password") {
-        alert("Password is too weak. Please use a stronger password.");
-      } else if (err.code === "auth/invalid-email") {
-        alert("Invalid email format.");
       } else {
-        alert("An error occurred during registration. Please try again.");
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          const user = userCredential.user;
+
+          const newUser = {
+            id: user.uid,
+            email_id: user.email,
+            username,
+            sign_in_method: "email",
+            homepage_songs: [],
+            playlist_ids: [],
+          };
+
+          await axios.post(
+            "/api/addUser",
+            { newUser },
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          await sendEmailVerification(user);
+          await signOut(auth);
+
+          setUsername("");
+          setEmail("");
+          setPassword("");
+          navigate("/redirect");
+        } catch (err) {
+          if (err.code === "auth/email-already-in-use") {
+            alert("Email already exists. Please login.");
+          } else if (err.code === "auth/weak-password") {
+            alert("Password is too weak. Please use a stronger password.");
+          } else if (err.code === "auth/invalid-email") {
+            alert("Invalid email format.");
+          } else {
+            alert("An error occurred during registration. Please try again.");
+          }
+        }
       }
+    } catch (err) {
+      alert("An error occurred during registration. Please try again.");
+
       console.error("Error during registration:", err.message);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 

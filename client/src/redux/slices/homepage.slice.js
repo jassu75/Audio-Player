@@ -23,6 +23,7 @@ const initialState = {
   jamendoSongs: checkExpired("jamendoSongs", null),
   audiusAlbums: checkExpired("audiusAlbums", null),
   audiusSongs: null,
+  recentlyPlayed: JSON.parse(localStorage.getItem("recentlyPlayed")) || null,
 };
 
 const songsSlice = createSlice({
@@ -131,6 +132,24 @@ const songsSlice = createSlice({
       state.playlists[playlistId].playlist_title = newTitle;
       localStorage.setItem("playlists", JSON.stringify(state.playlists));
     },
+    setRecentlyPlayed: (state, action) => {
+      state.recentlyPlayed = action.payload;
+      localStorage.setItem("recentlyPlayed", JSON.stringify(action.payload));
+    },
+    addRecentlyPlayed: (state, action) => {
+      if (!state.recentlyPlayed) state.recentlyPlayed = [];
+      state.recentlyPlayed = state.recentlyPlayed.filter(
+        (id) => id !== action.payload
+      );
+      state.recentlyPlayed.unshift(action.payload);
+      if (state.recentlyPlayed.length > 5) {
+        state.recentlyPlayed.pop();
+      }
+      localStorage.setItem(
+        "recentlyPlayed",
+        JSON.stringify(state.recentlyPlayed)
+      );
+    },
   },
 });
 
@@ -155,5 +174,7 @@ export const {
   logout,
   renameSong,
   renamePlaylist,
+  addRecentlyPlayed,
+  setRecentlyPlayed,
 } = songsSlice.actions;
 export default songsSlice.reducer;

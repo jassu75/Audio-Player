@@ -9,8 +9,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
 import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../redux/slices/homepage.slice";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { userSelector } from "../redux/selectors/homepage.selector";
 
@@ -19,7 +18,6 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   let userFromDB = useSelector(userSelector);
 
   const handleLogin = async (e) => {
@@ -29,40 +27,39 @@ const SignIn = () => {
     try {
       if (!userFromDB || userFromDB.email_id !== email) {
         const response = await axios.post(
-          "/api/checkExistingUser",
-          { email },
+          "/api/verifyemail",
+          { email_id: email },
           {
             headers: { "Content-Type": "application/json" },
           }
         );
-        if (response.data && response.data.users.length > 0) {
-          userFromDB = response.data.users[0];
+        if (response.data?.users?.length > 0) {
+          try {
+            const userCredential = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            const user = userCredential.user;
+
+            if (user.emailVerified) {
+              navigate("/homepage", { replace: true });
+            } else {
+              alert("Please verify your email and then login");
+            }
+          } catch (err) {
+            if (err.code === "auth/invalid-credential") {
+              alert("Incorrect Email ID or Password");
+            } else {
+              console.error("Login failed", err);
+            }
+          }
         } else {
           alert("User does not exist. Please register first.");
-          setLoading(false);
-          return;
         }
       }
-
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      if (user.emailVerified) {
-        dispatch(setUser(userFromDB));
-        navigate("/homepage", { replace: true });
-      } else {
-        alert("Please verify your email and then login");
-      }
     } catch (err) {
-      if (err.code === "auth/invalid-credential") {
-        alert("Incorrect Email ID or Password");
-      } else {
-        console.error("Login failed", err);
-      }
+      console.error("Login failed", err);
     } finally {
       setLoading(false);
     }
@@ -76,15 +73,14 @@ const SignIn = () => {
       setLoading(true);
       const user = userCredential.user;
       const response = await axios.post(
-        "/api/checkExistingUser",
-        { email: user.email },
+        "/api/verifyemail",
+        { email_id: user.email },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
 
-      if (response.data && response.data.users.length > 0) {
-        dispatch(setUser(response.data.users[0]));
+      if (response.data?.users?.length > 0) {
         navigate("/homepage", { replace: true });
       } else {
         const newUser = {
@@ -102,7 +98,6 @@ const SignIn = () => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        dispatch(setUser(newUser));
 
         navigate("/homepage", { replace: true });
       }

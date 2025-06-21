@@ -8,7 +8,7 @@ router.post("/api/updateHomepageSong", async (req, res) => {
   try {
     const { user_id, homepage_songs } = req.body;
     const response = await client.request(UPDATE_HOMEPAGE_SONGS, {
-      user_id,
+      id: user_id,
       homepage_songs,
     });
 

@@ -79,23 +79,22 @@ mutation DELETE_PLAYLISTS($ids: [uuid!]!) {
 `;
 
 export const DELETE_USER = `
-  mutation DELETE_USER($email: String!) {
-    delete_users_by_pk(email_id: $email) {
-      email_id
+  mutation DELETE_USER($id: String!) {
+    delete_users_by_pk(id: $id) {
+      id
     }
   }
 `;
 
 export const UPDATE_HOMEPAGE_SONGS = `
-  mutation UPDATE_HOMEPAGE_SONGS($user_id: String!, $homepage_songs: jsonb) {
-    update_users(
-      where: { id: { _eq: $user_id } }
+  mutation UPDATE_HOMEPAGE_SONGS($id: String!, $homepage_songs: jsonb) {
+    update_users_by_pk(
+      pk_columns:{id:$id},
       _set: { homepage_songs: $homepage_songs }
     ) {
-      returning {
         id
         homepage_songs
-      }
+      
     }
   }
 `;
@@ -115,15 +114,14 @@ export const UPDATE_PLAYLIST_SONGS = `
 `;
 
 export const UPDATE_PLAYLIST_IDS = `
-  mutation UPDATE_PLAYLIST_IDS($user_id: String!, $playlist_ids: jsonb) {
-    update_users(
-      where: { id: { _eq: $user_id } }
+  mutation UPDATE_PLAYLIST_IDS($id: String!, $playlist_ids: jsonb) {
+    update_users_by_pk(
+      pk_columns:{id:$id},
       _set: { playlist_ids: $playlist_ids }
     ) {
-      returning {
         id
         playlist_ids
-      }
+      
     }
   }
 `;
@@ -179,3 +177,16 @@ mutation UPDATE_PLAYLIST_TITLE($id: uuid!, $playlist_title: String!) {
   }
 }
 `;
+
+export const UPDATE_RECENTLY_PLAYED = `
+mutation UPDATE_RECENTLY_PLAYED($id: String!, $recently_played: jsonb) {
+  update_user_preferences_by_pk(
+    pk_columns: { id: $id }
+    _set: { recently_played: $recently_played }
+  ) {
+    id
+    recently_played
+  }
+}
+
+  `;

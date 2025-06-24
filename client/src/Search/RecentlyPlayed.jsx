@@ -2,7 +2,7 @@ import { Grid2, Typography } from "@mui/material";
 import SearchSong from "./SearchSong";
 import styles from "./recentlyPlayed.module.css";
 import { useSelector } from "react-redux";
-import { recentlyPlayedSongsSelector } from "../redux/selectors/userPrefs.selector";
+import { recentlyPlayedSongsSelector } from "../redux/selectors/userPreferences.selector";
 
 const RecentlyPlayed = () => {
   const recentlyPlayedSongs = useSelector(recentlyPlayedSongsSelector);

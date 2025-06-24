@@ -168,7 +168,7 @@ const HomepageSong = ({ songKey, song }) => {
         open={renameLoading}
         onClose={closeRenameModal}
         songId={songKey}
-        songTitle={song.title}
+        songTitle={song?.title}
       />
     </>
   );

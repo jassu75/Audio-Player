@@ -23,16 +23,16 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const images = [
-    "/images/playlist1.png",
-    "/images/playlist2.png",
-    "/images/playlist3.jpeg",
-    "/images/playlist4.jpeg",
-    "/images/playlist5.png",
-    "/images/playlist6.png",
-    "/images/playlist7.jpeg",
-    "/images/playlist8.jpeg",
-    "/images/playlist9.png",
-    "/images/playlist10.jpeg",
+    "/images/PlaylistCoverArt/playlist1.png",
+    "/images/PlaylistCoverArt/playlist2.png",
+    "/images/PlaylistCoverArt/playlist3.jpeg",
+    "/images/PlaylistCoverArt/playlist4.jpeg",
+    "/images/PlaylistCoverArt/playlist5.png",
+    "/images/PlaylistCoverArt/playlist6.png",
+    "/images/PlaylistCoverArt/playlist7.jpeg",
+    "/images/PlaylistCoverArt/playlist8.jpeg",
+    "/images/PlaylistCoverArt/playlist9.png",
+    "/images/PlaylistCoverArt/playlist10.jpeg",
   ];
 
   const handleInput = (e) => {

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useRef } from "react";
 import { auth } from "../config/firebase";
 import { useSelector } from "react-redux";
-import { recentlyPlayedSelector } from "../redux/selectors/userPrefs.selector";
+import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 
 const useRecentlyPlayed = () => {
   const recentlyPlayed = useSelector(recentlyPlayedSelector);

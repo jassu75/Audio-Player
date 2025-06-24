@@ -29,8 +29,8 @@ const AudioUploadForm = ({ open, onClose }) => {
   const user = useSelector(userSelector);
   const homepageSongs = user?.homepage_songs;
   const songTitles = homepageSongs
-    .map((songId) => allSongs[songId]?.title)
-    .filter(Boolean);
+    ?.map((songId) => allSongs?.[songId]?.title)
+    ?.filter(Boolean);
   const handleFileSelection = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files.map((file) => ({ file, status: "Upload Pending" })));

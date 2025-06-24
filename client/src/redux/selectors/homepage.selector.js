@@ -6,7 +6,6 @@ export const userSelector = (state) => state.homepage.user;
 export const jamendoSongsSelector = (state) => state.homepage.jamendoSongs;
 export const audiusAlbumsSelector = (state) => state.homepage.audiusAlbums;
 export const audiusSongsSelector = (state) => state.homepage.audiusSongs;
-export const recentlyPlayedSelector = (state) => state.homepage.recentlyPlayed;
 
 export const userSongsSelector = createSelector([userSelector], (user) => {
   if (!user) return [];
@@ -26,18 +25,6 @@ export const homepageSongsSelector = createSelector(
   }
 );
 
-export const recentlyPlayedSongsSelector = createSelector(
-  [songsSelector, recentlyPlayedSelector],
-  (songs, recentlyPlayed) => {
-    if (!recentlyPlayed || !songs) return [];
-    return recentlyPlayed.reduce((acc, id) => {
-      if (songs[id]) {
-        acc[id] = songs[id];
-      }
-      return acc;
-    }, {});
-  }
-);
 export const playlistSongsSelector = (playlistId) =>
   createSelector([playlistsSelector, songsSelector], (playlists, songs) => {
     if (!playlists || !songs) return [];

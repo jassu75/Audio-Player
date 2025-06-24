@@ -28,10 +28,10 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const allSongs = useSelector(songsSelector);
   const userPlaylists = useSelector(playlistsSelector);
 
-  const playlistSongs = userPlaylists[playlistId]?.playlist_songs;
+  const playlistSongs = userPlaylists?.[playlistId]?.playlist_songs;
 
   const songTitles = playlistSongs
-    .map((songId) => allSongs[songId]?.title)
+    ?.map((songId) => allSongs[songId]?.title)
     .filter(Boolean);
 
   const handleFileSelection = (event) => {

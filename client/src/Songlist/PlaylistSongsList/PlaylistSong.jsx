@@ -17,6 +17,7 @@ import axios from "axios";
 import { playlistsSelector } from "../../redux/selectors/homepage.selector";
 import { Divider } from "@mui/material";
 import RenameSongTitle from "./RenameSongTitle";
+import FavoriteIcon from "../../Favorite/FavoriteIcon";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const navigate = useNavigate();
@@ -116,10 +117,13 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
             </Grid2>
           </Grid2>
         </Grid2>
+
         <Grid2 className={styles.song_actions}>
-          <IconButton onClick={handleMenuOpen} sx={{ color: "White" }}>
+          <FavoriteIcon songId={songKey} />
+          <IconButton onClick={handleMenuOpen} className={styles.icon}>
             <MoreVertIcon />
           </IconButton>
+
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}

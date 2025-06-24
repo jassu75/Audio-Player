@@ -190,3 +190,16 @@ mutation UPDATE_RECENTLY_PLAYED($id: String!, $recently_played: jsonb) {
 }
 
   `;
+
+export const UPDATE_FAVORITES = `
+mutation UPDATE_FAVORITES($id: String!, $favorites: jsonb) {
+  update_user_preferences_by_pk(
+    pk_columns: { id: $id }
+    _set: { favorites: $favorites }
+  ) {
+    id
+    favorites
+  }
+}
+
+  `;

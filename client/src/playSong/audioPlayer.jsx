@@ -15,7 +15,7 @@ import {
   searchSongsSelector,
 } from "../redux/selectors/homepage.selector";
 import { IconButton } from "@mui/material";
-import { addRecentlyPlayed } from "../redux/slices/homepage.slice";
+import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 import useRecentlyPlayed from "../hooks/useRecentlyPlayed";
 
 const AudioPlayer = () => {

@@ -14,7 +14,7 @@ import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
 import useRecentlyPlayed from "../hooks/useRecentlyPlayed";
-import { addRecentlyPlayed } from "../redux/slices/homepage.slice";
+import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 
 const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();

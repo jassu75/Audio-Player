@@ -46,6 +46,7 @@
   display: flex;
   align-items: center;
   flex-direction: row;
+  padding-left: 10px;
 }
 
 .loader {
@@ -64,4 +65,8 @@
 }
 .delete_item_text {
   color: #ff7f7f;
+}
+
+.icon {
+  color: #ffffff;
 }

@@ -10,6 +10,7 @@ query CHECK_EXISTING_USER($id: String!) {
     }
     user_preferences:user_preferences_by_pk(id:$id) {
       recently_played
+      favorites
     }
   }
 `;

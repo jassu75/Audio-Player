@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPlaylistDetails,
-  setRecentlyPlayed,
   setSongs,
   setUser,
 } from "../redux/slices/homepage.slice";
@@ -15,6 +14,10 @@ import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
+import {
+  setRecentlyPlayed,
+  setFavorite,
+} from "../redux/slices/userPreferences.slice";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
@@ -57,10 +60,10 @@ const useFetchUserDetails = () => {
           );
 
           dispatch(setUser(response.data?.users));
-
           dispatch(
             setRecentlyPlayed(response.data?.user_preferences.recently_played)
           );
+          dispatch(setFavorite(response.data?.user_preferences.favorites));
         } catch (error) {
           setError((prev) => ({ ...prev, user: true }));
           console.error("Error fetching user details:", error);

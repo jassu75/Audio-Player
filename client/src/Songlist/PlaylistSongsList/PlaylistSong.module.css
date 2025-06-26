@@ -1,6 +1,7 @@
 .song_card {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .song_card_info {
@@ -10,8 +11,8 @@
   gap: 20px;
   height: 70px;
   cursor: pointer;
-  width: 87%;
-  max-width: 400px;
+  width: 400px;
+  max-width: 70%;
 }
 
 .song_image {
@@ -25,7 +26,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
 }
 
 .song_artist {

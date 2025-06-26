@@ -18,7 +18,7 @@ const useRecentlyPlayed = () => {
         await axios.post(
           "/api/updaterecentlyplayed",
           {
-            id: auth.currentUser?.uid,
+            user_id: auth.currentUser?.uid,
             recently_played: recentlyPlayedRef.current,
           },
           {

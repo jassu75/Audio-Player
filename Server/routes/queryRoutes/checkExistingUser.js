@@ -6,8 +6,8 @@ const router = Router();
 
 router.post("/api/checkExistingUser", async (req, res) => {
   try {
-    const { id } = req.body;
-    const response = await client.request(CHECK_EXISTING_USER, { id });
+    const { user_id } = req.body;
+    const response = await client.request(CHECK_EXISTING_USER, { user_id });
 
     res.status(200).json(response);
   } catch (error) {

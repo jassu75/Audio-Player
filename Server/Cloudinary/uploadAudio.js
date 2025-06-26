@@ -32,7 +32,7 @@ router.post(
         });
       }
     } catch (err) {
-      console.error("Image Upload Failed");
+      console.error("Audio Upload Failed");
     }
   }
 );

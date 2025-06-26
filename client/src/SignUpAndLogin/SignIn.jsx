@@ -99,12 +99,10 @@ const SignIn = () => {
         navigate("/homepage", { replace: true });
       } else {
         const newUser = {
-          id: user.uid,
+          user_id: user.uid,
           email_id: user.email,
           username: user.displayName || "New User",
           sign_in_method: "google",
-          homepage_songs: [],
-          playlist_ids: [],
         };
         await axios.post(
           "/api/addUser",

@@ -8,7 +8,7 @@ router.post("/api/updateplaylisttitle", async (req, res) => {
   try {
     const { playlistId, newTitle } = req.body;
     const response = await client.request(UPDATE_PLAYLIST_TITLE, {
-      id: playlistId,
+      playlist_id: playlistId,
       playlist_title: newTitle,
     });
     res.status(200).json(response);

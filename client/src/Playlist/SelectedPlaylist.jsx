@@ -9,20 +9,32 @@ import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import PlaylistSkeleton from "../Skeletons/PlaylistSkeleton";
-import { playlistsSelector } from "../redux/selectors/homepage.selector";
+import {
+  playlistsSelector,
+  songsSelector,
+} from "../redux/selectors/homepage.selector";
+import { Pagination } from "@mui/material";
+import { useState } from "react";
+import useFetchSongs from "../hooks/useFetchSongs";
 
 const SelectedPlaylist = () => {
   const { playlistId } = useParams();
   const { userLoading, userError } = useFetchUserDetails();
   const allPlaylist = useSelector(playlistsSelector);
-  const playlistSongs = allPlaylist?.[playlistId]?.playlist_songs;
+  const playlistSongs = useSelector(songsSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
+  const [page, setPage] = useState(1);
+  const { songsLoading, songsError } = useFetchSongs(playlistId);
 
-  if (userLoading) {
+  const handleSetPage = (_event, value) => {
+    setPage(value);
+  };
+
+  if (userLoading || songsLoading) {
     return <PlaylistSkeleton />;
   }
 
-  if (userError) {
+  if (userError || songsError) {
     return <ErrorPage />;
   }
 
@@ -34,8 +46,21 @@ const SelectedPlaylist = () => {
         </Typography>
         <PlaylistUploadButton playlistId={playlistId} />
       </Grid2>
-      {!playlistSongs || Object.keys(playlistSongs).length !== 0 ? (
-        <PlaylistSongsList playlistId={playlistId} songsList={playlistSongs} />
+
+      {playlistSongs && Object.keys(playlistSongs).length > 0 ? (
+        <Grid2>
+          <PlaylistSongsList
+            playlistId={playlistId}
+            playlistSongs={playlistSongs}
+            page={page}
+          />
+          <Pagination
+            variant="outlined"
+            count={Math.ceil(Object.keys(playlistSongs).length / 10)}
+            page={page}
+            onChange={handleSetPage}
+          />
+        </Grid2>
       ) : (
         <EmptySongsPage />
       )}

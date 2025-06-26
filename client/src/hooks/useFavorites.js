@@ -12,7 +12,7 @@ const useFavorites = () => {
       await axios.post(
         "/api/updatefavorites",
         {
-          id: auth.currentUser?.uid,
+          user_id: auth.currentUser?.uid,
           favorites: favorites,
         },
         {

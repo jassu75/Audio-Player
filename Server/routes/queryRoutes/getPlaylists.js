@@ -6,8 +6,9 @@ const router = Router();
 
 router.post("/api/getPlaylists", async (req, res) => {
   try {
-    const { playlist_ids } = req.body;
-    const response = await client.request(GET_PLAYLISTS, { playlist_ids });
+    const { user_id } = req.body;
+
+    const response = await client.request(GET_PLAYLISTS, { user_id });
 
     res.status(200).json(response);
   } catch (error) {

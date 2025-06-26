@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { GET_SONGS } from "../../queries.js";
+import { FETCH_PLAYLIST_SONGS } from "../../queries.js";
 import client from "../../Config/hasura.js";
 
 const router = Router();
 
-router.post("/api/getSongs", async (req, res) => {
+router.post("/api/fetchPlaylistSongs", async (req, res) => {
   try {
-    const { song_ids } = req.body;
-    const response = await client.request(GET_SONGS, { song_ids });
+    const { playlist_id } = req.body;
+    const response = await client.request(FETCH_PLAYLIST_SONGS, {
+      playlist_id,
+    });
 
     res.status(200).json(response);
   } catch (error) {

@@ -9,7 +9,7 @@ const JamendoSongList = () => {
   return (
     <Grid2 className={styles.container}>
       <Grid2 className={styles.song_list}>
-        {jamendoSongList.map((song) => (
+        {jamendoSongList?.map((song) => (
           <JamendoSong key={song.id} songKey={song.id} song={song} />
         ))}
       </Grid2>

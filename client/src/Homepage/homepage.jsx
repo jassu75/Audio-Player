@@ -16,7 +16,7 @@ const Homepage = () => {
   const { userLoading, userError } = useFetchUserDetails();
 
   const loading = userLoading || jamendoSongsLoading || audiusAlbumsLoading;
-  const error = userError || jamendoSongsError;
+  const error = userError || jamendoSongsError || audiusAlbumsError;
 
   if (error) return <ErrorPage />;
 
@@ -27,7 +27,7 @@ const Homepage = () => {
       <UserWelcome />
 
       <HomepagePlaylistSection />
-      {!audiusAlbumsError ? <HomepageAlbumSection /> : null}
+      <HomepageAlbumSection />
 
       <HomepageSongSection />
     </Grid2>

@@ -4,25 +4,14 @@ import ButtonBase from "@mui/material/ButtonBase";
 
 import styles from "./homepageSongSection.module.css";
 import { useState } from "react";
-import UserSongSection from "../UserSongSection/UserSongSection";
 import JamendoSongList from "../JamendoSongSection.jsx/JamendoSongList";
 
 const HomepageSongSection = () => {
-  const [view, setView] = useState("userSongSection");
+  const [view, setView] = useState("jamendoSongSection");
 
   return (
     <Grid2 className={styles.container}>
       <nav className={styles.navbar}>
-        <ButtonBase onClick={() => setView("userSongSection")}>
-          <Typography
-            className={`${styles.nav_button} ${
-              view === "userSongSection" ? styles.active : ""
-            }`}
-            variant="SignInAndSignUpButton"
-          >
-            Your Songs
-          </Typography>
-        </ButtonBase>
         <ButtonBase onClick={() => setView("jamendoSongSection")}>
           <Typography
             className={`${styles.nav_button} ${
@@ -34,7 +23,7 @@ const HomepageSongSection = () => {
           </Typography>
         </ButtonBase>
       </nav>
-      {view === "userSongSection" ? <UserSongSection /> : <JamendoSongList />}
+      <JamendoSongList />
     </Grid2>
   );
 };

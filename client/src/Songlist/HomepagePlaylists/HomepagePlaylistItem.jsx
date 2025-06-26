@@ -11,12 +11,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {
-  deletePlaylistDetails,
-  setPlaylistIds,
-} from "../../redux/slices/homepage.slice";
+import { deletePlaylistDetails } from "../../redux/slices/homepage.slice";
 import axios from "axios";
-import { userSelector } from "../../redux/selectors/homepage.selector";
 import RenamePlaylistTitle from "./RenamePlaylistTitle";
 import ShowMessage from "../../DialogBoxes/ShowMessage";
 
@@ -26,7 +22,6 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector(userSelector);
 
   const [cantDeleteModal, setCantDeleteModal] = useState(false);
 
@@ -40,41 +35,18 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
 
   const handleDeletePlaylist = async () => {
     try {
-      if (
-        !playlistItem?.playlist_songs ||
-        playlistItem.playlist_songs.length === 0
-      ) {
-        setDeleteLoading(true);
+      setDeleteLoading(true);
 
-        const updatedPlaylistIds = user.playlist_ids.filter(
-          (playlistId) => playlistId !== playlistKey
-        );
-
-        dispatch(setPlaylistIds(updatedPlaylistIds));
-
-        dispatch(deletePlaylistDetails(playlistKey));
-
-        await axios.post(
-          "/api/updatePlaylistId",
-          {
-            user_id: user.id,
-            playlist_ids: updatedPlaylistIds,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        await axios.post(
-          "/api/deletePlaylist",
-          { ids: [playlistKey] },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-      } else {
-        setCantDeleteModal(true);
-      }
+      await axios.post(
+        "/api/deletePlaylist",
+        { playlist_id: playlistKey },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      dispatch(deletePlaylistDetails(playlistKey));
     } catch (error) {
+      setCantDeleteModal(true);
       console.error("Error deleting Playlist", error);
     } finally {
       setDeleteLoading(false);

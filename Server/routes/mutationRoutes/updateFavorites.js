@@ -6,9 +6,9 @@ const router = Router();
 
 router.post("/api/updatefavorites", async (req, res) => {
   try {
-    const { id, favorites } = req.body;
+    const { user_id, favorites } = req.body;
     const response = await client.request(UPDATE_FAVORITES, {
-      id,
+      user_id,
       favorites,
     });
     res.status(200).json(response);

@@ -6,10 +6,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import styles from "./createPlaylistTitle.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addPlaylistDetails,
-  addPlaylistIds,
-} from "../../redux/slices/homepage.slice";
+import { addPlaylistDetails } from "../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
@@ -46,13 +43,12 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
         setErrorMessage("Enter a playlist title");
       } else {
         setLoading(true);
-        const homepagePlaylists = Array.from(user.playlist_ids);
         const randomImage = images[Math.floor(Math.random() * images.length)];
 
         const uploadPlaylist = {
           playlist_title: title,
           playlist_cover_art: randomImage,
-          playlist_songs: [],
+          user_id: user.user_id,
         };
         const response = await axios.post(
           "/api/addPlaylist",
@@ -61,21 +57,9 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        const id = response.data?.insert_playlist_details?.returning?.[0]?.id;
+        const id = response.data?.playlist_details?.returning?.[0]?.playlist_id;
         uploadPlaylist.id = id;
-        homepagePlaylists.push(id);
-        dispatch(addPlaylistIds(id));
         dispatch(addPlaylistDetails(uploadPlaylist));
-        await axios.post(
-          "/api/updatePlaylistId",
-          {
-            user_id: user.id,
-            playlist_ids: homepagePlaylists,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
       }
     } catch (error) {
       console.error("Error creating playlist", error);

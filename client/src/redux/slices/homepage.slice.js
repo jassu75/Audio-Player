@@ -34,11 +34,11 @@ const songsSlice = createSlice({
       localStorage.setItem("songsList", JSON.stringify(action.payload));
     },
     addSongs: (state, action) => {
-      const { id, ...songWithoutId } = action.payload;
+      const { song_id, ...songWithoutId } = action.payload;
       if (!state.songs) {
         state.songs = {};
       }
-      state.songs[id] = songWithoutId;
+      state.songs[song_id] = songWithoutId;
       localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
     deleteSong: (state, action) => {
@@ -64,31 +64,6 @@ const songsSlice = createSlice({
     },
     setHomepageSongTitles: (state, action) => {
       state.user.homepage_songs = action.payload;
-      localStorage.setItem("user", JSON.stringify(state.user));
-    },
-    addHomepageSongId: (state, action) => {
-      state.user.homepage_songs = [
-        ...state.user.homepage_songs,
-        action.payload,
-      ];
-      localStorage.setItem("user", JSON.stringify(state.user));
-    },
-    setPlaylistSongs: (state, action) => {
-      const { id, playlistSongs } = action.payload;
-      state.playlists[id].playlist_songs = playlistSongs;
-      localStorage.setItem("playlists", JSON.stringify(state.playlists));
-    },
-    addPlaylistSongs: (state, action) => {
-      const { id, playlistSongId } = action.payload;
-      state.playlists[id].playlist_songs.push(playlistSongId);
-      localStorage.setItem("playlists", JSON.stringify(state.playlists));
-    },
-    setPlaylistIds: (state, action) => {
-      state.user.playlist_ids = action.payload;
-      localStorage.setItem("user", JSON.stringify(state.user));
-    },
-    addPlaylistIds: (state, action) => {
-      state.user.playlist_ids.push(action.payload);
       localStorage.setItem("user", JSON.stringify(state.user));
     },
 
@@ -140,15 +115,10 @@ export const {
   removeHomepageSong,
   setUser,
   setHomepageSongTitles,
-  addHomepageSongId,
-  setPlaylistIds,
-  addPlaylistIds,
   addPlaylistDetails,
   setPlaylistDetails,
   deletePlaylistDetails,
   deleteSong,
-  setPlaylistSongs,
-  addPlaylistSongs,
   setJamendoSongs,
   setAudiusSongs,
   setAudiusAlbums,

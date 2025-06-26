@@ -7,14 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteSong,
-  setPlaylistSongs,
-} from "../../redux/slices/homepage.slice";
+import { useDispatch } from "react-redux";
+import { deleteSong } from "../../redux/slices/homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { playlistsSelector } from "../../redux/selectors/homepage.selector";
 import { Divider } from "@mui/material";
 import RenameSongTitle from "./RenameSongTitle";
 import FavoriteIcon from "../../Favorite/FavoriteIcon";
@@ -25,9 +21,6 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
   const dispatch = useDispatch();
-  const allPlaylistSongs = useSelector(playlistsSelector);
-  const playlistSongs = allPlaylistSongs[playlistId]?.playlist_songs;
-  const playlistSongList = Array.from(playlistSongs);
 
   const handleSongClick = () => {
     navigate(`/user/playlist/${playlistId}/song/${songKey}?list=playlist`);
@@ -44,25 +37,6 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
   const handleDeleteSong = async () => {
     setDeleteLoading(true);
     try {
-      const updatedPlaylistSongs = playlistSongList.filter(
-        (songId) => songId !== songKey
-      );
-      await axios.post(
-        "/api/updatePlaylistSong",
-        {
-          playlist_id: playlistId,
-          playlist_songs: updatedPlaylistSongs,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      dispatch(
-        setPlaylistSongs({
-          id: playlistId,
-          playlistSongs: updatedPlaylistSongs,
-        })
-      );
       const assets = [
         { id: song.cover_art_id, type: "image" },
         { id: song.audio_url_id, type: "video" },
@@ -71,8 +45,9 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
       await axios.post(
         "/api/deletesong",
         {
-          songIds: [songKey],
+          song_id: songKey,
           assets: assets,
+          playlist_id: playlistId,
         },
         {
           headers: { "Content-Type": "application/json" },

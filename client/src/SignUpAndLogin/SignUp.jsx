@@ -52,12 +52,10 @@ const SignUp = () => {
           const user = userCredential.user;
 
           const newUser = {
-            id: user.uid,
+            user_id: user.uid,
             email_id: user.email,
             username,
             sign_in_method: "email",
-            homepage_songs: [],
-            playlist_ids: [],
           };
 
           await axios.post(

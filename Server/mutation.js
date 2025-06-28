@@ -175,3 +175,23 @@ mutation UPDATE_FAVORITES($user_id: String!, $favorites: jsonb) {
 }
 
   `;
+
+export const ADD_FAVORITE = `
+mutation ADD_FAVORITE($user_id:String!,$favorite_id:uuid!){
+  insert_favorites(objects:{user_id:$user_id,favorite_id:$favorite_id}){
+    returning{
+      user_id
+      favorite_id
+    }
+  }
+}
+`;
+
+export const DELETE_FAVORITE = `
+mutation DELETE_FAVORITE($user_id: String!, $favorite_id: uuid!) {
+  delete_favorites_by_pk(favorite_id: $favorite_id, user_id: $user_id) {
+    favorite_id
+    user_id
+  }
+}
+`;

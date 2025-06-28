@@ -13,21 +13,23 @@ import addUser from "./routes/mutationRoutes/addUser.js";
 import addSong from "./routes/mutationRoutes/addSong.js";
 import addPlaylist from "./routes/mutationRoutes/addPlaylist.js";
 import addPlaylistSong from "./routes/mutationRoutes/addPlaylistSongs.js";
+import addFavorite from "./routes/mutationRoutes/addFavorite.js";
 
 import deletePlaylist from "./routes/mutationRoutes/deletePlaylist.js";
 import deleteUser from "./routes/mutationRoutes/deleteUser.js";
 import deleteSong from "./routes/mutationRoutes/deleteSong.js";
+import deleteFavorite from "./routes/mutationRoutes/deleteFavorite.js";
 
 import updateSongTitle from "./routes/mutationRoutes/updateSongTitle.js";
 import updatePlaylistTitle from "./routes/mutationRoutes/updatePlaylistTitle.js";
 import updateRecentlyPlayed from "./routes/mutationRoutes/updateRecentlyPlayed.js";
-import updateFavorites from "./routes/mutationRoutes/updateFavorites.js";
 
 import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
 import fetchAlbumSongs from "./routes/apiRoutes/fetchAlbumSongs.js";
 import fetchSearchSongs from "./routes/queryRoutes/fetchSearchSongs.js";
 import fetchRecentlyPlayed from "./routes/queryRoutes/fetchRecentlyPlayed.js";
+import fetchFavorites from "./routes/queryRoutes/fetchFavorites.js";
 
 import uploadCloudinaryImage from "./Cloudinary/uploadImage.js";
 import uploadCloudinaryAudio from "./Cloudinary/uploadAudio.js";
@@ -49,21 +51,23 @@ app.use(addUser);
 app.use(addSong);
 app.use(addPlaylist);
 app.use(addPlaylistSong);
+app.use(addFavorite);
 
 app.use(deletePlaylist);
 app.use(deleteUser);
 app.use(deleteSong);
+app.use(deleteFavorite);
 
 app.use(updateSongTitle);
 app.use(updatePlaylistTitle);
 app.use(updateRecentlyPlayed);
-app.use(updateFavorites);
 
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);
 app.use(fetchAlbumSongs);
 app.use(fetchSearchSongs);
 app.use(fetchRecentlyPlayed);
+app.use(fetchFavorites);
 
 app.use(uploadCloudinaryImage);
 app.use(uploadCloudinaryAudio);

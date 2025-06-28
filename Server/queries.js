@@ -5,10 +5,7 @@ query CHECK_EXISTING_USER($user_id: String!) {
       username
       email_id
     }
-    user_preferences:user_preferences_by_pk(user_id:$user_id) {
-      recently_played
-      favorites
-    }
+
   }
 `;
 
@@ -124,4 +121,13 @@ query FETCH_RECENTLY_PLAYED($user_id:String!){
     
   }
 }
+`;
+
+export const FETCH_FAVORITES = `
+query FETCH_FAVORITES($user_id: String!) {
+  favorites(where: {user_id: {_eq: $user_id}}) {
+    favorite_id
+  }
+}
+
 `;

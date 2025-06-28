@@ -34,9 +34,26 @@ const userPrefsSlice = createSlice({
       state.favorites = action.payload;
       localStorage.setItem("userPrefs", JSON.stringify(state));
     },
+    addFavorite: (state, action) => {
+      if (!state.favorites) state.favorites = [];
+      state.favorites.push(action.payload);
+      localStorage.setItem("userPrefs", JSON.stringify(state));
+    },
+    deleteFavorite: (state, action) => {
+      if (!state.favorites) state.favorites = [];
+      state.favorites = state.favorites.filter(
+        (songId) => songId !== action.payload
+      );
+      localStorage.setItem("userPrefs", JSON.stringify(state));
+    },
   },
 });
 
-export const { setRecentlyPlayed, addRecentlyPlayed, setFavorite } =
-  userPrefsSlice.actions;
+export const {
+  setRecentlyPlayed,
+  addRecentlyPlayed,
+  addFavorite,
+  deleteFavorite,
+  setFavorite,
+} = userPrefsSlice.actions;
 export default userPrefsSlice.reducer;

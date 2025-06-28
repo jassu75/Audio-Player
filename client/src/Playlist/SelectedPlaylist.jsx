@@ -15,10 +15,12 @@ import {
 } from "../redux/selectors/homepage.selector";
 import { Pagination } from "@mui/material";
 import useFetchSongs from "../hooks/useFetchSongs";
+import useFetchFavorites from "../hooks/useFetchFavorites";
 
 const SelectedPlaylist = () => {
   const { playlistId } = useParams();
   const { userLoading, userError } = useFetchUserDetails();
+  const { favoritesLoading, favoritesError } = useFetchFavorites();
   const allPlaylist = useSelector(playlistsSelector);
   const playlistSongs = useSelector(songsSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
@@ -31,11 +33,11 @@ const SelectedPlaylist = () => {
     setSearchParams({ page: value }, { replace: true });
   };
 
-  if (!playlistSongs || userLoading || songsLoading) {
+  if (!playlistSongs || userLoading || songsLoading || favoritesLoading) {
     return <PlaylistSkeleton />;
   }
 
-  if (userError || songsError) {
+  if (userError || songsError || favoritesError) {
     return <ErrorPage />;
   }
 

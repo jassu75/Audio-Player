@@ -9,7 +9,6 @@ import {
   playlistsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import { setFavorite } from "../redux/slices/userPreferences.slice";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
@@ -52,8 +51,6 @@ const useFetchUserDetails = () => {
           { headers: { "Content-Type": "application/json" } }
         );
         dispatch(setUser(response.data?.users));
-
-        dispatch(setFavorite(response.data?.user_preferences.favorites));
       } catch (error) {
         setError((prev) => ({ ...prev, user: true }));
         console.error("Error fetching user details:", error);

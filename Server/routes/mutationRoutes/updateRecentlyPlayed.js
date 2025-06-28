@@ -6,10 +6,9 @@ const router = Router();
 
 router.post("/api/updaterecentlyplayed", async (req, res) => {
   try {
-    const { user_id, recently_played } = req.body;
+    const { data } = req.body;
     const response = await client.request(UPDATE_RECENTLY_PLAYED, {
-      user_id,
-      recently_played,
+      recently_played: data,
     });
     res.status(200).json(response);
   } catch (error) {

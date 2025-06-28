@@ -1,7 +1,7 @@
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import EmptySongsPage from "../HelperPages/EmptyPages/EmptySongs";
 import styles from "./selectedPlaylist.module.css";
 import PlaylistUploadButton from "../CustomButtons/PlaylistUploadButton/PlaylistUploadButton";
@@ -14,7 +14,6 @@ import {
   songsSelector,
 } from "../redux/selectors/homepage.selector";
 import { Pagination } from "@mui/material";
-import { useState } from "react";
 import useFetchSongs from "../hooks/useFetchSongs";
 
 const SelectedPlaylist = () => {
@@ -23,14 +22,16 @@ const SelectedPlaylist = () => {
   const allPlaylist = useSelector(playlistsSelector);
   const playlistSongs = useSelector(songsSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
-  const [page, setPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page") || "1";
   const { songsLoading, songsError } = useFetchSongs(playlistId);
 
   const handleSetPage = (_event, value) => {
-    setPage(value);
+    setSearchParams({ page: value }, { replace: true });
   };
 
-  if (userLoading || songsLoading) {
+  if (!playlistSongs || userLoading || songsLoading) {
     return <PlaylistSkeleton />;
   }
 
@@ -47,8 +48,8 @@ const SelectedPlaylist = () => {
         <PlaylistUploadButton playlistId={playlistId} />
       </Grid2>
 
-      {playlistSongs && Object.keys(playlistSongs).length > 0 ? (
-        <Grid2>
+      {Object.keys(playlistSongs).length > 0 ? (
+        <Grid2 className={styles.songs_container}>
           <PlaylistSongsList
             playlistId={playlistId}
             playlistSongs={playlistSongs}
@@ -56,8 +57,8 @@ const SelectedPlaylist = () => {
           />
           <Pagination
             variant="outlined"
-            count={Math.ceil(Object.keys(playlistSongs).length / 10)}
-            page={page}
+            count={Math.ceil(Object.keys(playlistSongs).length / 20)}
+            page={Number(page)}
             onChange={handleSetPage}
           />
         </Grid2>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./homepagePlaylistItem.module.css";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -60,7 +60,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   };
 
   const handlePlaylistClick = () => {
-    navigate(`/playlists/${playlistKey}`);
+    navigate(`/playlists/${playlistKey}?page=1`);
   };
 
   return (

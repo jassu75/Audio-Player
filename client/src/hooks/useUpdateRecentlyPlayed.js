@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useEffect, useRef } from "react";
-import { auth } from "../config/firebase";
 import { useSelector } from "react-redux";
 import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 
-const useRecentlyPlayed = () => {
+const useUpdateRecentlyPlayed = () => {
   const recentlyPlayed = useSelector(recentlyPlayedSelector);
   const recentlyPlayedRef = useRef(recentlyPlayed);
 
@@ -15,12 +14,24 @@ const useRecentlyPlayed = () => {
   useEffect(() => {
     const updateRecentlyPlayed = async () => {
       try {
+        const data = recentlyPlayedRef.current
+          .filter((song) => song.last_played)
+          .map((song) => ({
+            where: {
+              song_id: { _eq: song.song_id },
+              _or: [
+                { last_played: { _is_null: true } },
+                { last_played: { _neq: song.last_played } },
+              ],
+            },
+            _set: {
+              last_played: song.last_played,
+            },
+          }));
+
         await axios.post(
           "/api/updaterecentlyplayed",
-          {
-            user_id: auth.currentUser?.uid,
-            recently_played: recentlyPlayedRef.current,
-          },
+          { data },
           {
             headers: { "Content-Type": "application/json" },
           }
@@ -39,4 +50,4 @@ const useRecentlyPlayed = () => {
   }, []);
 };
 
-export default useRecentlyPlayed;
+export default useUpdateRecentlyPlayed;

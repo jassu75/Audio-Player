@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSongs } from "../redux/slices/homepage.slice";
+import { songsSelector } from "../redux/selectors/homepage.selector";
 
 const useFetchSongs = (playlistId) => {
   const [songsLoading, setSongsLoading] = useState(false);
   const [songsError, setSongsError] = useState(false);
   const dispatch = useDispatch();
+  const songsList = useSelector(songsSelector);
   useEffect(() => {
     const fetchSongs = async () => {
       try {
@@ -33,10 +35,10 @@ const useFetchSongs = (playlistId) => {
         setSongsLoading(false);
       }
     };
-    if (playlistId) {
+    if (!songsList) {
       fetchSongs();
     }
-  }, [dispatch, playlistId]);
+  }, [dispatch, songsList, playlistId]);
 
   return { songsLoading, songsError };
 };

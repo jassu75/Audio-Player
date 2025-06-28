@@ -9,10 +9,7 @@ import {
   playlistsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import {
-  setRecentlyPlayed,
-  setFavorite,
-} from "../redux/slices/userPreferences.slice";
+import { setFavorite } from "../redux/slices/userPreferences.slice";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
@@ -55,9 +52,7 @@ const useFetchUserDetails = () => {
           { headers: { "Content-Type": "application/json" } }
         );
         dispatch(setUser(response.data?.users));
-        dispatch(
-          setRecentlyPlayed(response.data?.user_preferences.recently_played)
-        );
+
         dispatch(setFavorite(response.data?.user_preferences.favorites));
       } catch (error) {
         setError((prev) => ({ ...prev, user: true }));

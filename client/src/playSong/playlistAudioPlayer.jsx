@@ -12,7 +12,7 @@ import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
-import useRecentlyPlayed from "../hooks/useRecentlyPlayed";
+import useUpdateRecentlyPlayed from "../hooks/useUpdateRecentlyPlayed";
 import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 import { songsSelector } from "../redux/selectors/homepage.selector";
 
@@ -24,7 +24,7 @@ const PlaylistAudioPlayer = () => {
   const [shuffle, setShuffle] = useState(false);
 
   const songsList = useSelector(songsSelector);
-  const song = songsList[songId];
+  const song = songsList?.[songId];
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -35,11 +35,11 @@ const PlaylistAudioPlayer = () => {
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
 
-  useRecentlyPlayed();
+  useUpdateRecentlyPlayed();
 
   useEffect(() => {
-    dispatch(addRecentlyPlayed(songId));
-  }, [dispatch, songId]);
+    dispatch(addRecentlyPlayed(song));
+  }, [dispatch, song]);
 
   useEffect(() => {
     const player = audioPlayer.current;

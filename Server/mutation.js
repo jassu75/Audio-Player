@@ -155,13 +155,9 @@ mutation UPDATE_PLAYLIST_TITLE($playlist_id: uuid!, $playlist_title: String!) {
 `;
 
 export const UPDATE_RECENTLY_PLAYED = `
-mutation UPDATE_RECENTLY_PLAYED($user_id: String!, $recently_played: jsonb) {
-  update_user_preferences_by_pk(
-    pk_columns: { user_id: $user_id }
-    _set: { recently_played: $recently_played }
-  ) {
-    user_id
-    recently_played
+mutation UPDATE_RECENTLY_PLAYED($recently_played:[audio_details_updates!]!){
+  update_audio_details_many(updates:$recently_played){
+    affected_rows
   }
 }
 

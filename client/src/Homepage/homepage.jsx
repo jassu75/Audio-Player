@@ -9,14 +9,22 @@ import useAudiusAlbums from "../hooks/useAudiusAlbums";
 import HomepageAlbumSection from "./Sections/Albums/HomepageAlbumSection";
 import HomepageSkeleton from "../Skeletons/HomepageSkeleton";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setSongs } from "../redux/slices/homepage.slice";
 
 const Homepage = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
   const { userLoading, userError } = useFetchUserDetails();
+  const dispatch = useDispatch();
 
   const loading = userLoading || jamendoSongsLoading || audiusAlbumsLoading;
   const error = userError || jamendoSongsError || audiusAlbumsError;
+
+  useEffect(() => {
+    dispatch(setSongs(null));
+  }, [dispatch]);
 
   if (error) return <ErrorPage />;
 

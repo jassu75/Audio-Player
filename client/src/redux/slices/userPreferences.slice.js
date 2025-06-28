@@ -17,11 +17,15 @@ const userPrefsSlice = createSlice({
     },
     addRecentlyPlayed: (state, action) => {
       if (!state.recentlyPlayed) state.recentlyPlayed = [];
+      const newSong = {
+        ...action.payload,
+        last_played: new Date().toISOString(),
+      };
       state.recentlyPlayed = state.recentlyPlayed.filter(
-        (id) => id !== action.payload
+        (song) => song.song_id !== newSong.song_id
       );
-      state.recentlyPlayed.unshift(action.payload);
-      if (state.recentlyPlayed.length > 5) {
+      state.recentlyPlayed.unshift(newSong);
+      if (state.recentlyPlayed.length > 50) {
         state.recentlyPlayed.pop();
       }
       localStorage.setItem("userPrefs", JSON.stringify(state));

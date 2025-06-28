@@ -26,6 +26,8 @@ import updateFavorites from "./routes/mutationRoutes/updateFavorites.js";
 import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
 import fetchAlbumSongs from "./routes/apiRoutes/fetchAlbumSongs.js";
+import fetchSearchSongs from "./routes/queryRoutes/fetchSearchSongs.js";
+import fetchRecentlyPlayed from "./routes/queryRoutes/fetchRecentlyPlayed.js";
 
 import uploadCloudinaryImage from "./Cloudinary/uploadImage.js";
 import uploadCloudinaryAudio from "./Cloudinary/uploadAudio.js";
@@ -60,6 +62,8 @@ app.use(updateFavorites);
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);
 app.use(fetchAlbumSongs);
+app.use(fetchSearchSongs);
+app.use(fetchRecentlyPlayed);
 
 app.use(uploadCloudinaryImage);
 app.use(uploadCloudinaryAudio);

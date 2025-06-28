@@ -1,17 +1,14 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { songsSelector } from "./homepage.selector";
 
 export const recentlyPlayedSelector = (state) => state.userPrefs.recentlyPlayed;
 export const favoritesSelector = (state) => state.userPrefs.favorites;
 
-export const recentlyPlayedSongsSelector = createSelector(
-  [songsSelector, recentlyPlayedSelector],
-  (songs, recentlyPlayed) => {
-    if (!recentlyPlayed || !songs) return [];
-    return recentlyPlayed.reduce((acc, id) => {
-      if (songs[id]) {
-        acc[id] = songs[id];
-      }
+export const recentlyPlayedSongSelector = createSelector(
+  [recentlyPlayedSelector],
+  (songsList) => {
+    if (!songsList) return {};
+    return songsList.reduce((acc, song) => {
+      acc[song.song_id] = song;
       return acc;
     }, {});
   }

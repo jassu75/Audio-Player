@@ -13,7 +13,7 @@ import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import { searchSongsSelector } from "../redux/selectors/homepage.selector";
 import { IconButton } from "@mui/material";
 import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
-import useRecentlyPlayed from "../hooks/useRecentlyPlayed";
+import useUpdateRecentlyPlayed from "../hooks/useUpdateRecentlyPlayed";
 
 const AudioPlayer = () => {
   const [shuffle, setShuffle] = useState(false);
@@ -33,7 +33,7 @@ const AudioPlayer = () => {
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
 
-  useRecentlyPlayed();
+  useUpdateRecentlyPlayed();
 
   useEffect(() => {
     const player = audioPlayer.current;
@@ -84,8 +84,8 @@ const AudioPlayer = () => {
   }, [audioPlayer, navigate, songId, songsList]);
 
   useEffect(() => {
-    dispatch(addRecentlyPlayed(songId));
-  }, [dispatch, songId]);
+    dispatch(addRecentlyPlayed(song));
+  }, [dispatch, song]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);

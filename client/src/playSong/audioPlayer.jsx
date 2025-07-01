@@ -3,8 +3,6 @@ import styles from "./audioPlayer.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
-import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,14 +12,13 @@ import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import { IconButton } from "@mui/material";
 import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 import useUpdateRecentlyPlayed from "../hooks/useUpdateRecentlyPlayed";
 import axios from "axios";
 import { setSongs } from "../redux/slices/homepage.slice";
+import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
 
 const AudioPlayer = () => {
-  const [shuffle, setShuffle] = useState(false);
   const { userLoading, userError } = useFetchUserDetails();
   const { songId } = useParams();
   const dispatch = useDispatch();
@@ -35,11 +32,12 @@ const AudioPlayer = () => {
   const [songDuration, setSongDuration] = useState(0);
   const navigate = useNavigate();
 
+  const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
+  useUpdateRecentlyPlayed();
+
   const audioPlayer = useRef(); // Reference to the audio component
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
-
-  useUpdateRecentlyPlayed();
 
   useEffect(() => {
     const player = audioPlayer.current;
@@ -58,15 +56,10 @@ const AudioPlayer = () => {
       const handleEnded = () => {
         const songIds = Object.keys(songsList);
         let nextSongId;
-        if (shuffle) {
-          do {
-            nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
-          } while (nextSongId === songId && songIds.length > 1);
-        } else {
-          const currentIndex = songIds.indexOf(songId);
-          const nextIndex = (currentIndex + 1) % songIds.length;
-          nextSongId = songIds[nextIndex];
-        }
+        do {
+          nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
+        } while (nextSongId === songId && songIds.length > 1);
+
         const nextSong = songsList[nextSongId];
         player.src = nextSong.audio_url;
         const playNextSong = () => {
@@ -126,8 +119,8 @@ const AudioPlayer = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(addRecentlyPlayed(song));
-  }, [dispatch, song]);
+    if (song && user) dispatch(addRecentlyPlayed(song));
+  }, [dispatch, song, user]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -202,12 +195,7 @@ const AudioPlayer = () => {
     resetProgressBar();
   };
 
-  const handleShuffle = () => {
-    const prevValue = shuffle;
-    setShuffle(!prevValue);
-  };
-
-  if (userLoading) {
+  if (userLoading || recentlyPlayedLoading || !songsList) {
     return <AudioPlayerSkeleton />;
   }
 
@@ -215,7 +203,7 @@ const AudioPlayer = () => {
     return <ErrorPage />;
   }
 
-  return songsList ? (
+  return (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
       <Grid2 className={styles.song_content}>
@@ -231,12 +219,6 @@ const AudioPlayer = () => {
             </Typography>
           </Grid2>
         </Grid2>
-        <IconButton
-          onClick={handleShuffle}
-          title={shuffle ? "Shuffle On" : "Shuffle Off"}
-        >
-          {shuffle ? <ShuffleOnIcon /> : <ShuffleIcon />}
-        </IconButton>
       </Grid2>
 
       <Grid2 className={styles.audio_buttons}>
@@ -284,8 +266,6 @@ const AudioPlayer = () => {
         </Grid2>
       </Grid2>
     </Grid2>
-  ) : (
-    <AudioPlayerSkeleton />
   );
 };
 

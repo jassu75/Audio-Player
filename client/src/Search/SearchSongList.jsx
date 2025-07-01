@@ -17,9 +17,11 @@ const SearchSongList = ({ showRecentlyPlayed }) => {
           RECENTLY PLAYED
         </Typography>
       ) : null}
-      {Object.entries(songsList ?? {}).map(([id, song]) => (
-        <SearchSong key={id} songKey={id} song={song} />
-      ))}
+      {Object.entries(songsList ?? {})
+        .slice(0, 15)
+        .map(([id, song]) => (
+          <SearchSong key={id} songKey={id} song={song} />
+        ))}
     </Grid2>
   );
 };

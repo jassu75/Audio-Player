@@ -14,7 +14,12 @@ import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
 import useUpdateRecentlyPlayed from "../hooks/useUpdateRecentlyPlayed";
 import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
-import { songsSelector } from "../redux/selectors/homepage.selector";
+import {
+  songsSelector,
+  userSelector,
+} from "../redux/selectors/homepage.selector";
+import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
+import useFetchSongs from "../hooks/useFetchSongs";
 
 const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -24,6 +29,7 @@ const PlaylistAudioPlayer = () => {
   const [shuffle, setShuffle] = useState(false);
 
   const songsList = useSelector(songsSelector);
+  const user = useSelector(userSelector);
   const song = songsList?.[songId];
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,15 +37,17 @@ const PlaylistAudioPlayer = () => {
   const [songDuration, setSongDuration] = useState(0);
   const navigate = useNavigate();
 
+  const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
+  useUpdateRecentlyPlayed();
+  const { songsLoading, songsError } = useFetchSongs(playlistId);
+
   const audioPlayer = useRef(); // Reference to the audio component
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
 
-  useUpdateRecentlyPlayed();
-
   useEffect(() => {
-    dispatch(addRecentlyPlayed(song));
-  }, [dispatch, song]);
+    if (song && user) dispatch(addRecentlyPlayed(song));
+  }, [dispatch, song, user]);
 
   useEffect(() => {
     const player = audioPlayer.current;
@@ -171,11 +179,11 @@ const PlaylistAudioPlayer = () => {
     setShuffle(!prevValue);
   };
 
-  if (userLoading) {
+  if (userLoading || songsLoading || recentlyPlayedLoading) {
     return <AudioPlayerSkeleton />;
   }
 
-  if (userError) {
+  if (userError || songsError) {
     return <ErrorPage />;
   }
 

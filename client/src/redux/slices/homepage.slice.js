@@ -62,10 +62,6 @@ const songsSlice = createSlice({
       delete state.playlists[action.payload];
       localStorage.setItem("playlists", JSON.stringify(state.playlists));
     },
-    setHomepageSongTitles: (state, action) => {
-      state.user.homepage_songs = action.payload;
-      localStorage.setItem("user", JSON.stringify(state.user));
-    },
 
     setUser: (state, action) => {
       state.user = action.payload;
@@ -92,7 +88,6 @@ const songsSlice = createSlice({
     setAudiusSongs: (state, action) => {
       state.audiusSongs = action.payload;
     },
-    logout: () => initialState,
 
     renameSong: (state, action) => {
       const songId = action.payload.songId;
@@ -114,7 +109,6 @@ export const {
   addSongs,
   removeHomepageSong,
   setUser,
-  setHomepageSongTitles,
   addPlaylistDetails,
   setPlaylistDetails,
   deletePlaylistDetails,
@@ -122,7 +116,6 @@ export const {
   setJamendoSongs,
   setAudiusSongs,
   setAudiusAlbums,
-  logout,
   renameSong,
   renamePlaylist,
 } = songsSlice.actions;

@@ -7,11 +7,6 @@ export const jamendoSongsSelector = (state) => state.homepage.jamendoSongs;
 export const audiusAlbumsSelector = (state) => state.homepage.audiusAlbums;
 export const audiusSongsSelector = (state) => state.homepage.audiusSongs;
 
-export const userSongsSelector = createSelector([userSelector], (user) => {
-  if (!user) return [];
-  return user.homepage_songs;
-});
-
 export const searchSongsSelector = createSelector([songsSelector], (songs) => {
   if (!songs) return [];
   const titles = new Set();

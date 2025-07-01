@@ -163,19 +163,6 @@ mutation UPDATE_RECENTLY_PLAYED($recently_played:[audio_details_updates!]!){
 
   `;
 
-export const UPDATE_FAVORITES = `
-mutation UPDATE_FAVORITES($user_id: String!, $favorites: jsonb) {
-  update_user_preferences_by_pk(
-    pk_columns: { user_id: $user_id }
-    _set: { favorites: $favorites }
-  ) {
-    user_id
-    favorites
-  }
-}
-
-  `;
-
 export const ADD_FAVORITE = `
 mutation ADD_FAVORITE($user_id:String!,$favorite_id:uuid!){
   insert_favorites(objects:{user_id:$user_id,favorite_id:$favorite_id}){

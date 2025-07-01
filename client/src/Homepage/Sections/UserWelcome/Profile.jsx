@@ -13,12 +13,8 @@ import { auth } from "../../../config/firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../redux/slices/homepage.slice";
-import {
-  playlistsSelector,
-  songsSelector,
-} from "../../../redux/selectors/homepage.selector";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/reducers/mainReducer";
 
 const Profile = ({ username }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -26,8 +22,6 @@ const Profile = ({ username }) => {
   const dispatch = useDispatch();
   const [signOutLoading, setSignOutLoading] = useState(false);
   const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
-  const allSongs = useSelector(songsSelector);
-  const playlists = useSelector(playlistsSelector);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,20 +51,31 @@ const Profile = ({ username }) => {
       setDeleteAccountLoading(true);
       const token = await auth.currentUser?.getIdToken();
       if (token) {
-        const songIds = Object.keys(allSongs);
-        const playlistIds = Object.keys(playlists);
-
-        const assets = [];
-        for (const song of Object.values(allSongs)) {
-          if (song.cover_art_id !== "static") {
-            assets.push({ id: song.cover_art_id, type: "image" });
+        const assets = await axios.post(
+          "/api/fetchassets",
+          { user_id: auth.currentUser.uid },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-          assets.push({ id: song.audio_url_id, type: "video" });
-        }
+        );
+        const refinedAssets = assets.data?.assets.flatMap((asset) => {
+          const result = [];
+
+          if (asset.cover_art_id !== "static") {
+            result.push({ id: asset.cover_art_id, type: "image" });
+          }
+
+          result.push({ id: asset.audio_url_id, type: "video" });
+
+          return result;
+        });
 
         await axios.post(
           "/api/deleteuser",
-          { songIds, playlistIds, assets },
+          { assets: refinedAssets },
           {
             headers: {
               "Content-Type": "application/json",

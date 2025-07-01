@@ -10,19 +10,25 @@ import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
-import { searchSongsSelector } from "../redux/selectors/homepage.selector";
+import {
+  songsSelector,
+  userSelector,
+} from "../redux/selectors/homepage.selector";
 import { IconButton } from "@mui/material";
 import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 import useUpdateRecentlyPlayed from "../hooks/useUpdateRecentlyPlayed";
+import axios from "axios";
+import { setSongs } from "../redux/slices/homepage.slice";
 
 const AudioPlayer = () => {
   const [shuffle, setShuffle] = useState(false);
   const { userLoading, userError } = useFetchUserDetails();
   const { songId } = useParams();
   const dispatch = useDispatch();
-
-  const songsList = useSelector(searchSongsSelector);
-  const song = songsList[songId];
+  const [count, setCount] = useState(0);
+  const user = useSelector(userSelector);
+  const songsList = useSelector(songsSelector);
+  const song = songsList?.[songId];
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -70,7 +76,7 @@ const AudioPlayer = () => {
         };
 
         player.addEventListener("canplaythrough", playNextSong, { once: true });
-
+        setCount((prev) => prev + 1);
         navigate(`/user/song/${nextSongId}`, { replace: true });
         resetProgressBar();
       };
@@ -82,6 +88,42 @@ const AudioPlayer = () => {
       };
     }
   }, [audioPlayer, navigate, songId, songsList]);
+
+  useEffect(() => {
+    const fetchRandomSongs = async () => {
+      try {
+        const response = await axios.post(
+          "/api/fetchrandomsongs",
+          { user_id: user.user_id },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        const refinedResponse = response.data?.randomSongs.reduce(
+          (acc, song) => {
+            acc[song.song_id] = song;
+            return acc;
+          },
+          {}
+        );
+        dispatch(setSongs(refinedResponse));
+        setCount(1);
+      } catch (err) {
+        console.error("error fetching random songs", err);
+      }
+    };
+
+    if (user && count % 20 === 0) {
+      fetchRandomSongs();
+    }
+  }, [count, dispatch, user]);
+
+  useEffect(() => {
+    return () => {
+      console.log("hi");
+      dispatch(setSongs(null));
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(addRecentlyPlayed(song));
@@ -141,6 +183,8 @@ const AudioPlayer = () => {
     const prevSongId = songIds[prevIndex];
 
     setIsPlaying(false);
+    setCount((prev) => prev + 1);
+
     navigate(`/user/song/${prevSongId}`, { replace: true });
     resetProgressBar();
   };
@@ -152,6 +196,8 @@ const AudioPlayer = () => {
     const nextSongId = songIds[nextIndex];
 
     setIsPlaying(false);
+    setCount((prev) => prev + 1);
+
     navigate(`/user/song/${nextSongId}`, { replace: true });
     resetProgressBar();
   };
@@ -169,7 +215,7 @@ const AudioPlayer = () => {
     return <ErrorPage />;
   }
 
-  return (
+  return songsList ? (
     <Grid2 className={styles.audioPlayer}>
       <img src={song?.cover_art} alt="" className={styles.song_image} />
       <Grid2 className={styles.song_content}>
@@ -238,6 +284,8 @@ const AudioPlayer = () => {
         </Grid2>
       </Grid2>
     </Grid2>
+  ) : (
+    <AudioPlayerSkeleton />
   );
 };
 

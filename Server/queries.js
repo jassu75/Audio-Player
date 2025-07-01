@@ -41,7 +41,7 @@ query FETCH_PLAYLIST_SONGS($playlist_id: uuid!) @cached {
 
 export const FETCH_USER_SONGS_RANDOMLY = `
 query FETCH_USER_SONGS_RANDOMLY($user_id: String!) {
-  fetch_user_songs_randomly(args: {userid: $user_id}) {
+  randomSongs:fetch_user_songs_randomly(args: {userid: $user_id}) {
   cover_art
     artist
     song_id
@@ -79,6 +79,7 @@ query VERIFY_PLAYLIST_EMPTY($playlist_id:uuid!){
 export const FETCH_SEARCH_SONGS = `
 query FETCH_SEARCH_SONGS($user_id: String!, $search_text: String!) {
   searchResults:audio_details(
+    distinct_on: title
     where: {
       _and: [
         { user_id: { _eq: $user_id } },
@@ -99,6 +100,7 @@ query FETCH_SEARCH_SONGS($user_id: String!, $search_text: String!) {
     last_played
   }
 }
+
 
 `;
 
@@ -130,4 +132,13 @@ query FETCH_FAVORITES($user_id: String!) {
   }
 }
 
+`;
+
+export const FETCH_ASSETS = `
+query FETCH_ASSETS($user_id:String!) {
+  assets:audio_details(where: {user_id: {_eq: $user_id}}) {
+    audio_url_id
+    cover_art_id
+  }
+}
 `;

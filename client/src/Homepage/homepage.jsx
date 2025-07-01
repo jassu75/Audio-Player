@@ -12,14 +12,20 @@ import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setSongs } from "../redux/slices/homepage.slice";
+import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
 
 const Homepage = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
   const { userLoading, userError } = useFetchUserDetails();
+  const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   const dispatch = useDispatch();
 
-  const loading = userLoading || jamendoSongsLoading || audiusAlbumsLoading;
+  const loading =
+    userLoading ||
+    jamendoSongsLoading ||
+    audiusAlbumsLoading ||
+    recentlyPlayedLoading;
   const error = userError || jamendoSongsError || audiusAlbumsError;
 
   useEffect(() => {

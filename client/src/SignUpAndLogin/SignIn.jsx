@@ -8,7 +8,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
-import GoogleSignIn from "../assets/SignUpAndLogin/GoogleSignIn.svg";
+import GoogleSignIn from "../assets/images/SignUpAndLogin/GoogleSignIn.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { userSelector } from "../redux/selectors/homepage.selector";

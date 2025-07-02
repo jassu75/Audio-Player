@@ -10,7 +10,7 @@ import styles from "./playlistUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
-import defaultMusicNote from "../assets/AudioUploadForm/defaultMusicImage.webp";
+import defaultMusicNote from "../assets/images/AudioUploadForm/defaultMusicImage.webp";
 import axios from "axios";
 import {
   songsSelector,

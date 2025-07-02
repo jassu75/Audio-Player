@@ -3,8 +3,7 @@ import styles from "./homepage.module.css";
 import UserWelcome from "./Sections/UserWelcome/UserWelcome";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
-import HomepageSongSection from "./Sections/Songs/HomepageSongSection/HomepageSongSection";
-import useJamendoSongs from "../hooks/useJamendoSongs";
+import HomepageForYouSection from "./Sections/HomepageForYouSection/HomepageForYouSection";
 import useAudiusAlbums from "../hooks/useAudiusAlbums";
 import HomepageAlbumSection from "./Sections/Albums/HomepageAlbumSection";
 import HomepageSkeleton from "../Skeletons/HomepageSkeleton";
@@ -15,18 +14,13 @@ import { setSongs } from "../redux/slices/homepage.slice";
 import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
 
 const Homepage = () => {
-  const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
   const { userLoading, userError } = useFetchUserDetails();
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   const dispatch = useDispatch();
 
-  const loading =
-    userLoading ||
-    jamendoSongsLoading ||
-    audiusAlbumsLoading ||
-    recentlyPlayedLoading;
-  const error = userError || jamendoSongsError || audiusAlbumsError;
+  const loading = userLoading || audiusAlbumsLoading || recentlyPlayedLoading;
+  const error = userError || audiusAlbumsError;
 
   useEffect(() => {
     dispatch(setSongs(null));
@@ -39,11 +33,10 @@ const Homepage = () => {
   ) : (
     <Grid2 className={styles.container}>
       <UserWelcome />
+      <HomepageForYouSection />
 
       <HomepagePlaylistSection />
       <HomepageAlbumSection />
-
-      <HomepageSongSection />
     </Grid2>
   );
 };

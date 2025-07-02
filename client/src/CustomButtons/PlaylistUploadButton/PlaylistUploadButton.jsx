@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ButtonBase from "@mui/material/ButtonBase";
-import uploadButton from "../../assets/Homepage/UploadIcon.jpg";
+import uploadButton from "../../assets/images/Homepage/UploadIcon.jpg";
 import styles from "./playlistUploadButton.module.css";
 import PlaylistUploadForm from "../../AudioUploadForm/PlaylistUploadForm";
 const PlaylistUploadButton = ({ playlistId }) => {

@@ -1,6 +1,6 @@
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import defaultAvatar from "../../../assets/Homepage/DefaultAvatar.jpeg";
+import defaultAvatar from "../../../assets/images/Homepage/DefaultAvatar.jpeg";
 import styles from "./profile.module.css";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useState } from "react";

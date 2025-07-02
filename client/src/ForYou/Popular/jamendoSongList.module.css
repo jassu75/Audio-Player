@@ -26,3 +26,30 @@
 .song_list::-webkit-scrollbar-thumb:hover {
   background-color: #ddd;
 }
+
+.jamendo_songs {
+  display: flex;
+  flex-direction: column;
+  padding: 9px;
+  width: 100%;
+  gap: 15px;
+}
+
+.title_text {
+  color: #d3d3d3;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: underline;
+  padding: 15px;
+}

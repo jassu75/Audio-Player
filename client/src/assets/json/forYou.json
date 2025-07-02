@@ -1,0 +1,19 @@
+{
+  "data": [
+    {
+      "foryou_cover_art": "/images/ForYou/FavoritesItem.jpeg",
+      "foryou_title": "Favorites",
+      "foryou_id": "4d56e421-0b43-5b35-a22f-518e661142b0"
+    },
+    {
+      "foryou_cover_art": "/images/ForYou/RecentsItem.png",
+      "foryou_title": "Recents",
+      "foryou_id": "6e122898-417a-5d28-9ac5-b3484d6f7e61"
+    },
+    {
+      "foryou_cover_art": "/images/ForYou/PopularItem.jpeg",
+      "foryou_title": "Popular",
+      "foryou_id": "2a847b94-71d6-5cc1-9bb0-062372efc43d"
+    }
+  ]
+}

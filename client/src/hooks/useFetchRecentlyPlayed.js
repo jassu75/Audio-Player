@@ -7,6 +7,7 @@ import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selec
 
 const useFetchRecentlyPlayed = () => {
   const [recentlyPlayedLoading, setRecentlyPlayedLoading] = useState(false);
+  const [recentlyPlayedError, setRecentlyPlayedError] = useState(false);
   const user = useSelector(userSelector);
   const recentlyPlayed = useSelector(recentlyPlayedSelector);
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const useFetchRecentlyPlayed = () => {
     const fetchRecentlyPlayed = async () => {
       try {
         setRecentlyPlayedLoading(true);
+        setRecentlyPlayedError(false);
         const response = await axios.post(
           "/api/fetchrecentlyplayed",
           { user_id: user.user_id },
@@ -25,6 +27,7 @@ const useFetchRecentlyPlayed = () => {
         dispatch(setRecentlyPlayed(refinedResponse));
       } catch (error) {
         console.error("error fetching recently played", error);
+        setRecentlyPlayedError(true);
       } finally {
         setRecentlyPlayedLoading(false);
       }
@@ -35,7 +38,7 @@ const useFetchRecentlyPlayed = () => {
     }
   }, [dispatch, user, recentlyPlayed]);
 
-  return { recentlyPlayedLoading };
+  return { recentlyPlayedLoading, recentlyPlayedError };
 };
 
 export default useFetchRecentlyPlayed;

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const SearchSong = ({ songKey, song }) => {
   const navigate = useNavigate();
   const handleSongClick = () => {
-    navigate(`/user/song/${songKey}?list=search`);
+    navigate(`/user/song/${songKey}`);
   };
 
   return (

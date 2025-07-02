@@ -1,0 +1,55 @@
+.container {
+  padding: 9px;
+}
+.song_list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.song_list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.song_list::-webkit-scrollbar-track {
+  background: #4d4d4d;
+}
+
+.song_list::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 2px solid #29293e;
+}
+
+.song_list::-webkit-scrollbar-thumb:hover {
+  background-color: #ddd;
+}
+
+.recent_songs {
+  display: flex;
+  flex-direction: column;
+  padding: 9px;
+  width: 100%;
+  gap: 15px;
+}
+
+.title_text {
+  color: #d3d3d3;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: underline;
+  padding: 15px;
+}

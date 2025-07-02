@@ -5,7 +5,6 @@ import styles from "./homepageForYouSection.module.css";
 import HomepageForYouItem from "./HomepageForYouItem";
 
 const HomepageForYouSection = () => {
-  console.log(forYouList);
   return (
     <Grid2 className={styles.homepage_playlists}>
       <Grid2 className={styles.title}>

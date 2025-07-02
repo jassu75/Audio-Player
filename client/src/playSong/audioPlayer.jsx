@@ -113,7 +113,6 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     return () => {
-      console.log("hi");
       dispatch(setSongs(null));
     };
   }, [dispatch]);

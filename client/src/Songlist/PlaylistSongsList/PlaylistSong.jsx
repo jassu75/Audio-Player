@@ -23,7 +23,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
   const dispatch = useDispatch();
 
   const handleSongClick = () => {
-    navigate(`/user/playlist/${playlistId}/song/${songKey}?list=playlist`);
+    navigate(`/user/playlist/${playlistId}/song/${songKey}`);
   };
 
   const handleMenuOpen = (event) => {

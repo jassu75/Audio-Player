@@ -14,13 +14,13 @@ import {
   songsSelector,
 } from "../redux/selectors/homepage.selector";
 import { Pagination } from "@mui/material";
-import useFetchSongs from "../hooks/useFetchSongs";
-import useFetchFavorites from "../hooks/useFetchFavorites";
+import useFetchSongs from "../hooks/Songs/useFetchSongs";
+import useFetchFavoriteIds from "../hooks/Favorites/useFetchFavoriteIds";
 
 const SelectedPlaylist = () => {
   const { playlistId } = useParams();
   const { userLoading, userError } = useFetchUserDetails();
-  const { favoritesLoading, favoritesError } = useFetchFavorites();
+  const { favoritesLoading, favoritesError } = useFetchFavoriteIds();
   const allPlaylist = useSelector(playlistsSelector);
   const playlistSongs = useSelector(songsSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;

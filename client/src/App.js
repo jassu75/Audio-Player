@@ -13,6 +13,7 @@ import AudiusAudioPlayer from "./playSong/audiusAudioPlayer";
 import Search from "./Search/Search";
 import PlaylistAudioPlayer from "./playSong/playlistAudioPlayer";
 import SelectedForYou from "./ForYou/SelectedForYou";
+import PreferenceAudioPlayer from "./playSong/PreferenceAudioPlayer";
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -39,6 +40,10 @@ function App() {
             />
             <Route path="/search" element={<Search />} />
             <Route path="/foryou/:foryouTitle" element={<SelectedForYou />} />
+            <Route
+              path="/preference/:preference/song/:songId"
+              element={<PreferenceAudioPlayer />}
+            />
           </Routes>
         </div>
       </Router>

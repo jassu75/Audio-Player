@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setJamendoSongs } from "../redux/slices/homepage.slice";
-import { jamendoSongsSelector } from "../redux/selectors/homepage.selector";
+import { setJamendoSongs } from "../../redux/slices/homepage.slice";
+import { jamendoSongsSelector } from "../../redux/selectors/homepage.selector";
 
 const useJamendoSongs = () => {
   const [jamendoSongsLoading, setJamendoSongsLoading] = useState(false);

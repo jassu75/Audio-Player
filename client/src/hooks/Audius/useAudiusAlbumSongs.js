@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setAudiusSongs } from "../redux/slices/homepage.slice";
+import { setAudiusSongs } from "../../redux/slices/homepage.slice";
 
 const useAudiusAlbumSong = (playlistId) => {
   const [audiusAlbumSongLoading, setAudiusAlbumSongLoading] = useState(false);

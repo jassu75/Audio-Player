@@ -125,9 +125,9 @@ query FETCH_RECENTLY_PLAYED($user_id:String!){
 }
 `;
 
-export const FETCH_FAVORITES = `
-query FETCH_FAVORITES($user_id: String!) {
-  favorites(where: {user_id: {_eq: $user_id}}) {
+export const FETCH_FAVORITE_IDS = `
+query FETCH_FAVORITE_IDS($user_id: String!) {
+  favoriteIds:favorites(where: {user_id: {_eq: $user_id}}) {
     favorite_id
   }
 }
@@ -139,6 +139,25 @@ query FETCH_ASSETS($user_id:String!) {
   assets:audio_details(where: {user_id: {_eq: $user_id}}) {
     audio_url_id
     cover_art_id
+  }
+}
+`;
+
+export const FETCH_FAVORITES = `
+query FETCH_FAVORITES($user_id: String!) {
+  favorites(where: {user_id: {_eq: $user_id}}) {
+    song:audio_detail {
+   cover_art
+    artist
+    song_id
+    album
+    audio_url
+    duration
+    genre
+    release_year
+    title
+    last_played
+    }
   }
 }
 `;

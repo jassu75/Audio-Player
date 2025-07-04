@@ -4,14 +4,14 @@ import UserWelcome from "./Sections/UserWelcome/UserWelcome";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
 import HomepageForYouSection from "./Sections/HomepageForYouSection/HomepageForYouSection";
-import useAudiusAlbums from "../hooks/useAudiusAlbums";
+import useAudiusAlbums from "../hooks/Audius/useAudiusAlbums";
 import HomepageAlbumSection from "./Sections/Albums/HomepageAlbumSection";
 import HomepageSkeleton from "../Skeletons/HomepageSkeleton";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setSongs } from "../redux/slices/homepage.slice";
-import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
 
 const Homepage = () => {
   const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();

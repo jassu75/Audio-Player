@@ -3,7 +3,7 @@ import styles from "./jamendoSongList.module.css";
 import JamendoSong from "./JamendoSong";
 import { useSelector } from "react-redux";
 import { jamendoSongsSelector } from "../../redux/selectors/homepage.selector";
-import useJamendoSongs from "../../hooks/useJamendoSongs";
+import useJamendoSongs from "../../hooks/Songs/useJamendoSongs";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import { Typography } from "@mui/material";

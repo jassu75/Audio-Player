@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userSelector } from "../redux/selectors/homepage.selector";
-import { setRecentlyPlayed } from "../redux/slices/userPreferences.slice";
-import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
+import { recentlyPlayedSelector } from "../../redux/selectors/userPreferences.selector";
+import { userSelector } from "../../redux/selectors/homepage.selector";
+import { setRecentlyPlayed } from "../../redux/slices/userPreferences.slice";
 
 const useFetchRecentlyPlayed = () => {
   const [recentlyPlayedLoading, setRecentlyPlayedLoading] = useState(false);

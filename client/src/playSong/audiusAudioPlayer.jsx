@@ -6,7 +6,7 @@ import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
-import useAudiusAlbumSong from "../hooks/useAudiusAlbumSongs";
+import useAudiusAlbumSong from "../hooks/Audius/useAudiusAlbumSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import { audiusSongsSelector } from "../redux/selectors/homepage.selector";
@@ -161,7 +161,7 @@ const AudiusAudioPlayer = () => {
     setShuffle(!prevValue);
   };
 
-  if (audiusAlbumSongLoading) return <AudioPlayerSkeleton />;
+  if (audiusAlbumSongLoading || !songsList) return <AudioPlayerSkeleton />;
   if (audiusAlbumSongError) return <ErrorPage />;
 
   return (

@@ -1,30 +1,35 @@
 import { useState, useRef, useEffect } from "react";
-import styles from "./audioPlayer.module.css";
+import styles from "./playlistAudioPlayer.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
+
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
+import IconButton from "@mui/material/IconButton";
+import useUpdateRecentlyPlayed from "../hooks/RecentlyPlayed/useUpdateRecentlyPlayed";
+import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
-import useUpdateRecentlyPlayed from "../hooks/RecentlyPlayed/useUpdateRecentlyPlayed";
-import axios from "axios";
-import { setSongs } from "../redux/slices/homepage.slice";
 import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import useFetchPreferenceSongs from "../hooks/Songs/useFetchPreferencesSongs";
 
-const AudioPlayer = () => {
+const PreferenceAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
-  const { songId } = useParams();
+  const { preference, songId } = useParams();
   const dispatch = useDispatch();
-  const [count, setCount] = useState(0);
-  const user = useSelector(userSelector);
+
+  const [shuffle, setShuffle] = useState(false);
+
   const songsList = useSelector(songsSelector);
+  const user = useSelector(userSelector);
   const song = songsList?.[songId];
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -34,10 +39,15 @@ const AudioPlayer = () => {
 
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   useUpdateRecentlyPlayed();
+  const { songsLoading, songsError } = useFetchPreferenceSongs(preference);
 
   const audioPlayer = useRef(); // Reference to the audio component
   const progressBar = useRef(); // Reference to the progress bar
   const animationRef = useRef(); // Reference to the animation
+
+  useEffect(() => {
+    if (song && user) dispatch(addRecentlyPlayed(song));
+  }, [dispatch, song, user]);
 
   useEffect(() => {
     const player = audioPlayer.current;
@@ -56,12 +66,19 @@ const AudioPlayer = () => {
       const handleEnded = () => {
         const songIds = Object.keys(songsList);
         let nextSongId;
-        do {
-          nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
-        } while (nextSongId === songId && songIds.length > 1);
+        if (shuffle) {
+          do {
+            nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
+          } while (nextSongId === songId && songIds.length > 1);
+        } else {
+          const currentIndex = songIds.indexOf(songId);
+          const nextIndex = (currentIndex + 1) % songIds.length;
+          nextSongId = songIds[nextIndex];
+        }
 
         const nextSong = songsList[nextSongId];
         player.src = nextSong.audio_url;
+
         const playNextSong = () => {
           player.play().catch((error) => {
             console.error("Error playing audio:", error);
@@ -69,8 +86,10 @@ const AudioPlayer = () => {
         };
 
         player.addEventListener("canplaythrough", playNextSong, { once: true });
-        setCount((prev) => prev + 1);
-        navigate(`/user/song/${nextSongId}`, { replace: true });
+
+        navigate(`/preference/${preference}song/${nextSongId}`, {
+          replace: true,
+        });
         resetProgressBar();
       };
 
@@ -80,46 +99,7 @@ const AudioPlayer = () => {
         player.removeEventListener("ended", handleEnded);
       };
     }
-  }, [audioPlayer, navigate, songId, songsList]);
-
-  useEffect(() => {
-    const fetchRandomSongs = async () => {
-      try {
-        const response = await axios.post(
-          "/api/fetchrandomsongs",
-          { user_id: user.user_id },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const refinedResponse = response.data?.randomSongs.reduce(
-          (acc, song) => {
-            acc[song.song_id] = song;
-            return acc;
-          },
-          {}
-        );
-        dispatch(setSongs(refinedResponse));
-        setCount(1);
-      } catch (err) {
-        console.error("error fetching random songs", err);
-      }
-    };
-
-    if (user && count % 20 === 0) {
-      fetchRandomSongs();
-    }
-  }, [count, dispatch, user]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(setSongs(null));
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (song && user) dispatch(addRecentlyPlayed(song));
-  }, [dispatch, song, user]);
+  }, [audioPlayer, navigate, songId, songsList, preference]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -175,9 +155,9 @@ const AudioPlayer = () => {
     const prevSongId = songIds[prevIndex];
 
     setIsPlaying(false);
-    setCount((prev) => prev + 1);
-
-    navigate(`/user/song/${prevSongId}`, { replace: true });
+    navigate(`/preference/${preference}/song/${prevSongId}`, {
+      replace: true,
+    });
     resetProgressBar();
   };
 
@@ -188,17 +168,22 @@ const AudioPlayer = () => {
     const nextSongId = songIds[nextIndex];
 
     setIsPlaying(false);
-    setCount((prev) => prev + 1);
-
-    navigate(`/user/song/${nextSongId}`, { replace: true });
+    navigate(`/preference/${preference}/song/${nextSongId}`, {
+      replace: true,
+    });
     resetProgressBar();
   };
 
-  if (userLoading || recentlyPlayedLoading || !songsList) {
+  const handleShuffle = () => {
+    const prevValue = shuffle;
+    setShuffle(!prevValue);
+  };
+
+  if (userLoading || songsLoading || recentlyPlayedLoading || !songsList) {
     return <AudioPlayerSkeleton />;
   }
 
-  if (userError) {
+  if (userError || songsError) {
     return <ErrorPage />;
   }
 
@@ -218,6 +203,12 @@ const AudioPlayer = () => {
             </Typography>
           </Grid2>
         </Grid2>
+        <IconButton
+          onClick={handleShuffle}
+          title={shuffle ? "Shuffle On" : "Shuffle Off"}
+        >
+          {shuffle ? <ShuffleOnIcon /> : <ShuffleIcon />}
+        </IconButton>
       </Grid2>
 
       <Grid2 className={styles.audio_buttons}>
@@ -268,4 +259,4 @@ const AudioPlayer = () => {
   );
 };
 
-export default AudioPlayer;
+export default PreferenceAudioPlayer;

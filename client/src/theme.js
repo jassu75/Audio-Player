@@ -84,6 +84,22 @@ const theme = createTheme({
       fontSize: "12px",
       fontWeight: 600,
     },
+
+    CardTitle: {
+      fontFamily: "Outfit",
+      fontSize: "20px",
+      fontWeight: 700,
+    },
+    CardArtist: {
+      fontFamily: "Outfit",
+      fontSize: "16px",
+      fontWeight: 500,
+    },
+    CardContent: {
+      fontFamily: "Outfit",
+      fontSize: "15px",
+      fontWeight: 400,
+    },
   },
 });
 

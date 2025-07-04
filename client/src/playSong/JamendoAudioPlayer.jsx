@@ -6,7 +6,7 @@ import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
-import useJamendoSongs from "../hooks/useJamendoSongs";
+import useJamendoSongs from "../hooks/Songs/useJamendoSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import { jamendoSongsSelector } from "../redux/selectors/homepage.selector";
@@ -159,7 +159,7 @@ const JamendoAudioPlayer = () => {
     setShuffle(!prevValue);
   };
 
-  if (jamendoSongsLoading) return <AudioPlayerSkeleton />;
+  if (jamendoSongsLoading || !songsList) return <AudioPlayerSkeleton />;
   if (jamendoSongsError) return <ErrorPage />;
 
   return (

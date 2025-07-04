@@ -4,7 +4,12 @@
   gap: 20px;
   overflow-y: auto;
   height: 100%;
-  width: 100%;
+}
+
+@media (max-width: 500px) {
+  .song_list {
+    width: 100%;
+  }
 }
 
 .song_list::-webkit-scrollbar {

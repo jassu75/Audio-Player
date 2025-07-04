@@ -7,10 +7,10 @@ import { useSearchParams } from "react-router-dom";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import SearchSkeleton from "../Skeletons/SearchSkeleton";
-import useFetchSearchSongs from "../hooks/useFetchSearchSongs";
+import useFetchSearchSongs from "../hooks/Songs/useFetchSearchSongs";
 
 import EmptySearch from "./EmptySearch";
-import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
 
 const Search = () => {
   const { userLoading, userError } = useFetchUserDetails();

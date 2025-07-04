@@ -12,14 +12,14 @@ import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
-import useUpdateRecentlyPlayed from "../hooks/useUpdateRecentlyPlayed";
+import useUpdateRecentlyPlayed from "../hooks/RecentlyPlayed/useUpdateRecentlyPlayed";
 import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
 import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import useFetchRecentlyPlayed from "../hooks/useFetchRecentlyPlayed";
-import useFetchSongs from "../hooks/useFetchSongs";
+import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import useFetchSongs from "../hooks/Songs/useFetchSongs";
 
 const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -179,7 +179,7 @@ const PlaylistAudioPlayer = () => {
     setShuffle(!prevValue);
   };
 
-  if (userLoading || songsLoading || recentlyPlayedLoading) {
+  if (userLoading || songsLoading || recentlyPlayedLoading || !songsList) {
     return <AudioPlayerSkeleton />;
   }
 

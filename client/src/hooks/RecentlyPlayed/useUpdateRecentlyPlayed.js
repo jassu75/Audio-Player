@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
+import { recentlyPlayedSelector } from "../../redux/selectors/userPreferences.selector";
 
 const useUpdateRecentlyPlayed = () => {
   const recentlyPlayed = useSelector(recentlyPlayedSelector);

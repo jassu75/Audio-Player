@@ -1,0 +1,132 @@
+.favorite_card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.image_container {
+  position: relative;
+  width: 100%;
+}
+
+.favorite_card:hover {
+  .genre_container {
+    display: block;
+  }
+}
+
+.favorite_image {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.favorite_icon_container {
+  position: absolute;
+  right: 0;
+  top: 0px;
+  padding: 20px;
+}
+
+.favorite_content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.title_text {
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.artist_text {
+  color: #d3d3d3;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.genre {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.genre_container {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #fffff0;
+  padding: 4px 8px;
+  max-width: 100%;
+}
+
+.genre_text {
+  color: #483d8b;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0 4px;
+}
+
+.album_time_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.album_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 80%;
+}
+
+.album_image {
+  width: 14px;
+  height: 14px;
+  padding: 0 4px 0 0;
+}
+
+.album_text {
+  color: #d3d3d3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.time_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 20%;
+}
+
+.time_text {
+  color: #d3d3d3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.time_image {
+  width: 14px;
+  height: 14px;
+  padding: 0 4px;
+}

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import { Typography } from "@mui/material";
-import useFetchRecentlyPlayed from "../../hooks/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import { recentlyPlayedSelector } from "../../redux/selectors/userPreferences.selector";
 import RecentSong from "./RecentSong";

@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  width: 100vw;
+  height: 100vh;
+  gap: 40px;
+}
+
+.skeleton_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 1rem;
+  max-width: 80%;
+  height: 100%;
+  overflow: hidden;
+  align-self: center;
+}

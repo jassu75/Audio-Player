@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAudiusAlbums } from "../redux/slices/homepage.slice";
-import { audiusAlbumsSelector } from "../redux/selectors/homepage.selector";
+import { setAudiusAlbums } from "../../redux/slices/homepage.slice";
+import { audiusAlbumsSelector } from "../../redux/selectors/homepage.selector";
 
 const useAudiusAlbums = () => {
   const [audiusAlbumsLoading, setAudiusAlbumsLoading] = useState(false);

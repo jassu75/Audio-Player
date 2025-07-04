@@ -77,7 +77,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             artist: (metadata.common.artist || "").trim(),
             album: (metadata.common.album || "").trim(),
             duration: Math.round(metadata.format.duration || 0),
-            genre: metadata.common.genre || "",
+            genre: metadata.common.genre || [],
             release_year: String(metadata.common.year || "").trim(),
             cover_art: imageDetails.coverArt,
             audio_url: audioDetails.audioUrl,

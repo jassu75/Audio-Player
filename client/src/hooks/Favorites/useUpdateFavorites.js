@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "../../redux/selectors/homepage.selector";
 import {
   addFavorite,
   deleteFavorite,
-} from "../redux/slices/userPreferences.slice";
-import { userSelector } from "../redux/selectors/homepage.selector";
+} from "../../redux/slices/userPreferences.slice";
 
 const useUpdateFavorites = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,8 @@ const useUpdateFavorites = () => {
 
   const addFavoriteId = async (songId) => {
     try {
+      dispatch(addFavorite(songId));
+
       await axios.post(
         "/api/addfavorite",
         {
@@ -22,7 +24,6 @@ const useUpdateFavorites = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      dispatch(addFavorite(songId));
     } catch (error) {
       console.error("error adding favorites", error);
     }
@@ -30,6 +31,8 @@ const useUpdateFavorites = () => {
 
   const deleteFavoriteId = async (songId) => {
     try {
+      dispatch(deleteFavorite(songId));
+
       await axios.post(
         "/api/deletefavorite",
         {
@@ -40,7 +43,6 @@ const useUpdateFavorites = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      dispatch(deleteFavorite(songId));
     } catch (error) {
       console.error("error deleting favorites", error);
     }

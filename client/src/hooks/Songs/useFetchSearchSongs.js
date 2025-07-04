@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userSelector } from "../redux/selectors/homepage.selector";
-import { setSongs } from "../redux/slices/homepage.slice";
-import { recentlyPlayedSongSelector } from "../redux/selectors/userPreferences.selector";
+import { userSelector } from "../../redux/selectors/homepage.selector";
+import { setSongs } from "../../redux/slices/homepage.slice";
+import { recentlyPlayedSongSelector } from "../../redux/selectors/userPreferences.selector";
 
 const useFetchSearchSongs = (searchText) => {
   const user = useSelector(userSelector);

@@ -2,7 +2,7 @@ import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import styles from "./selectedAlbum.module.css";
-import useAudiusAlbumSong from "../../../hooks/useAudiusAlbumSongs";
+import useAudiusAlbumSong from "../../../hooks/Audius/useAudiusAlbumSongs";
 import AlbumSongList from "./AlbumSongList";
 import EmptyAlbum from "../../../HelperPages/EmptyPages/EmptyAlbum";
 import PlaylistSkeleton from "../../../Skeletons/PlaylistSkeleton";

@@ -1,5 +1,5 @@
 import Grid2 from "@mui/material/Grid2";
-import emptyImage from "../../assets/Homepage/EmptyMusic.png";
+import emptyImage from "../../assets/images/Homepage/EmptyMusic.png";
 import styles from "./emptyHomepage.module.css";
 import { Typography } from "@mui/material";
 

@@ -10,15 +10,19 @@ import { setSongs } from "../../redux/slices/homepage.slice";
 import FavoriteSkeleton from "../../Skeletons/FavoriteSkeleton";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
+import useFetchUserDetails from "../../hooks/useFetchUserDetails";
+import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
 
 const FavoritesList = () => {
+  const { userLoading, userError } = useFetchUserDetails();
   const { favoritesError, favoritesLoading } = useFetchFavorites();
+  const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
   const songsList = useSelector(songsSelector);
   const favorites = useSelector(favoritesSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (songsList) {
+    if (songsList && favorites) {
       const filteredSongList = Object.fromEntries(
         Object.entries(songsList).filter(([favoriteId]) =>
           favorites.includes(favoriteId)
@@ -28,8 +32,9 @@ const FavoritesList = () => {
     }
   }, [favorites, dispatch]);
 
-  if (favoritesLoading || !songsList) return <FavoriteSkeleton />;
-  if (favoritesError) return <ErrorPage />;
+  if (favoritesLoading || userLoading || favoritesIdLoading || !songsList)
+    return <FavoriteSkeleton />;
+  if (favoritesError || userError || favoritesIdError) return <ErrorPage />;
 
   return (
     <Grid2 className={styles.favorite_songs}>

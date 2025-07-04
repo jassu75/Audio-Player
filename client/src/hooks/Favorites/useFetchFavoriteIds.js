@@ -8,16 +8,16 @@ import axios from "axios";
 
 const useFetchFavoriteIds = () => {
   const dispatch = useDispatch();
-  const [favoritesLoading, setFavoritesLoading] = useState(false);
-  const [favoritesError, setFavoritesError] = useState(false);
+  const [favoritesIdLoading, setFavoritesIdLoading] = useState(false);
+  const [favoritesIdError, setFavoritesIdError] = useState(false);
   const favoriteIds = useSelector(favoritesSelector);
   const user = useSelector(userSelector);
 
   useEffect(() => {
     const fetchFavoriteIds = async () => {
       try {
-        setFavoritesLoading(true);
-        setFavoritesError(false);
+        setFavoritesIdLoading(true);
+        setFavoritesIdError(false);
         const response = await axios.post(
           "/api/fetchfavoriteids",
           { user_id: user.user_id },
@@ -31,9 +31,9 @@ const useFetchFavoriteIds = () => {
         dispatch(setFavorite(refinedResponse));
       } catch (error) {
         console.error("error fetching favoriteIds", error);
-        setFavoritesError(false);
+        setFavoritesIdError(false);
       } finally {
-        setFavoritesLoading(false);
+        setFavoritesIdLoading(false);
       }
     };
 
@@ -42,7 +42,7 @@ const useFetchFavoriteIds = () => {
     }
   }, [dispatch, user, favoriteIds]);
 
-  return { favoritesLoading, favoritesError };
+  return { favoritesIdLoading, favoritesIdError };
 };
 
 export default useFetchFavoriteIds;

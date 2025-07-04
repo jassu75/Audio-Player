@@ -41,11 +41,17 @@ const useUpdateRecentlyPlayed = () => {
       }
     };
 
-    const intervalId = setInterval(updateRecentlyPlayed, 10 * 60 * 1000);
+    const callUpdateRecentlyPlayed = () => {
+      if (recentlyPlayedRef.current) {
+        updateRecentlyPlayed();
+      }
+    };
+
+    const intervalId = setInterval(callUpdateRecentlyPlayed, 10 * 60 * 1000);
 
     return () => {
       clearInterval(intervalId);
-      updateRecentlyPlayed();
+      callUpdateRecentlyPlayed();
     };
   }, []);
 };

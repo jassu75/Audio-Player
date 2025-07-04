@@ -20,7 +20,7 @@ import useFetchFavoriteIds from "../hooks/Favorites/useFetchFavoriteIds";
 const SelectedPlaylist = () => {
   const { playlistId } = useParams();
   const { userLoading, userError } = useFetchUserDetails();
-  const { favoritesLoading, favoritesError } = useFetchFavoriteIds();
+  const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
   const allPlaylist = useSelector(playlistsSelector);
   const playlistSongs = useSelector(songsSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
@@ -33,11 +33,11 @@ const SelectedPlaylist = () => {
     setSearchParams({ page: value }, { replace: true });
   };
 
-  if (!playlistSongs || userLoading || songsLoading || favoritesLoading) {
+  if (!playlistSongs || userLoading || songsLoading || favoritesIdLoading) {
     return <PlaylistSkeleton />;
   }
 
-  if (userError || songsError || favoritesError) {
+  if (userError || songsError || favoritesIdError) {
     return <ErrorPage />;
   }
 

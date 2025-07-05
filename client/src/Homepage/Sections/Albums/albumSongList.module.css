@@ -6,6 +6,12 @@
   height: 100%;
 }
 
+@media (max-width: 500px) {
+  .song_list {
+    width: 100%;
+  }
+}
+
 .song_list::-webkit-scrollbar {
   width: 7px;
 }

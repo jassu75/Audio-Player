@@ -7,13 +7,14 @@ const HomepageForYouItem = ({ forYouKey, forYouItem }) => {
   const navigate = useNavigate();
 
   const handlePlaylistClick = () => {
-    navigate(`/foryou/${forYouItem.foryou_title}`);
+    navigate(`/foryou/${forYouItem.foryou_title}/?page=1`);
   };
 
   return (
     <div className={styles.playlist_card_container}>
       <div className={styles.playlist_card} onClick={handlePlaylistClick}>
         <img
+          loading="lazy"
           className={styles.playlist_image}
           src={forYouItem?.foryou_cover_art}
           alt=""

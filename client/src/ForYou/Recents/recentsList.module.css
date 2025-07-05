@@ -1,12 +1,15 @@
-.container {
-  padding: 9px;
-}
 .song_list {
   display: flex;
   flex-direction: column;
   gap: 20px;
   overflow-y: auto;
   height: 100%;
+}
+
+@media (max-width: 500px) {
+  .song_list {
+    width: 100%;
+  }
 }
 
 .song_list::-webkit-scrollbar {
@@ -32,7 +35,7 @@
   flex-direction: column;
   padding: 9px;
   width: 100%;
-  gap: 15px;
+  gap: 10px;
 }
 
 .title_text {
@@ -50,6 +53,14 @@
   gap: 10px;
   align-items: center;
   justify-content: center;
-  text-decoration: underline;
   padding: 15px;
+}
+
+.songs_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
 }

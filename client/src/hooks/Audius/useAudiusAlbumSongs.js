@@ -32,6 +32,10 @@ const useAudiusAlbumSong = (playlistId) => {
       }
     };
     fetchAudiusAlbumSongs();
+
+    return () => {
+      dispatch(setAudiusSongs(null));
+    };
   }, []);
 
   return { audiusAlbumSongLoading, audiusAlbumSongError };

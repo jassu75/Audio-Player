@@ -7,13 +7,18 @@ const HomepageAlbum = ({ albumKey, album }) => {
   const navigate = useNavigate();
 
   const handleAlbumClick = () => {
-    navigate(`/album/${encodeURIComponent(album.title)}-${albumKey}`);
+    navigate(`/album/${encodeURIComponent(album.title)}-${albumKey}?page=1`);
   };
 
   return (
     <div className={styles.album_card_container}>
       <div className={styles.album_card} onClick={handleAlbumClick}>
-        <img className={styles.album_image} src={album.cover_art} alt="" />
+        <img
+          loading="lazy"
+          className={styles.album_image}
+          src={album.cover_art}
+          alt=""
+        />
         <Grid2 className={styles.album_content}>
           <Grid2>
             <Typography

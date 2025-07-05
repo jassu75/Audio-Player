@@ -1,4 +1,4 @@
-import { Grid2, Typography } from "@mui/material";
+import { Grid2, Pagination, Typography } from "@mui/material";
 import useFetchFavorites from "../../hooks/Favorites/useFetchFavorites";
 import styles from "./favoritesList.module.css";
 import FavoriteCard from "./FavoriteCard";
@@ -12,14 +12,25 @@ import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
+import { useSearchParams } from "react-router-dom";
 
 const FavoritesList = () => {
   const { userLoading, userError } = useFetchUserDetails();
   const { favoritesError, favoritesLoading } = useFetchFavorites();
   const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page") || "1");
+  const start = (page - 1) * 20;
+  const end = start + 20;
+
   const songsList = useSelector(songsSelector);
   const favorites = useSelector(favoritesSelector);
+
   const dispatch = useDispatch();
+
+  const handleSetPage = (_event, value) => {
+    setSearchParams({ page: value }, { replace: true });
+  };
 
   useEffect(() => {
     if (songsList && favorites) {
@@ -43,16 +54,25 @@ const FavoritesList = () => {
           Songs in Favorites
         </Typography>
       </Grid2>
-
-      {Object.keys(songsList).length > 0 ? (
-        <Grid2 className={styles.favorites_container}>
-          {Object.entries(songsList).map(([id, favorite]) => (
-            <FavoriteCard key={id} favorite={favorite} />
-          ))}
-        </Grid2>
-      ) : (
-        <EmptyHomePage />
-      )}
+      <Grid2 className={styles.songs_container}>
+        {Object.keys(songsList).length > 0 ? (
+          <Grid2 className={styles.favorites_container}>
+            {Object.entries(songsList)
+              ?.slice(start, end)
+              .map(([id, favorite]) => (
+                <FavoriteCard key={id} favorite={favorite} />
+              ))}
+          </Grid2>
+        ) : (
+          <EmptyHomePage />
+        )}
+        <Pagination
+          variant="outlined"
+          count={Math.ceil(Object.keys(favorites).length / 20)}
+          page={page}
+          onChange={handleSetPage}
+        />
+      </Grid2>
     </Grid2>
   );
 };

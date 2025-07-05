@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 const EmptyAlbum = () => {
   return (
     <Grid2 className={styles.container}>
-      <img className={styles.image} src={emptyImage} alt="" />
+      <img loading="lazy" className={styles.image} src={emptyImage} alt="" />
       <Typography
         variant="audioPlayerSongTitle"
         className={styles.redirect_text_heading}

@@ -1,6 +1,7 @@
 .song_card {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .song_card_info {

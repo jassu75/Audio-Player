@@ -68,6 +68,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
       <div className={styles.playlist_card_container}>
         <div className={styles.playlist_card} onClick={handlePlaylistClick}>
           <img
+            loading="lazy"
             className={styles.playlist_image}
             src={playlistItem?.playlist_cover_art}
             alt=""

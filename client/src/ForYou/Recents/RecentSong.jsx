@@ -13,7 +13,12 @@ const RecentSong = ({ songKey, song }) => {
   return (
     <Grid2 className={styles.song_card}>
       <Grid2 className={styles.song_card_info} onClick={handleSongClick}>
-        <img className={styles.song_image} src={song?.cover_art} alt="" />
+        <img
+          loading="lazy"
+          className={styles.song_image}
+          src={song?.cover_art}
+          alt=""
+        />
         <Grid2 className={styles.song_content}>
           <Grid2 className={styles.song_title}>
             <Typography

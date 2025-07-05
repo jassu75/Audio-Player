@@ -20,7 +20,6 @@
   gap: 10px;
   align-items: center;
   justify-content: center;
-  text-decoration: underline;
   padding: 15px;
 }
 
@@ -29,6 +28,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
 }

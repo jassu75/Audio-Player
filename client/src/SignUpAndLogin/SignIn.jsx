@@ -151,6 +151,7 @@ const SignIn = () => {
           className={styles.signin_buttons_container}
         >
           <img
+            loading="lazy"
             src={GoogleSignIn}
             alt="Google Sign-In"
             className={styles.signin_button}

@@ -189,7 +189,12 @@ const PlaylistAudioPlayer = () => {
 
   return (
     <Grid2 className={styles.audioPlayer}>
-      <img src={song?.cover_art} alt="" className={styles.song_image} />
+      <img
+        loading="lazy"
+        src={song?.cover_art}
+        alt=""
+        className={styles.song_image}
+      />
       <Grid2 className={styles.song_content}>
         <Grid2 className={styles.song_details}>
           <Grid2 className={styles.song_title}>

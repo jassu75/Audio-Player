@@ -13,7 +13,12 @@ const PlaylistUploadButton = ({ playlistId }) => {
   return (
     <div>
       <ButtonBase onClick={openModal}>
-        <img src={uploadButton} className={styles.upload_button} alt=""></img>
+        <img
+          loading="lazy"
+          src={uploadButton}
+          className={styles.upload_button}
+          alt=""
+        />
       </ButtonBase>
 
       <PlaylistUploadForm

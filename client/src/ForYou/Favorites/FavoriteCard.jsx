@@ -18,7 +18,12 @@ const Genre = ({ genre }) => {
               {value}
             </Typography>
             {index < genre.length - 1 ? (
-              <img src={GreenDot} alt="" className={styles.dot} />
+              <img
+                loading="lazy"
+                src={GreenDot}
+                alt=""
+                className={styles.dot}
+              />
             ) : null}
           </Fragment>
         ))}

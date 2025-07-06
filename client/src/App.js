@@ -20,8 +20,8 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<UserAuthentication />} />
-            <Route path="/homepage" element={<Homepage />} />
+            <Route path="/account" element={<UserAuthentication />} />
+            <Route path="/" element={<Homepage />} />
             <Route path="/user/song/:songId" element={<AudioPlayer />} />
             <Route
               path="/user/playlist/:playlistId/song/:songId"

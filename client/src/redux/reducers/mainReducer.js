@@ -7,7 +7,11 @@ const mainReducer = combineReducers({
   userPrefs: userPrefReducer,
 });
 
-export const logout = () => ({ type: "auth/logout" });
+export const logout = () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  return { type: "auth/logout" };
+};
 
 const rootReducer = (state, action) => {
   if (action.type === "auth/logout") {

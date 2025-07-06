@@ -32,7 +32,7 @@ const useFetchUserDetails = () => {
       if (authUser) {
         setFirebaseUser(authUser);
       } else {
-        navigate("/", { replace: true });
+        navigate("/account", { replace: true });
       }
     });
 

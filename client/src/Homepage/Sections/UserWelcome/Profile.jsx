@@ -12,14 +12,11 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../config/firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { logout } from "../../../redux/reducers/mainReducer";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Profile = ({ username }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [signOutLoading, setSignOutLoading] = useState(false);
   const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
 
@@ -35,9 +32,7 @@ const Profile = ({ username }) => {
     try {
       setSignOutLoading(true);
       await signOut(auth);
-      localStorage.clear();
-      dispatch(logout());
-      navigate("/", { replace: true });
+      navigate("/account", { replace: true });
     } catch (error) {
       console.error("error logging out user", error);
     } finally {
@@ -83,10 +78,8 @@ const Profile = ({ username }) => {
             },
           }
         );
-        localStorage.clear();
-        dispatch(logout());
 
-        navigate("/", { replace: true });
+        navigate("/account", { replace: true });
       }
     } catch (error) {
       console.error("Error deleting user", error);

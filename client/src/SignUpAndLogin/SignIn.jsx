@@ -47,7 +47,7 @@ const SignIn = () => {
             const user = userCredential.user;
 
             if (user.emailVerified) {
-              navigate("/homepage", { replace: true });
+              navigate("/", { replace: true });
             } else {
               setMessageTitle("Email not Verfied!");
               setMessage("Please verify your email and then login");
@@ -96,7 +96,7 @@ const SignIn = () => {
       );
 
       if (response.data?.users?.length > 0) {
-        navigate("/homepage", { replace: true });
+        navigate("/", { replace: true });
       } else {
         const newUser = {
           user_id: user.uid,
@@ -112,7 +112,7 @@ const SignIn = () => {
           }
         );
 
-        navigate("/homepage", { replace: true });
+        navigate("/", { replace: true });
       }
     } catch (err) {
       setMessageTitle("Login Failed!");

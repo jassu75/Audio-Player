@@ -9,9 +9,14 @@ import HomepageAlbumSection from "./Sections/Albums/HomepageAlbumSection";
 import HomepageSkeleton from "../Skeletons/HomepageSkeleton";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSongs } from "../redux/slices/homepage.slice";
 import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import {
+  audiusAlbumsSelector,
+  playlistsSelector,
+  userSelector,
+} from "../redux/selectors/homepage.selector";
 
 const Homepage = () => {
   const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
@@ -19,7 +24,17 @@ const Homepage = () => {
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   const dispatch = useDispatch();
 
-  const loading = userLoading || audiusAlbumsLoading || recentlyPlayedLoading;
+  const user = useSelector(userSelector);
+  const playlists = useSelector(playlistsSelector);
+  const audiusAlbums = useSelector(audiusAlbumsSelector);
+
+  const loading =
+    userLoading ||
+    audiusAlbumsLoading ||
+    recentlyPlayedLoading ||
+    !user ||
+    !playlists ||
+    !audiusAlbums;
   const error = userError || audiusAlbumsError;
 
   useEffect(() => {

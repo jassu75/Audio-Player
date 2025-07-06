@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const userPrefs = JSON.parse(localStorage.getItem("userPrefs"));
+const userPrefs = JSON.parse(sessionStorage.getItem("userPrefs"));
 
 const initialState = {
   recentlyPlayed: userPrefs?.recentlyPlayed || null,
@@ -13,7 +13,7 @@ const userPrefsSlice = createSlice({
   reducers: {
     setRecentlyPlayed: (state, action) => {
       state.recentlyPlayed = action.payload;
-      localStorage.setItem("userPrefs", JSON.stringify(state));
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
     },
     addRecentlyPlayed: (state, action) => {
       if (!state.recentlyPlayed) state.recentlyPlayed = [];
@@ -28,23 +28,23 @@ const userPrefsSlice = createSlice({
       if (state.recentlyPlayed.length > 50) {
         state.recentlyPlayed.pop();
       }
-      localStorage.setItem("userPrefs", JSON.stringify(state));
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
     },
     setFavorite: (state, action) => {
       state.favorites = action.payload;
-      localStorage.setItem("userPrefs", JSON.stringify(state));
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
     },
     addFavorite: (state, action) => {
       if (!state.favorites) state.favorites = [];
       state.favorites.push(action.payload);
-      localStorage.setItem("userPrefs", JSON.stringify(state));
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
     },
     deleteFavorite: (state, action) => {
       if (!state.favorites) state.favorites = [];
       state.favorites = state.favorites.filter(
         (songId) => songId !== action.payload
       );
-      localStorage.setItem("userPrefs", JSON.stringify(state));
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
     },
   },
 });

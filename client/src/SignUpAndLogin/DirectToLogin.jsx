@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const DirectToLogin = () => {
   const navigate = useNavigate();
   const handleRedirect = () => {
-    navigate("/");
+    navigate("/account");
   };
   return (
     <Grid2 className={styles.redirect_text_container}>

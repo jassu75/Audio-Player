@@ -10,13 +10,17 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../config/firebase";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 
+const logout = () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace("/account");
+};
+
 const Profile = ({ username }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
   const [signOutLoading, setSignOutLoading] = useState(false);
   const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
 
@@ -32,7 +36,7 @@ const Profile = ({ username }) => {
     try {
       setSignOutLoading(true);
       await signOut(auth);
-      navigate("/account", { replace: true });
+      logout();
     } catch (error) {
       console.error("error logging out user", error);
     } finally {
@@ -79,7 +83,7 @@ const Profile = ({ username }) => {
           }
         );
 
-        navigate("/account", { replace: true });
+        logout();
       }
     } catch (error) {
       console.error("Error deleting user", error);

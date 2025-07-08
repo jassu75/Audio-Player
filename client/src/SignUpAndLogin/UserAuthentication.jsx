@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./userAuthentication.module.css";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
@@ -7,16 +7,9 @@ import authenticationMan from "../assets/images/SignUpAndLogin/AuthenticationMan
 import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import { useDispatch } from "react-redux";
-import { logout } from "../redux/reducers/mainReducer";
 
 const UserAuthentication = () => {
   const [view, setView] = useState("signIn");
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(logout());
-  }, [dispatch]);
 
   return (
     <Grid2 className={styles.container}>

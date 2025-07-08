@@ -12,11 +12,15 @@ import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
-import useUpdateRecentlyPlayed from "../hooks/RecentlyPlayed/useUpdateRecentlyPlayed";
+import {
+  addListens,
+  addRecentlyPlayed,
+  setListens,
+} from "../redux/slices/userPreferences.slice";
+import useUpdateUserPreference from "../hooks/UserPrefs/useUpdateUserPreferences";
 import axios from "axios";
 import { setSongs } from "../redux/slices/homepage.slice";
-import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 
 const AudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -33,7 +37,7 @@ const AudioPlayer = () => {
   const navigate = useNavigate();
 
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
-  useUpdateRecentlyPlayed();
+  useUpdateUserPreference();
 
   const audioPlayer = useRef(); // Reference to the audio component
   const progressBar = useRef(); // Reference to the progress bar
@@ -118,8 +122,17 @@ const AudioPlayer = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (song && user) dispatch(addRecentlyPlayed(song));
-  }, [dispatch, song, user]);
+    if (song && user) {
+      dispatch(addRecentlyPlayed(song));
+      dispatch(addListens(songId));
+    }
+  }, [dispatch, song, songId, user]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setListens(null));
+    };
+  }, [dispatch]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);

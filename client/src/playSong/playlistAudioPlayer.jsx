@@ -12,13 +12,17 @@ import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
-import useUpdateRecentlyPlayed from "../hooks/RecentlyPlayed/useUpdateRecentlyPlayed";
-import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
+import useUpdateUserPreference from "../hooks/UserPrefs/useUpdateUserPreferences";
+import {
+  addListens,
+  addRecentlyPlayed,
+  setListens,
+} from "../redux/slices/userPreferences.slice";
 import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 import useFetchSongs from "../hooks/Songs/useFetchSongs";
 
 const PlaylistAudioPlayer = () => {
@@ -38,7 +42,7 @@ const PlaylistAudioPlayer = () => {
   const navigate = useNavigate();
 
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
-  useUpdateRecentlyPlayed();
+  useUpdateUserPreference();
   const { songsLoading, songsError } = useFetchSongs(playlistId);
 
   const audioPlayer = useRef(); // Reference to the audio component
@@ -46,8 +50,17 @@ const PlaylistAudioPlayer = () => {
   const animationRef = useRef(); // Reference to the animation
 
   useEffect(() => {
-    if (song && user) dispatch(addRecentlyPlayed(song));
-  }, [dispatch, song, user]);
+    if (song && user) {
+      dispatch(addRecentlyPlayed(song));
+      dispatch(addListens(songId));
+    }
+  }, [dispatch, song, songId, user]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setListens(null));
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const player = audioPlayer.current;

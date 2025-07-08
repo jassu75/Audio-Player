@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const userPrefs = JSON.parse(sessionStorage.getItem("userPrefs"));
 
 const initialState = {
+  listens: userPrefs?.listens || null,
   recentlyPlayed: userPrefs?.recentlyPlayed || null,
   favorites: userPrefs?.favorites || null,
 };
@@ -30,6 +31,16 @@ const userPrefsSlice = createSlice({
       }
       sessionStorage.setItem("userPrefs", JSON.stringify(state));
     },
+    setListens: (state, action) => {
+      state.listens = action.payload;
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
+    },
+    addListens: (state, action) => {
+      if (!state.listens) state.listens = {};
+      const songId = action.payload;
+      state.listens[songId] = (state.listens[songId] || 0) + 1;
+      sessionStorage.setItem("userPrefs", JSON.stringify(state));
+    },
     setFavorite: (state, action) => {
       state.favorites = action.payload;
       sessionStorage.setItem("userPrefs", JSON.stringify(state));
@@ -55,5 +66,7 @@ export const {
   addFavorite,
   deleteFavorite,
   setFavorite,
+  addListens,
+  setListens,
 } = userPrefsSlice.actions;
 export default userPrefsSlice.reducer;

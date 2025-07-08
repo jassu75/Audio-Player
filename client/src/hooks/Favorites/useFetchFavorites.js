@@ -28,18 +28,11 @@ const useFetchFavorites = () => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        const refinedResponse = response.data?.favorites?.reduce(
-          (acc, favorite) => {
-            acc[favorite.song.song_id] = favorite.song;
-
-            return acc;
-          },
-          {}
-        );
+        const refinedResponse =
+          response.data?.favorites?.map((favorite) => favorite.song) || [];
         dispatch(setSongs(refinedResponse));
-        sessionStorage.setItem("favorites", JSON.stringify(refinedResponse));
       } catch (error) {
-        console.error("error fetching favoriteIds", error);
+        console.error("error fetching favorites", error);
         setFavoritesError(false);
       } finally {
         setFavoritesLoading(false);

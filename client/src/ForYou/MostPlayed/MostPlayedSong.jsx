@@ -1,13 +1,13 @@
 import Typography from "@mui/material/Typography";
-import styles from "./recentSong.module.css";
+import styles from "./mostPlayedSong.module.css";
 import Grid2 from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 
-const RecentSong = ({ songKey, song }) => {
+const MostPlayedSong = ({ songKey, song }) => {
   const navigate = useNavigate();
 
   const handleSongClick = () => {
-    navigate(`/preference/recents/song/${songKey}`);
+    navigate(`/preference/mostPlayed/song/${songKey}`);
   };
 
   return (
@@ -42,4 +42,4 @@ const RecentSong = ({ songKey, song }) => {
   );
 };
 
-export default RecentSong;
+export default MostPlayedSong;

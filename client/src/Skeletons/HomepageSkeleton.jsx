@@ -12,6 +12,7 @@ const HomepageSkeleton = () => {
         </Grid2>
         <Grid2 className={styles.icons}>
           <Skeleton variant="circular" width={35} height={35} />
+          <Skeleton variant="circular" width={35} height={35} />
         </Grid2>
       </Grid2>
       <Grid2 className={styles.album_container}>
@@ -21,27 +22,26 @@ const HomepageSkeleton = () => {
             <Skeleton
               key={index}
               variant="rectangular"
-              width={150}
-              height={170}
+              width={170}
+              height={220}
               sx={{ flexShrink: 0, borderRadius: "8px" }}
             />
           ))}
         </Grid2>
       </Grid2>
-      <Grid2 className={styles.album_title}>
+      <Grid2 className={styles.album_container}>
         <Skeleton variant="rect" width={200} height={25} />
-      </Grid2>
-
-      <Grid2 className={styles.song}>
-        {Array.from({ length: 1000 }).map((_, index) => (
-          <Skeleton
-            key={index}
-            variant="rect"
-            width={450}
-            height={80}
-            sx={{ flexShrink: 0, maxWidth: "98%" }}
-          />
-        ))}
+        <Grid2 className={styles.album}>
+          {Array.from({ length: 1000 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              variant="rectangular"
+              width={170}
+              height={220}
+              sx={{ flexShrink: 0, borderRadius: "8px" }}
+            />
+          ))}
+        </Grid2>
       </Grid2>
     </Grid2>
   );

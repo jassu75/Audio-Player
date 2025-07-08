@@ -34,11 +34,10 @@ const FavoritesList = () => {
 
   useEffect(() => {
     if (songsList && favorites) {
-      const filteredSongList = Object.fromEntries(
-        Object.entries(songsList).filter(([favoriteId]) =>
-          favorites.includes(favoriteId)
-        )
+      const filteredSongList = songsList.filter((favorite) =>
+        favorites.includes(favorite.song_id)
       );
+
       dispatch(setSongs(filteredSongList));
     }
   }, [favorites, dispatch]);
@@ -55,23 +54,23 @@ const FavoritesList = () => {
         </Typography>
       </Grid2>
       <Grid2 className={styles.songs_container}>
-        {Object.keys(songsList).length > 0 ? (
-          <Grid2 className={styles.favorites_container}>
-            {Object.entries(songsList)
-              ?.slice(start, end)
-              .map(([id, favorite]) => (
-                <FavoriteCard key={id} favorite={favorite} />
+        {songsList.length > 0 ? (
+          <>
+            <Grid2 className={styles.favorites_container}>
+              {songsList?.slice(start, end).map((favorite) => (
+                <FavoriteCard key={favorite.song_id} favorite={favorite} />
               ))}
-          </Grid2>
+            </Grid2>
+            <Pagination
+              variant="outlined"
+              count={Math.ceil(Object.keys(favorites).length / 20)}
+              page={page}
+              onChange={handleSetPage}
+            />
+          </>
         ) : (
           <EmptyHomePage />
         )}
-        <Pagination
-          variant="outlined"
-          count={Math.ceil(Object.keys(favorites).length / 20)}
-          page={page}
-          onChange={handleSetPage}
-        />
       </Grid2>
     </Grid2>
   );

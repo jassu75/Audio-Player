@@ -22,13 +22,14 @@ import deleteFavorite from "./routes/mutationRoutes/deleteFavorite.js";
 
 import updateSongTitle from "./routes/mutationRoutes/updateSongTitle.js";
 import updatePlaylistTitle from "./routes/mutationRoutes/updatePlaylistTitle.js";
-import updateRecentlyPlayed from "./routes/mutationRoutes/updateRecentlyPlayed.js";
+import updateUserPreference from "./routes/mutationRoutes/updateUserPreference.js";
 
 import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
 import fetchAlbumSongs from "./routes/apiRoutes/fetchAlbumSongs.js";
 import fetchSearchSongs from "./routes/queryRoutes/fetchSearchSongs.js";
 import fetchRecentlyPlayed from "./routes/queryRoutes/fetchRecentlyPlayed.js";
+import fetchMostListened from "./routes/queryRoutes/fetchMostListened.js";
 import fetchFavoriteIds from "./routes/queryRoutes/fetchFavoriteIds.js";
 import fetchFavorites from "./routes/queryRoutes/fetchFavorites.js";
 import fetchAssets from "./routes/queryRoutes/fetchAssets.js";
@@ -63,13 +64,14 @@ app.use(deleteFavorite);
 
 app.use(updateSongTitle);
 app.use(updatePlaylistTitle);
-app.use(updateRecentlyPlayed);
+app.use(updateUserPreference);
 
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);
 app.use(fetchAlbumSongs);
 app.use(fetchSearchSongs);
 app.use(fetchRecentlyPlayed);
+app.use(fetchMostListened);
 app.use(fetchFavoriteIds);
 app.use(fetchFavorites);
 app.use(fetchAssets);

@@ -125,6 +125,29 @@ query FETCH_RECENTLY_PLAYED($user_id:String!){
 }
 `;
 
+export const FETCH_MOST_LISTENED = `
+query FETCH_MOST_LISTENED($user_id:String!){
+  most_listened:audio_details(
+    where:{user_id:{_eq:$user_id},
+      listens:{_gt:0}},
+    order_by:{listens:desc},
+    limit:50
+  ){
+    cover_art
+    artist
+    song_id
+    album
+    audio_url
+    duration
+    genre
+    release_year
+    title
+    last_played
+    
+  }
+}
+`;
+
 export const FETCH_FAVORITE_IDS = `
 query FETCH_FAVORITE_IDS($user_id: String!) {
   favoriteIds:favorites(where: {user_id: {_eq: $user_id}}) {

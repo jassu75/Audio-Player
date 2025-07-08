@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import useJamendoSongs from "../hooks/Songs/useJamendoSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
-import { jamendoSongsSelector } from "../redux/selectors/homepage.selector";
+import { songsSelector } from "../redux/selectors/homepage.selector";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
@@ -17,9 +17,8 @@ import IconButton from "@mui/material/IconButton";
 const JamendoAudioPlayer = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const { songId } = useParams();
-  const [id, setId] = useState(songId);
-  const songsList = useSelector(jamendoSongsSelector);
-  const song = songsList?.find((song) => song.id === id);
+  const songsList = useSelector(songsSelector);
+  const song = songsList?.find((song) => song.song_id === songId);
   const [shuffle, setShuffle] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,16 +50,17 @@ const JamendoAudioPlayer = () => {
           do {
             nextIndex = Math.floor(Math.random() * songsList.length);
           } while (
-            songsList?.[nextIndex]?.id === songId &&
+            songsList?.[nextIndex]?.song_id === songId &&
             songsList.length > 1
           );
         } else {
-          const currentIndex = songsList.findIndex((song) => song.id === id);
+          const currentIndex = songsList.findIndex(
+            (song) => song.song_id === songId
+          );
           nextIndex = (currentIndex + 1) % songsList.length;
         }
 
-        const nextSongId = songsList[nextIndex].id;
-        setId(nextSongId);
+        const nextSongId = songsList[nextIndex].song_id;
         const nextSong = songsList[nextIndex];
 
         player.src = nextSong.audio_url;
@@ -83,7 +83,7 @@ const JamendoAudioPlayer = () => {
         player.removeEventListener("ended", handleEnded);
       };
     }
-  }, [audioPlayer, navigate, id, songsList]);
+  }, [audioPlayer, navigate, songId, songsList]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -133,21 +133,19 @@ const JamendoAudioPlayer = () => {
   };
 
   const backButton = () => {
-    const currentIndex = songsList.findIndex((song) => song.id === id);
+    const currentIndex = songsList.findIndex((song) => song.song_id === songId);
     const prevSongId =
-      songsList[(currentIndex - 1 + songsList.length) % songsList.length].id;
+      songsList[(currentIndex - 1 + songsList.length) % songsList.length]
+        .song_id;
 
-    setId(prevSongId);
     setIsPlaying(false);
     navigate(`/song/${prevSongId}`, { replace: true });
     resetProgressBar();
   };
 
   const forwardButton = () => {
-    const currentIndex = songsList.findIndex((song) => song.id === id);
-    const nextSongId = songsList[(currentIndex + 1) % songsList.length].id;
-
-    setId(nextSongId);
+    const currentIndex = songsList.findIndex((song) => song.song_id === songId);
+    const nextSongId = songsList[(currentIndex + 1) % songsList.length].song_id;
 
     setIsPlaying(false);
     navigate(`/song/${nextSongId}`, { replace: true });

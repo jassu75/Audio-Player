@@ -10,7 +10,7 @@ import SearchSkeleton from "../Skeletons/SearchSkeleton";
 import useFetchSearchSongs from "../hooks/Songs/useFetchSearchSongs";
 
 import EmptySearch from "./EmptySearch";
-import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 
 const Search = () => {
   const { userLoading, userError } = useFetchUserDetails();

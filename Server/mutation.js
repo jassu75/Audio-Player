@@ -154,8 +154,8 @@ mutation UPDATE_PLAYLIST_TITLE($playlist_id: uuid!, $playlist_title: String!) {
 }
 `;
 
-export const UPDATE_RECENTLY_PLAYED = `
-mutation UPDATE_RECENTLY_PLAYED($recently_played:[audio_details_updates!]!){
+export const UPDATE_USER_PREFERENCE = `
+mutation UPDATE_USER_PREFERENCE($recently_played:[audio_details_updates!]!){
   update_audio_details_many(updates:$recently_played){
     affected_rows
   }

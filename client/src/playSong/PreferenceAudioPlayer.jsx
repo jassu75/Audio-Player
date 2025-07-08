@@ -12,33 +12,36 @@ import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
-import useUpdateRecentlyPlayed from "../hooks/RecentlyPlayed/useUpdateRecentlyPlayed";
-import { addRecentlyPlayed } from "../redux/slices/userPreferences.slice";
+import useUpdateUserPreference from "../hooks/UserPrefs/useUpdateUserPreferences";
+import {
+  addListens,
+  addRecentlyPlayed,
+  setListens,
+} from "../redux/slices/userPreferences.slice";
 import {
   songsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
-import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
 import useFetchPreferenceSongs from "../hooks/Songs/useFetchPreferencesSongs";
 
 const PreferenceAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
   const { preference, songId } = useParams();
+
   const dispatch = useDispatch();
 
   const [shuffle, setShuffle] = useState(false);
 
   const songsList = useSelector(songsSelector);
   const user = useSelector(userSelector);
-  const song = songsList?.[songId];
+  const song = songsList?.find((song) => song.song_id === songId);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [songDuration, setSongDuration] = useState(0);
   const navigate = useNavigate();
 
-  const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
-  useUpdateRecentlyPlayed();
+  useUpdateUserPreference();
   const { songsLoading, songsError } = useFetchPreferenceSongs(preference);
 
   const audioPlayer = useRef(); // Reference to the audio component
@@ -46,8 +49,17 @@ const PreferenceAudioPlayer = () => {
   const animationRef = useRef(); // Reference to the animation
 
   useEffect(() => {
-    if (song && user) dispatch(addRecentlyPlayed(song));
-  }, [dispatch, song, user]);
+    if (song && user) {
+      dispatch(addRecentlyPlayed(song));
+      dispatch(addListens(songId));
+    }
+  }, [dispatch, song, songId, user]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setListens(null));
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const player = audioPlayer.current;
@@ -64,19 +76,24 @@ const PreferenceAudioPlayer = () => {
       updateDuration();
 
       const handleEnded = () => {
-        const songIds = Object.keys(songsList);
-        let nextSongId;
+        let nextIndex;
         if (shuffle) {
           do {
-            nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
-          } while (nextSongId === songId && songIds.length > 1);
+            nextIndex = Math.floor(Math.random() * songsList.length);
+          } while (
+            songsList?.[nextIndex]?.song_id === songId &&
+            songsList.length > 1
+          );
         } else {
-          const currentIndex = songIds.indexOf(songId);
-          const nextIndex = (currentIndex + 1) % songIds.length;
-          nextSongId = songIds[nextIndex];
+          const currentIndex = songsList.findIndex(
+            (song) => song.song_id === songId
+          );
+          nextIndex = (currentIndex + 1) % songsList.length;
         }
 
-        const nextSong = songsList[nextSongId];
+        const nextSongId = songsList[nextIndex].song_id;
+        const nextSong = songsList[nextIndex];
+
         player.src = nextSong.audio_url;
 
         const playNextSong = () => {
@@ -149,10 +166,10 @@ const PreferenceAudioPlayer = () => {
   };
 
   const backButton = () => {
-    const songIds = Object.keys(songsList);
-    const currentIndex = songIds.indexOf(songId);
-    const prevIndex = (currentIndex - 1 + songIds.length) % songIds.length;
-    const prevSongId = songIds[prevIndex];
+    const currentIndex = songsList.findIndex((song) => song.wong_id === songId);
+    const prevSongId =
+      songsList[(currentIndex - 1 + songsList.length) % songsList.length]
+        .song_id;
 
     setIsPlaying(false);
     navigate(`/preference/${preference}/song/${prevSongId}`, {
@@ -162,10 +179,8 @@ const PreferenceAudioPlayer = () => {
   };
 
   const forwardButton = () => {
-    const songIds = Object.keys(songsList);
-    const currentIndex = songIds.indexOf(songId);
-    const nextIndex = (currentIndex + 1) % songIds.length;
-    const nextSongId = songIds[nextIndex];
+    const currentIndex = songsList.findIndex((song) => song.song_id === songId);
+    const nextSongId = songsList[(currentIndex + 1) % songsList.length].song_id;
 
     setIsPlaying(false);
     navigate(`/preference/${preference}/song/${nextSongId}`, {
@@ -179,7 +194,7 @@ const PreferenceAudioPlayer = () => {
     setShuffle(!prevValue);
   };
 
-  if (userLoading || songsLoading || recentlyPlayedLoading || !songsList) {
+  if (userLoading || songsLoading || !songsList) {
     return <AudioPlayerSkeleton />;
   }
 

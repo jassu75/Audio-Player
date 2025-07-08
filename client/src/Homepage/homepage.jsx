@@ -11,7 +11,7 @@ import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSongs } from "../redux/slices/homepage.slice";
-import useFetchRecentlyPlayed from "../hooks/RecentlyPlayed/useFetchRecentlyPlayed";
+import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 import {
   audiusAlbumsSelector,
   playlistsSelector,

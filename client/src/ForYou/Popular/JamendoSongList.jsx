@@ -2,7 +2,7 @@ import Grid2 from "@mui/material/Grid2";
 import styles from "./jamendoSongList.module.css";
 import JamendoSong from "./JamendoSong";
 import { useSelector } from "react-redux";
-import { jamendoSongsSelector } from "../../redux/selectors/homepage.selector";
+import { songsSelector } from "../../redux/selectors/homepage.selector";
 import useJamendoSongs from "../../hooks/Songs/useJamendoSongs";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
@@ -12,7 +12,7 @@ import { useSearchParams } from "react-router-dom";
 
 const JamendoSongList = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
-  const jamendoSongList = useSelector(jamendoSongsSelector);
+  const songsList = useSelector(songsSelector);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") || "1");
   const start = (page - 1) * 20;
@@ -22,7 +22,7 @@ const JamendoSongList = () => {
     setSearchParams({ page: value }, { replace: true });
   };
 
-  if (jamendoSongsLoading || !jamendoSongList) return <PlaylistSkeleton />;
+  if (jamendoSongsLoading || !songsList) return <PlaylistSkeleton />;
   if (jamendoSongsError) return <ErrorPage />;
 
   return (
@@ -34,13 +34,17 @@ const JamendoSongList = () => {
       </Grid2>
       <Grid2 className={styles.songs_container}>
         <Grid2 className={styles.song_list}>
-          {jamendoSongList?.slice(start, end).map((song) => (
-            <JamendoSong key={song.id} songKey={song.id} song={song} />
+          {songsList?.slice(start, end).map((song) => (
+            <JamendoSong
+              key={song.song_id}
+              songKey={song.song_id}
+              song={song}
+            />
           ))}
         </Grid2>
         <Pagination
           variant="outlined"
-          count={Math.ceil(Object.keys(jamendoSongList).length / 20)}
+          count={Math.ceil(songsList.length / 20)}
           page={page}
           onChange={handleSetPage}
         />

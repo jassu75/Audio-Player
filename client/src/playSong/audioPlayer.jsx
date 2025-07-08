@@ -21,6 +21,7 @@ import useUpdateUserPreference from "../hooks/UserPrefs/useUpdateUserPreferences
 import axios from "axios";
 import { setSongs } from "../redux/slices/homepage.slice";
 import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
+import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 
 const AudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -30,6 +31,7 @@ const AudioPlayer = () => {
   const user = useSelector(userSelector);
   const songsList = useSelector(songsSelector);
   const song = songsList?.[songId];
+  const recentlyPlayed = useSelector(recentlyPlayedSelector);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -122,7 +124,7 @@ const AudioPlayer = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (song && user) {
+    if (song && user && recentlyPlayed) {
       dispatch(addRecentlyPlayed(song));
       dispatch(addListens(songId));
     }

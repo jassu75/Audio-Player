@@ -8,7 +8,6 @@ import {
 import axios from "axios";
 import { setSongs } from "../../redux/slices/homepage.slice";
 import { recentlyPlayedSelector } from "../../redux/selectors/userPreferences.selector";
-import { setRecentlyPlayed } from "../../redux/slices/userPreferences.slice";
 
 const useFetchPreferenceSongs = (preference) => {
   const [songsLoading, setSongsLoading] = useState(false);
@@ -76,25 +75,7 @@ const useFetchPreferenceSongs = (preference) => {
     };
 
     const fetchRecents = async () => {
-      try {
-        setSongsLoading(true);
-        setSongsError(false);
-        const response = await axios.post(
-          "/api/fetchrecentlyplayed",
-          { user_id: user.user_id },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const refinedResponse = response.data?.recently_played;
-        dispatch(setRecentlyPlayed(refinedResponse));
-        dispatch(setSongs(refinedResponse));
-      } catch (error) {
-        console.error("error fetching recently played", error);
-        setSongsError(true);
-      } finally {
-        setSongsLoading(false);
-      }
+      dispatch(setSongs(recentlyPlayed));
     };
 
     const fetchPopular = () => {

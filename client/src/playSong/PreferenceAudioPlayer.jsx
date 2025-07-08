@@ -23,6 +23,8 @@ import {
   userSelector,
 } from "../redux/selectors/homepage.selector";
 import useFetchPreferenceSongs from "../hooks/Songs/useFetchPreferencesSongs";
+import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
+import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 
 const PreferenceAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -34,6 +36,8 @@ const PreferenceAudioPlayer = () => {
 
   const songsList = useSelector(songsSelector);
   const user = useSelector(userSelector);
+  const recentlyPlayed = useSelector(recentlyPlayedSelector);
+  const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   const song = songsList?.find((song) => song.song_id === songId);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -49,7 +53,7 @@ const PreferenceAudioPlayer = () => {
   const animationRef = useRef(); // Reference to the animation
 
   useEffect(() => {
-    if (song && user) {
+    if (song && user && recentlyPlayed) {
       dispatch(addRecentlyPlayed(song));
       dispatch(addListens(songId));
     }
@@ -194,7 +198,7 @@ const PreferenceAudioPlayer = () => {
     setShuffle(!prevValue);
   };
 
-  if (userLoading || songsLoading || !songsList) {
+  if (userLoading || songsLoading || recentlyPlayedLoading || !songsList) {
     return <AudioPlayerSkeleton />;
   }
 

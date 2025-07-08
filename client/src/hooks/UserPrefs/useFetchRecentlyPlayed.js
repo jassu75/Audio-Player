@@ -23,7 +23,7 @@ const useFetchRecentlyPlayed = () => {
             headers: { "Content-Type": "application/json" },
           }
         );
-        const refinedResponse = response.data?.recently_played;
+        const refinedResponse = response.data?.recently_played || [];
         dispatch(setRecentlyPlayed(refinedResponse));
       } catch (error) {
         console.error("error fetching recently played", error);

@@ -24,6 +24,7 @@ import {
 } from "../redux/selectors/homepage.selector";
 import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 import useFetchSongs from "../hooks/Songs/useFetchSongs";
+import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 
 const PlaylistAudioPlayer = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -40,6 +41,7 @@ const PlaylistAudioPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [songDuration, setSongDuration] = useState(0);
   const navigate = useNavigate();
+  const recentlyPlayed = useSelector(recentlyPlayedSelector);
 
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   useUpdateUserPreference();
@@ -50,7 +52,7 @@ const PlaylistAudioPlayer = () => {
   const animationRef = useRef(); // Reference to the animation
 
   useEffect(() => {
-    if (song && user) {
+    if (song && user && recentlyPlayed) {
       dispatch(addRecentlyPlayed(song));
       dispatch(addListens(songId));
     }

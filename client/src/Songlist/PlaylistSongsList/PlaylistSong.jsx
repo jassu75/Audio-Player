@@ -14,12 +14,14 @@ import axios from "axios";
 import { Divider } from "@mui/material";
 import RenameSongTitle from "./RenameSongTitle";
 import FavoriteIcon from "../../Favorite/FavoriteIcon";
+import MoveSong from "./MoveSong";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
+  const [moveLoading, setMoveLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleSongClick = () => {
@@ -66,7 +68,14 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
     setRenameLoading(true);
     handleMenuClose();
   };
+
+  const handleMove = () => {
+    setMoveLoading(true);
+    handleMenuClose();
+  };
   const closeRenameModal = () => setRenameLoading(false);
+
+  const closeMoveModal = () => setMoveLoading(false);
 
   return (
     <>
@@ -113,7 +122,22 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
             }}
           >
             <MenuItem
-              disabled={deleteLoading || renameLoading}
+              disabled={deleteLoading || renameLoading || moveLoading}
+              onClick={handleMove}
+              className={styles.menu_item}
+            >
+              {moveLoading ? (
+                <>
+                  <Typography variant="MenuItemText">Moving</Typography>
+                  <CircularProgress className={styles.loader} size={20} />
+                </>
+              ) : (
+                <Typography variant="MenuItemText">Move</Typography>
+              )}
+            </MenuItem>
+            <Divider className={styles.divider} />
+            <MenuItem
+              disabled={deleteLoading || renameLoading || moveLoading}
               onClick={handleRenameSong}
               className={styles.menu_item}
             >
@@ -129,7 +153,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
             <Divider className={styles.divider} />
 
             <MenuItem
-              disabled={renameLoading || deleteLoading}
+              disabled={renameLoading || deleteLoading || moveLoading}
               onClick={handleDeleteSong}
               className={styles.menu_item}
             >
@@ -160,6 +184,12 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
         onClose={closeRenameModal}
         songId={songKey}
         songTitle={song.title}
+      />
+      <MoveSong
+        open={moveLoading}
+        onClose={closeMoveModal}
+        songId={songKey}
+        playlistId={playlistId}
       />
     </>
   );

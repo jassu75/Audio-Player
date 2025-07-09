@@ -182,3 +182,22 @@ mutation DELETE_FAVORITE($user_id: String!, $favorite_id: uuid!) {
   }
 }
 `;
+
+export const MOVE_SONG = `
+mutation MOVE_SONG($old_playlist_id: uuid!, $new_playlist_id: uuid!, $song_id: uuid!) {
+  update_playlist_songs(
+    where: {
+      playlist_id: { _eq: $old_playlist_id },
+      song_id: { _eq: $song_id }
+    },
+    _set: { playlist_id: $new_playlist_id }
+  ) {
+    returning {
+      playlist_id
+      song_id
+    }
+  }
+}
+
+
+`;

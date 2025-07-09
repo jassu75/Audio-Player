@@ -23,6 +23,7 @@ import deleteFavorite from "./routes/mutationRoutes/deleteFavorite.js";
 import updateSongTitle from "./routes/mutationRoutes/updateSongTitle.js";
 import updatePlaylistTitle from "./routes/mutationRoutes/updatePlaylistTitle.js";
 import updateUserPreference from "./routes/mutationRoutes/updateUserPreference.js";
+import moveSong from "./routes/mutationRoutes/moveSong.js";
 
 import fetchTopSongs from "./routes/apiRoutes/fetchTopSongs.js";
 import fetchTopAlbums from "./routes/apiRoutes/fetchTopAlbums.js";
@@ -65,6 +66,7 @@ app.use(deleteFavorite);
 app.use(updateSongTitle);
 app.use(updatePlaylistTitle);
 app.use(updateUserPreference);
+app.use(moveSong);
 
 app.use(fetchTopSongs);
 app.use(fetchTopAlbums);

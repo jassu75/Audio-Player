@@ -64,6 +64,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
     } catch (error) {
       console.error("Error creating playlist", error);
     } finally {
+      setTitle("");
       setLoading(false);
       onClose();
     }

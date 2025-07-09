@@ -38,6 +38,7 @@ const RenameSongTitle = ({ open, onClose, songId, songTitle }) => {
       } catch (error) {
         console.error("Error renaming playlist song", error);
       } finally {
+        setTitle("");
         setLoading(false);
         onClose();
       }

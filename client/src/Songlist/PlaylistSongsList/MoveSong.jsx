@@ -11,6 +11,65 @@ import axios from "axios";
 import { playlistsSelector } from "../../redux/selectors/homepage.selector";
 import { Radio } from "@mui/material";
 import { deleteSong } from "../../redux/slices/homepage.slice";
+import exclaimationMark from "../../assets/images/Homepage/ExclaimationMark.png";
+
+const PlaylistSelector = ({ filteredPlaylists, selected, handleSelect }) => {
+  return (
+    <Grid2 className={styles.playlist_container}>
+      {filteredPlaylists.length > 0 ? (
+        filteredPlaylists.map(([id, playlist]) => (
+          <ButtonBase
+            key={id}
+            className={`${styles.playlist_item} ${
+              selected === id ? styles.selected_item : ""
+            }`}
+            onClick={() => handleSelect(id)}
+          >
+            <Radio
+              checked={selected === id}
+              onChange={() => handleSelect(id)}
+            />
+            <img
+              loading="lazy"
+              alt=""
+              src={playlist.playlist_cover_art}
+              className={styles.playlist_image}
+            />
+            <Grid2 className={styles.playlist_content}>
+              <Typography
+                variant="RedirectText"
+                className={styles.playlist_title}
+              >
+                {playlist?.playlist_title}
+              </Typography>
+            </Grid2>
+          </ButtonBase>
+        ))
+      ) : (
+        <Typography>No playlists available</Typography>
+      )}
+    </Grid2>
+  );
+};
+
+const EmptyPlaylistSelector = () => {
+  return (
+    <Grid2 className={styles.empty_container}>
+      <img
+        loading="lazy"
+        className={styles.empty_image}
+        src={exclaimationMark}
+        alt=""
+      />
+      <Typography
+        variant="RedirectText"
+        className={styles.empty_redirect_text_heading}
+      >
+        No Playlists Available
+      </Typography>
+    </Grid2>
+  );
+};
 
 const MoveSong = ({ open, onClose, songId, playlistId }) => {
   const dispatch = useDispatch();
@@ -19,6 +78,9 @@ const MoveSong = ({ open, onClose, songId, playlistId }) => {
   const [selected, setSelected] = useState(null);
 
   const playlists = useSelector(playlistsSelector);
+  const filteredPlaylists = Object.entries(playlists).filter(
+    ([id]) => id !== playlistId
+  );
   const handleSelect = (id) => {
     setSelected(id);
     setErrorMessage("");
@@ -58,39 +120,15 @@ const MoveSong = ({ open, onClose, songId, playlistId }) => {
           <Typography variant="RedirectText" className={styles.edit_title_text}>
             Select a Playlist
           </Typography>
-
-          <Grid2 className={styles.playlist_container}>
-            {Object.entries(playlists)
-              .filter(([id]) => id !== playlistId)
-              .map(([id, playlist]) => (
-                <ButtonBase
-                  key={id}
-                  className={`${styles.playlist_item} ${
-                    selected === id ? styles.selected_item : ""
-                  }`}
-                  onClick={() => handleSelect(id)}
-                >
-                  <Radio
-                    checked={selected === id}
-                    onChange={() => handleSelect(id)}
-                  />
-                  <img
-                    loading="lazy"
-                    alt=""
-                    src={playlist.playlist_cover_art}
-                    className={styles.playlist_image}
-                  />
-                  <Grid2 className={styles.playlist_content}>
-                    <Typography
-                      variant="RedirectText"
-                      className={styles.playlist_title}
-                    >
-                      {playlist?.playlist_title}
-                    </Typography>
-                  </Grid2>
-                </ButtonBase>
-              ))}
-          </Grid2>
+          {filteredPlaylists.length > 0 ? (
+            <PlaylistSelector
+              filteredPlaylists={filteredPlaylists}
+              selected={selected}
+              handleSelect={handleSelect}
+            />
+          ) : (
+            <EmptyPlaylistSelector />
+          )}
 
           <Grid2 className={styles.error_message_container}>
             {errorMessage ? (

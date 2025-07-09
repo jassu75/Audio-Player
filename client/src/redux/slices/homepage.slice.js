@@ -34,11 +34,11 @@ const songsSlice = createSlice({
       localStorage.setItem("songsList", JSON.stringify(action.payload));
     },
     addSongs: (state, action) => {
-      const { song_id, ...songWithoutId } = action.payload;
+      const { song_id } = action.payload;
       if (!state.songs) {
         state.songs = {};
       }
-      state.songs[song_id] = songWithoutId;
+      state.songs[song_id] = action.payload;
       localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
     deleteSong: (state, action) => {

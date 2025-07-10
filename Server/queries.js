@@ -18,7 +18,7 @@ query VERIFY_EMAIL($email_id: String) {
 `;
 
 export const FETCH_PLAYLIST_SONGS = `
-query FETCH_PLAYLIST_SONGS($playlist_id: uuid!) @cached {
+query FETCH_PLAYLIST_SONGS($playlist_id: uuid!) {
   playlists: playlist_songs(where: {playlist_id: {_eq: $playlist_id}}) {
     songs: audio_detail {
       song_id

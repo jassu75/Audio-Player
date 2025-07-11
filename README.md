@@ -1,37 +1,59 @@
-# Audio Player
+# Musify
 
 ## Website Link
-[Visit the Application](https://tejas-music-app.netlify.app/)
+[Visit the Application](https://tejas-musify.wl.r.appspot.com/)
+
+## Demo Link
+[Visit Youtube](https://youtu.be/a4fB9b7h3oA?si=VRNRHWyofjqSH-v6)
 
 ## Introduction
-This application allows users to play their favorite music for free. Users can upload their music files and listen to them seamlessly. The songs will continuously play one after the other. Users can upload their favorite audio files, navigate forward and backward between songs, delete songs, and much more!
+Welcome to Musify. Upload your favorite audio to listen to them add free. 
 
 ## Directions
 
-### Signup
+### Signup and Login
+Users can create account using email id and password or directly use their Google Account. if they use the former, then need to verify email address before login.
+
 ![Signup](https://github.com/user-attachments/assets/55e24145-1987-4e4e-9f24-6c8b503784d7)  
-Users need to sign up using their email ID and create a password. Once done, click the **Signup** button. Alternatively, users can create an account and log in directly using their Google account.
-
-### Email Verification
-![Email Verification](https://github.com/user-attachments/assets/c4d03faa-7368-4de7-9079-4ddd9ae23dd3)  
-Users will need to verify their email if they choose the email and password method. Only after verification will they be allowed to log in.
-
-### Login
-![Login](https://github.com/user-attachments/assets/23072c9b-60ec-40b6-bc0a-2c3ca1bb198c)  
-Once the email is verified, the user can log into their account through the **Login** page. They can also use their Google account for this process.
 
 ### Homepage
-![Homepage](https://github.com/user-attachments/assets/c6dc2dfb-6c31-413a-93d5-6bdb8a840f6b)  
-This is how the homepage looks initially. The user can upload audio files of their favorite songs by clicking on the **Upload** button.
+This is the landing page of the application. Create your playlist, search your favorite songs or listen to top quality royalty free music!!
 
-### Audio Uploader
-![Audio Uploader](https://github.com/user-attachments/assets/905fd053-ceb4-4d9f-b4c9-98c72a605dad)  
-The user needs to choose audio files to upload from their system. Multiple audio files can be selected simultaneously to speed up the process. Once done, click the **Upload** button and wait until all files are uploaded. The upload status will be updated in the window.
+<img width="1911" height="941" alt="image" src="https://github.com/user-attachments/assets/7db86a4a-7ce6-4c4e-90a5-ee3ad78a778a" />
 
-### View Your Uploaded Songs
-![Uploaded Songs](https://github.com/user-attachments/assets/17462d87-7b3d-4f9d-afc4-632c7e6a6315)  
-You can now view and listen to your uploaded songs. Dive into your favorite music. **Cheers!**
+### Audio Uploader 
+Upload the audio files to listen to them anytime ad free
 
-### Deleting a Song
-![image](https://github.com/user-attachments/assets/a4caa23c-78b3-4598-b0b6-746e46920d0a)
-To delete a song from the list, click on the three-dot icon beside the song and then click the **Delete** button. The song will be removed from your list.
+<img width="1700" height="896" alt="image" src="https://github.com/user-attachments/assets/0b8f8359-6573-4209-9b41-f5cf7fc1b021" />
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+<img width="1257" height="774" alt="image" src="https://github.com/user-attachments/assets/c945adce-6fdf-4016-b1c0-a85c89e08f07" />
+
+### Audio oPlayer
+Lose yourself in your favorite music!!
+
+<img width="1421" height="920" alt="image" src="https://github.com/user-attachments/assets/913c5463-0b01-434c-b02a-47423c1058dc" />
+
+### Search
+Search your desired songs from your entire playlist collection
+
+<img width="1109" height="944" alt="image" src="https://github.com/user-attachments/assets/67af4c6d-f272-40c4-9b44-338bbf6f5a28" />
+
+
+### For You
+Listen to personally curated songs based on your listening
+
+## Favorites
+
+<img width="1314" height="786" alt="image" src="https://github.com/user-attachments/assets/dc45edec-e9bf-46e2-a9d6-4ffd0d9e5f41" />
+
+## Recently Played
+
+<img width="864" height="300" alt="image" src="https://github.com/user-attachments/assets/deac50dc-c47c-4ef1-a66b-2ce11dc32a00" />
+
+## Most Played
+
+<img width="590" height="453" alt="image" src="https://github.com/user-attachments/assets/12b6bafa-c282-4f28-ab28-4e40882ea87e" />
+
+

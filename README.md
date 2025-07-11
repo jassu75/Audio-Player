@@ -12,7 +12,7 @@ Welcome to Musify. Upload your favorite audio to listen to them add free.
 ## Directions
 
 ### Signup and Login
-Users can create account using email id and password or directly use their Google Account. if they use the former, then need to verify email address before login.
+Users can create an account using their email ID and password, or sign in directly with their Google account. If they choose the former, they must verify their email address before logging in
 
 ![Signup](https://github.com/user-attachments/assets/55e24145-1987-4e4e-9f24-6c8b503784d7)  
 
@@ -30,7 +30,7 @@ Upload the audio files to listen to them anytime ad free
 
 <img width="1257" height="774" alt="image" src="https://github.com/user-attachments/assets/c945adce-6fdf-4016-b1c0-a85c89e08f07" />
 
-### Audio oPlayer
+### Audio Player
 Lose yourself in your favorite music!!
 
 <img width="1421" height="920" alt="image" src="https://github.com/user-attachments/assets/913c5463-0b01-434c-b02a-47423c1058dc" />

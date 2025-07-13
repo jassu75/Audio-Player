@@ -51,7 +51,7 @@ Lose yourself in your favorite music with our sleek audio player!
 ### 🔍 Search  
 Quickly find songs from your personal collection with the search feature.
 
-<img width="1109" height="944" alt="Search" src="https://github.com/user-attachments/assets/67af4c6d-f272-40c4-9b44-338bbf6f5a28" />
+<img width="840" height="539" alt="image" src="https://github.com/user-attachments/assets/afb865b7-6781-4f8a-9eaa-31d9103595da" />
 
 ---
 

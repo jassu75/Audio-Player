@@ -2,7 +2,7 @@ import { Grid2, Typography } from "@mui/material";
 import styles from "./favoriteCard.module.css";
 import { Fragment } from "react";
 import GreenDot from "../../assets/images/Card/greenDot.png";
-import Album from "../../assets/images/Card/album.png";
+import Album from "../../assets/images/Card/Album.png";
 import Time from "../../assets/images/Card/time.png";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "../../Favorite/FavoriteIcon";

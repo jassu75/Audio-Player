@@ -41,52 +41,48 @@ const AudioPlayer = () => {
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   useUpdateUserPreference();
 
-  const audioPlayer = useRef(); // Reference to the audio component
-  const progressBar = useRef(); // Reference to the progress bar
-  const animationRef = useRef(); // Reference to the animation
+  const audioPlayer = useRef();
+  const progressBar = useRef();
 
   useEffect(() => {
     const player = audioPlayer.current;
+    if (!player) return;
 
-    if (player) {
-      const updateDuration = () => {
-        if (!isNaN(player.duration)) {
-          const duration = Math.floor(player.duration);
-          setSongDuration(duration);
-          progressBar.current.max = duration;
-        }
-      };
+    const handleEnded = () => {
+      const songIds = Object.keys(songsList);
+      let nextSongId;
 
-      updateDuration();
+      do {
+        nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
+      } while (nextSongId === songId && songIds.length > 1);
 
-      const handleEnded = () => {
-        const songIds = Object.keys(songsList);
-        let nextSongId;
-        do {
-          nextSongId = songIds[Math.floor(Math.random() * songIds.length)];
-        } while (nextSongId === songId && songIds.length > 1);
+      setCount((prev) => prev + 1);
+      navigate(`/user/song/${nextSongId}`, { replace: true });
+      resetProgressBar();
+    };
 
-        const nextSong = songsList[nextSongId];
-        player.src = nextSong.audio_url;
-        const playNextSong = () => {
-          player.play().catch((error) => {
-            console.error("Error playing audio:", error);
-          });
-        };
+    player.addEventListener("ended", handleEnded);
+    return () => player.removeEventListener("ended", handleEnded);
+  }, [navigate, songId, songsList]);
 
-        player.addEventListener("canplaythrough", playNextSong, { once: true });
-        setCount((prev) => prev + 1);
-        navigate(`/user/song/${nextSongId}`, { replace: true });
-        resetProgressBar();
-      };
+  useEffect(() => {
+    const player = audioPlayer.current;
+    if (!player || !song) return;
 
-      player.addEventListener("ended", handleEnded);
+    setCurrentTime(0);
 
-      return () => {
-        player.removeEventListener("ended", handleEnded);
-      };
-    }
-  }, [audioPlayer, navigate, songId, songsList]);
+    const handleCanPlay = () => {
+      if (isPlaying) {
+        player.play().catch(() => {});
+      }
+    };
+
+    player.addEventListener("canplay", handleCanPlay);
+
+    return () => {
+      player.removeEventListener("canplay", handleCanPlay);
+    };
+  }, [song, isPlaying]);
 
   useEffect(() => {
     const fetchRandomSongs = async () => {
@@ -96,15 +92,17 @@ const AudioPlayer = () => {
           { user_id: user.user_id },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
+
         const refinedResponse = response.data?.randomSongs.reduce(
           (acc, song) => {
             acc[song.song_id] = song;
             return acc;
           },
-          {}
+          {},
         );
+
         dispatch(setSongs(refinedResponse));
         setCount(1);
       } catch (err) {
@@ -118,9 +116,7 @@ const AudioPlayer = () => {
   }, [count, dispatch, user]);
 
   useEffect(() => {
-    return () => {
-      dispatch(setSongs(null));
-    };
+    return () => dispatch(setSongs(null));
   }, [dispatch]);
 
   useEffect(() => {
@@ -131,10 +127,59 @@ const AudioPlayer = () => {
   }, [dispatch, song, songId, user]);
 
   useEffect(() => {
-    return () => {
-      dispatch(setListens(null));
-    };
+    return () => dispatch(setListens(null));
   }, [dispatch]);
+
+  useEffect(() => {
+    const player = audioPlayer.current;
+    if (!player) return;
+
+    const updateTime = () => {
+      if (progressBar.current) {
+        progressBar.current.value = player.currentTime;
+        progressBar.current.style.setProperty(
+          "--seek-before-width",
+          `${(player.currentTime / songDuration) * 100}%`,
+        );
+      }
+      setCurrentTime(player.currentTime);
+    };
+
+    player.addEventListener("timeupdate", updateTime);
+    return () => player.removeEventListener("timeupdate", updateTime);
+  }, [songDuration]);
+
+  useEffect(() => {
+    if (!("mediaSession" in navigator) || !song) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: song.title,
+      artist: song.artist,
+      artwork: [
+        { src: song.cover_art, sizes: "96x96", type: "image/png" },
+        { src: song.cover_art, sizes: "192x192", type: "image/png" },
+        { src: song.cover_art, sizes: "512x512", type: "image/png" },
+      ],
+    });
+
+    navigator.mediaSession.setActionHandler("play", () => {
+      audioPlayer.current.play();
+      setIsPlaying(true);
+    });
+
+    navigator.mediaSession.setActionHandler("pause", () => {
+      audioPlayer.current.pause();
+      setIsPlaying(false);
+    });
+
+    navigator.mediaSession.setActionHandler("previoustrack", backButton);
+    navigator.mediaSession.setActionHandler("nexttrack", forwardButton);
+  }, [song]);
+
+  useEffect(() => {
+    if (!("mediaSession" in navigator)) return;
+    navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+  }, [isPlaying]);
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -145,54 +190,31 @@ const AudioPlayer = () => {
   };
 
   const togglePlayPause = () => {
-    const prevValue = isPlaying;
-    setIsPlaying(!prevValue);
-    if (!prevValue) {
+    if (!isPlaying) {
       audioPlayer.current.play();
-      animationRef.current = requestAnimationFrame(whilePlaying);
     } else {
       audioPlayer.current.pause();
-      cancelAnimationFrame(animationRef.current);
     }
-  };
-
-  const whilePlaying = () => {
-    if (audioPlayer.current) {
-      progressBar.current.value = audioPlayer.current.currentTime;
-      changePlayerCurrentTime();
-      animationRef.current = requestAnimationFrame(whilePlaying);
-    }
+    setIsPlaying(!isPlaying);
   };
 
   const changeRange = () => {
     audioPlayer.current.currentTime = progressBar?.current?.value;
-    changePlayerCurrentTime();
+    setCurrentTime(progressBar.current.value);
   };
 
   const resetProgressBar = () => {
     setCurrentTime(0);
-    progressBar.current.value = 0;
-    changePlayerCurrentTime();
-  };
-
-  const changePlayerCurrentTime = () => {
-    progressBar.current.style.setProperty(
-      "--seek-before-width",
-      `${(progressBar.current.value / songDuration) * 100}%`
-    );
-    setCurrentTime(progressBar.current.value);
+    if (progressBar.current) progressBar.current.value = 0;
   };
 
   const backButton = () => {
     const songIds = Object.keys(songsList);
     const currentIndex = songIds.indexOf(songId);
     const prevIndex = (currentIndex - 1 + songIds.length) % songIds.length;
-    const prevSongId = songIds[prevIndex];
 
-    setIsPlaying(false);
     setCount((prev) => prev + 1);
-
-    navigate(`/user/song/${prevSongId}`, { replace: true });
+    navigate(`/user/song/${songIds[prevIndex]}`, { replace: true });
     resetProgressBar();
   };
 
@@ -200,16 +222,13 @@ const AudioPlayer = () => {
     const songIds = Object.keys(songsList);
     const currentIndex = songIds.indexOf(songId);
     const nextIndex = (currentIndex + 1) % songIds.length;
-    const nextSongId = songIds[nextIndex];
 
-    setIsPlaying(false);
     setCount((prev) => prev + 1);
-
-    navigate(`/user/song/${nextSongId}`, { replace: true });
+    navigate(`/user/song/${songIds[nextIndex]}`, { replace: true });
     resetProgressBar();
   };
 
-  if (userLoading || recentlyPlayedLoading || !songsList) {
+  if (userLoading || recentlyPlayedLoading || !songsList || !song) {
     return <AudioPlayerSkeleton />;
   }
 
@@ -251,22 +270,27 @@ const AudioPlayer = () => {
             progressBar.current.max = duration;
           }}
         ></audio>
+
         <button className={styles.forwardBackward} onClick={backButton}>
           <SkipPrevious />
         </button>
+
         <button onClick={togglePlayPause} className={styles.playPause}>
           {isPlaying ? <Pause /> : <PlayArrow />}
         </button>
+
         <button className={styles.forwardBackward} onClick={forwardButton}>
           <SkipNext />
         </button>
       </Grid2>
+
       <Grid2 className={styles.progress_bar_and_time}>
         <Grid2 className={styles.currentTime}>
           <Typography variant="AudioPlayerCurrentTimeAndDuration">
             {calculateTime(currentTime)}
           </Typography>
         </Grid2>
+
         <Grid2>
           <input
             type="range"
@@ -276,6 +300,7 @@ const AudioPlayer = () => {
             onChange={changeRange}
           />
         </Grid2>
+
         <Grid2 className={styles.duration}>
           {songDuration > 0 && (
             <Typography variant="AudioPlayerCurrentTimeAndDuration">

@@ -14,12 +14,20 @@ import Search from "./Search/Search";
 import PlaylistAudioPlayer from "./playSong/playlistAudioPlayer";
 import SelectedForYou from "./ForYou/SelectedForYou";
 import PreferenceAudioPlayer from "./playSong/PreferenceAudioPlayer";
+import AudioplayerLayout from "./layout/audioplayerLayout/AudioplayerLayout";
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <div className="App">
           <Routes>
+            <Route element={<AudioplayerLayout />}>
+              <Route
+                path="/playlists/:playlistId"
+                element={<SelectedPlaylist />}
+              />
+            </Route>
             <Route path="/account" element={<UserAuthentication />} />
             <Route path="/" element={<Homepage />} />
             <Route path="/user/song/:songId" element={<AudioPlayer />} />
@@ -29,10 +37,7 @@ function App() {
             />
             <Route path="/song/:songId" element={<JamendoAudioPlayer />} />
             <Route path="/redirect" element={<DirectToLogin />} />
-            <Route
-              path="/playlists/:playlistId"
-              element={<SelectedPlaylist />}
-            />
+
             <Route path="/album/:slug" element={<SelectedAlbum />} />
             <Route
               path="/album/:playlistId/song/:songId"

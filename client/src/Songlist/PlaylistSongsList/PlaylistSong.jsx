@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import styles from "./PlaylistSong.module.css";
 import Grid2 from "@mui/material/Grid2";
-import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
-import { deleteSong } from "../../redux/slices/homepage.slice";
+import { deleteSong, setCurrentSong } from "../../redux/slices/homepage.slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { Divider } from "@mui/material";
@@ -17,7 +16,6 @@ import FavoriteIcon from "../../Favorite/FavoriteIcon";
 import MoveSong from "./MoveSong";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
@@ -25,7 +23,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
   const dispatch = useDispatch();
 
   const handleSongClick = () => {
-    navigate(`/user/playlist/${playlistId}/song/${songKey}`);
+    dispatch(setCurrentSong(song));
   };
 
   const handleMenuOpen = (event) => {
@@ -53,7 +51,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
         },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
       dispatch(deleteSong(songKey));
     } catch (error) {

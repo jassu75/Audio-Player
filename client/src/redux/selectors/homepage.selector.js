@@ -6,6 +6,7 @@ export const userSelector = (state) => state.homepage.user;
 export const jamendoSongsSelector = (state) => state.homepage.jamendoSongs;
 export const audiusAlbumsSelector = (state) => state.homepage.audiusAlbums;
 export const audiusSongsSelector = (state) => state.homepage.audiusSongs;
+export const currentSongSelector = (state) => state.homepage.currentSong;
 
 export const searchSongsSelector = createSelector([songsSelector], (songs) => {
   if (!songs) return [];
@@ -15,7 +16,7 @@ export const searchSongsSelector = createSelector([songsSelector], (songs) => {
       if (titles.has(song.title)) return false;
       titles.add(song.title);
       return true;
-    })
+    }),
   );
 });
 
@@ -34,6 +35,6 @@ export const filteredSearchSongSelector = (query) =>
           return true;
         }
         return false;
-      })
+      }),
     );
   });

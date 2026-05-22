@@ -18,6 +18,7 @@ const checkExpired = (key, defaultValue) => {
 
 const initialState = {
   songs: JSON.parse(localStorage.getItem("songsList")) || null,
+  currentSong: null,
   user: JSON.parse(localStorage.getItem("user")) || null,
   playlists: JSON.parse(sessionStorage.getItem("playlists")) || null,
   jamendoSongs: checkExpired("jamendoSongs", null),
@@ -32,6 +33,9 @@ const songsSlice = createSlice({
     setSongs: (state, action) => {
       state.songs = action.payload;
       localStorage.setItem("songsList", JSON.stringify(action.payload));
+    },
+    setCurrentSong: (state, action) => {
+      state.currentSong = action.payload;
     },
     addSongs: (state, action) => {
       const { song_id } = action.payload;
@@ -106,6 +110,7 @@ const songsSlice = createSlice({
 
 export const {
   setSongs,
+  setCurrentSong,
   addSongs,
   removeHomepageSong,
   setUser,

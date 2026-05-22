@@ -23,7 +23,6 @@ const Audioplayer = () => {
 
   useEffect(() => {
     const audio = audioRef.current;
-
     if (!audio) return;
 
     const onTimeUpdate = () => setProgress(audio.currentTime);
@@ -40,27 +39,48 @@ const Audioplayer = () => {
 
   useEffect(() => {
     const audio = audioRef.current;
-
     if (!audio || !song?.audio_url) return;
 
-    audio.src = song.audio_url;
-
-    audio.play();
-    setIsPlaying(true);
     setProgress(0);
+    setIsPlaying(false);
+
+    audio.src = song.audio_url;
+    audio.load();
+
+    const onCanPlay = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (err) {
+        console.error("Error playing audio:", err);
+      }
+    };
+
+    audio.addEventListener("canplay", onCanPlay, { once: true });
+
+    return () => {
+      audio.removeEventListener("canplay", onCanPlay);
+      audio.pause();
+    };
   }, [song]);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (isPlaying) {
       audio.pause();
+      setIsPlaying(false);
     } else {
-      audio.play();
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("Playback error:", err);
+        }
+      }
     }
-
-    setIsPlaying(!isPlaying);
   };
 
   const handleSeek = (_, val) => {
@@ -77,7 +97,7 @@ const Audioplayer = () => {
 
   return (
     <Grid className={styles.audioplayer_container}>
-      <audio ref={audioRef} src={song?.audio_url} />
+      <audio ref={audioRef} />
 
       <div className={styles.audioplayer_content}>
         <Grid className={styles.logo_container}>
@@ -114,11 +134,7 @@ const Audioplayer = () => {
             min={0}
             max={duration || 100}
             onChange={handleSeek}
-            sx={{
-              flex: 1,
-              color: "#d4af37",
-              "& .MuiSlider-thumb": { width: 12, height: 12 },
-            }}
+            className={styles.slider}
           />
           <Typography className={styles.time}>{fmt(duration)}</Typography>
         </Grid>

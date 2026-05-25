@@ -38,8 +38,12 @@ const audioplayerSlice = createSlice({
       state.viewingSonglist[songId].title = newTitle;
       sync(state);
     },
-    setPlayingSonglist: (state, action) => {
-      state.playingSonglist = action.payload;
+    setPlayingSonglist: (state) => {
+      state.playingSonglist = { ...state.viewingSonglist };
+      sync(state);
+    },
+    setPlayingIndex: (state, action) => {
+      state.playingIndex = action.payload;
       sync(state);
     },
     playNext: (state) => {
@@ -66,6 +70,7 @@ export const {
   deleteViewingSong,
   renameViewingSong,
   setPlayingSonglist,
+  setPlayingIndex,
   playNext,
   playPrevious,
 } = audioplayerSlice.actions;

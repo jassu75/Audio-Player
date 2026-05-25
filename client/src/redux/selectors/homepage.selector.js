@@ -4,4 +4,3 @@ export const jamendoSongslistSelector = (state) => state.homepage.jamendoSongs;
 export const audiusAlbumsSelector = (state) => state.homepage.audiusAlbums;
 export const audiusviewingSonglistSelector = (state) =>
   state.homepage.audiusSongs;
-export const currentSongSelector = (state) => state.homepage.currentSong;

@@ -7,8 +7,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
-import { setCurrentSong } from "../../redux/slices/homepage.slice";
-import { deleteViewingSong } from "../../redux/slices/audioplayer.slice";
+import {
+  deleteViewingSong,
+  setPlayingIndex,
+  setPlayingSonglist,
+} from "../../redux/slices/audioplayer.slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { Divider } from "@mui/material";
@@ -24,7 +27,8 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
   const dispatch = useDispatch();
 
   const handleSongClick = () => {
-    dispatch(setCurrentSong(song));
+    dispatch(setPlayingSonglist());
+    dispatch(setPlayingIndex(songKey));
   };
 
   const handleMenuOpen = (event) => {

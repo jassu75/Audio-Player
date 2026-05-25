@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
-import { currentSongSelector } from "../redux/selectors/homepage.selector";
+import { currentSongSelector } from "../redux/selectors/audioplayer.selector";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Slider from "@mui/material/Slider";

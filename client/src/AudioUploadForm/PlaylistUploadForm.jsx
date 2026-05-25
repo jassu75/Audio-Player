@@ -5,7 +5,7 @@ import UploadFile from "@mui/icons-material/UploadFile";
 import * as musicMetadata from "music-metadata-browser";
 import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
-import { addSongs } from "../redux/slices/homepage.slice";
+import { addViewingSong } from "../redux/slices/audioplayer.slice";
 import styles from "./playlistUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -123,7 +123,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
 
   useEffect(() => {
     if (newSong) {
-      dispatch(addSongs(newSong));
+      dispatch(addViewingSong(newSong));
     }
   }, [newSong, dispatch]);
 

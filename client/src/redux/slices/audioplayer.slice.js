@@ -20,6 +20,24 @@ const audioplayerSlice = createSlice({
       state.viewingSonglist = action.payload;
       sync(state);
     },
+    addViewingSong: (state, action) => {
+      const { song_id } = action.payload;
+      if (!state.viewingSonglist) {
+        state.viewingSonglist = {};
+      }
+      state.viewingSonglist[song_id] = action.payload;
+      sync(state);
+    },
+    deleteViewingSong: (state, action) => {
+      delete state.viewingSonglist[action.payload];
+      sync(state);
+    },
+    renameViewingSong: (state, action) => {
+      const songId = action.payload.songId;
+      const newTitle = action.payload.newTitle;
+      state.viewingSonglist[songId].title = newTitle;
+      sync(state);
+    },
     setPlayingSonglist: (state, action) => {
       state.playingSonglist = action.payload;
       sync(state);
@@ -44,6 +62,9 @@ const audioplayerSlice = createSlice({
 
 export const {
   setViewingSonglist,
+  addViewingSong,
+  deleteViewingSong,
+  renameViewingSong,
   setPlayingSonglist,
   playNext,
   playPrevious,

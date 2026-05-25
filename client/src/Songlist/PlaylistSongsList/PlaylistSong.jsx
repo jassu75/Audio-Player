@@ -7,7 +7,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
-import { deleteSong, setCurrentSong } from "../../redux/slices/homepage.slice";
+import { setCurrentSong } from "../../redux/slices/homepage.slice";
+import { deleteViewingSong } from "../../redux/slices/audioplayer.slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { Divider } from "@mui/material";
@@ -53,7 +54,7 @@ const PlaylistSong = ({ playlistId, songKey, song }) => {
           headers: { "Content-Type": "application/json" },
         },
       );
-      dispatch(deleteSong(songKey));
+      dispatch(deleteViewingSong(songKey));
     } catch (error) {
       console.error("Error deleting song:", error);
     } finally {

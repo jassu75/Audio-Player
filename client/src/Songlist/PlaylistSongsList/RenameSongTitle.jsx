@@ -6,7 +6,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import styles from "./renameSongTitle.module.css";
 import { useDispatch } from "react-redux";
-import { renameSong } from "../../redux/slices/homepage.slice";
+import { renameViewingSong } from "../../redux/slices/audioplayer.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
@@ -31,7 +31,7 @@ const RenameSongTitle = ({ open, onClose, songId, songTitle }) => {
       try {
         setLoading(true);
         const payload = { songId: songId, newTitle: title };
-        dispatch(renameSong(payload));
+        dispatch(renameViewingSong(payload));
         await axios.post("/api/updatesongtitle", payload, {
           headers: { "Content-Type": "application/json" },
         });

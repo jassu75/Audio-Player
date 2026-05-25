@@ -17,7 +17,6 @@ const checkExpired = (key, defaultValue) => {
 };
 
 const initialState = {
-  songs: JSON.parse(localStorage.getItem("songsList")) || null,
   currentSong: null,
   user: JSON.parse(localStorage.getItem("user")) || null,
   playlists: JSON.parse(sessionStorage.getItem("playlists")) || null,
@@ -32,18 +31,6 @@ const songsSlice = createSlice({
   reducers: {
     setCurrentSong: (state, action) => {
       state.currentSong = action.payload;
-    },
-    addSongs: (state, action) => {
-      const { song_id } = action.payload;
-      if (!state.songs) {
-        state.songs = {};
-      }
-      state.songs[song_id] = action.payload;
-      localStorage.setItem("songsList", JSON.stringify(state.songs));
-    },
-    deleteSong: (state, action) => {
-      delete state.songs[action.payload];
-      localStorage.setItem("songsList", JSON.stringify(state.songs));
     },
 
     setPlaylistDetails: (state, action) => {
@@ -89,12 +76,6 @@ const songsSlice = createSlice({
       state.audiusSongs = action.payload;
     },
 
-    renameSong: (state, action) => {
-      const songId = action.payload.songId;
-      const newTitle = action.payload.newTitle;
-      state.songs[songId].title = newTitle;
-      localStorage.setItem("songsList", JSON.stringify(state.songs));
-    },
     renamePlaylist: (state, action) => {
       const playlistId = action.payload.playlistId;
       const newTitle = action.payload.newTitle;
@@ -106,17 +87,13 @@ const songsSlice = createSlice({
 
 export const {
   setCurrentSong,
-  addSongs,
-  removeHomepageSong,
   setUser,
   addPlaylistDetails,
   setPlaylistDetails,
   deletePlaylistDetails,
-  deleteSong,
   setJamendoSongs,
   setAudiusSongs,
   setAudiusAlbums,
-  renameSong,
   renamePlaylist,
 } = songsSlice.actions;
 

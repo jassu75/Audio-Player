@@ -10,7 +10,7 @@ import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import { useSearchParams } from "react-router-dom";
 import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
 import useFetchMostListened from "../../hooks/UserPrefs/useFetchMostListened";
-import { songsSelector } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import MostPlayedSong from "./MostPlayedSong";
 
 const MostPlayedList = () => {
@@ -18,7 +18,7 @@ const MostPlayedList = () => {
   const { mostListenedLoading, mostListenedError } = useFetchMostListened();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") || "1");
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const start = (page - 1) * 20;
   const end = start + 20;
 

@@ -8,10 +8,8 @@ import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
-import {
-  songsSelector,
-  userSelector,
-} from "../redux/selectors/homepage.selector";
+import { userSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 import {
   addListens,
   addRecentlyPlayed,
@@ -19,7 +17,7 @@ import {
 } from "../redux/slices/userPreferences.slice";
 import useUpdateUserPreference from "../hooks/UserPrefs/useUpdateUserPreferences";
 import axios from "axios";
-import { setSongs } from "../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
 import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 
@@ -29,7 +27,7 @@ const AudioPlayer = () => {
   const dispatch = useDispatch();
   const [count, setCount] = useState(0);
   const user = useSelector(userSelector);
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const song = songsList?.[songId];
   const recentlyPlayed = useSelector(recentlyPlayedSelector);
 
@@ -103,7 +101,7 @@ const AudioPlayer = () => {
           {},
         );
 
-        dispatch(setSongs(refinedResponse));
+        dispatch(setViewingSonglist(refinedResponse));
         setCount(1);
       } catch (err) {
         console.error("error fetching random songs", err);
@@ -116,7 +114,7 @@ const AudioPlayer = () => {
   }, [count, dispatch, user]);
 
   useEffect(() => {
-    return () => dispatch(setSongs(null));
+    return () => dispatch(setViewingSonglist(null));
   }, [dispatch]);
 
   useEffect(() => {

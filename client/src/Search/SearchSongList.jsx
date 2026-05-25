@@ -3,19 +3,19 @@ import Typography from "@mui/material/Typography";
 import SearchSong from "./SearchSong";
 import styles from "./searchSongList.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { songsSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 import { recentlyPlayedSongSelector } from "../redux/selectors/userPreferences.selector";
 import { useEffect } from "react";
-import { setSongs } from "../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
 
 const SearchSongList = ({ showRecentlyPlayed }) => {
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const recentlyPlayed = useSelector(recentlyPlayedSongSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (showRecentlyPlayed && recentlyPlayed) {
-      dispatch(setSongs(recentlyPlayed));
+      dispatch(setViewingSonglist(recentlyPlayed));
     }
   }, [dispatch, recentlyPlayed, showRecentlyPlayed]);
   return (

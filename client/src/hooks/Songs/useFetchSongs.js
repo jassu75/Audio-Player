@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSongs } from "../../redux/slices/homepage.slice";
-import { songsSelector } from "../../redux/selectors/homepage.selector";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 
 const useFetchSongs = (playlistId) => {
   const [songsLoading, setSongsLoading] = useState(false);
   const [songsError, setSongsError] = useState(false);
   const dispatch = useDispatch();
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   useEffect(() => {
     const fetchSongs = async () => {
       try {
@@ -17,7 +17,7 @@ const useFetchSongs = (playlistId) => {
         const response = await axios.post(
           "/api/fetchPlaylistSongs",
           { playlist_id: playlistId },
-          { headers: { "Content-Type": "application/json" } }
+          { headers: { "Content-Type": "application/json" } },
         );
 
         const songsHashMap = response.data.playlists.reduce((acc, playlist) => {
@@ -27,7 +27,7 @@ const useFetchSongs = (playlistId) => {
           }
           return acc;
         }, {});
-        dispatch(setSongs(songsHashMap));
+        dispatch(setViewingSonglist(songsHashMap));
       } catch (error) {
         setSongsError(true);
         console.error("Error fetching songs", error);

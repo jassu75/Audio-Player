@@ -11,9 +11,9 @@ import { recentlyPlayedSelector } from "../../redux/selectors/userPreferences.se
 import RecentSong from "./RecentSong";
 import { useSearchParams } from "react-router-dom";
 import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
-import { songsSelector } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import { useEffect } from "react";
-import { setSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 
 const RecentsList = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -21,7 +21,7 @@ const RecentsList = () => {
     useFetchRecentlyPlayed();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") || "1");
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const recentlyPlayed = useSelector(recentlyPlayedSelector);
   const start = (page - 1) * 20;
   const end = start + 20;
@@ -29,7 +29,7 @@ const RecentsList = () => {
 
   useEffect(() => {
     if (recentlyPlayed) {
-      dispatch(setSongs(recentlyPlayed));
+      dispatch(setViewingSonglist(recentlyPlayed));
     }
   }, [dispatch, recentlyPlayed]);
 

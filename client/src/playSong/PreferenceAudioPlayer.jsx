@@ -18,10 +18,8 @@ import {
   addRecentlyPlayed,
   setListens,
 } from "../redux/slices/userPreferences.slice";
-import {
-  songsSelector,
-  userSelector,
-} from "../redux/selectors/homepage.selector";
+import { userSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 import useFetchPreferenceSongs from "../hooks/Songs/useFetchPreferencesSongs";
 import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
@@ -34,7 +32,7 @@ const PreferenceAudioPlayer = () => {
 
   const [shuffle, setShuffle] = useState(false);
 
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const user = useSelector(userSelector);
   const recentlyPlayed = useSelector(recentlyPlayedSelector);
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
@@ -90,7 +88,7 @@ const PreferenceAudioPlayer = () => {
           );
         } else {
           const currentIndex = songsList.findIndex(
-            (song) => song.song_id === songId
+            (song) => song.song_id === songId,
           );
           nextIndex = (currentIndex + 1) % songsList.length;
         }
@@ -164,7 +162,7 @@ const PreferenceAudioPlayer = () => {
   const changePlayerCurrentTime = () => {
     progressBar.current.style.setProperty(
       "--seek-before-width",
-      `${(progressBar.current.value / songDuration) * 100}%`
+      `${(progressBar.current.value / songDuration) * 100}%`,
     );
     setCurrentTime(progressBar.current.value);
   };

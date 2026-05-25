@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import useJamendoSongs from "../hooks/Songs/useJamendoSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
-import { songsSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 const JamendoAudioPlayer = () => {
   const { jamendoSongsLoading, jamendoSongsError } = useJamendoSongs();
   const { songId } = useParams();
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const song = songsList?.find((song) => song.song_id === songId);
   const [shuffle, setShuffle] = useState(false);
 
@@ -55,7 +55,7 @@ const JamendoAudioPlayer = () => {
           );
         } else {
           const currentIndex = songsList.findIndex(
-            (song) => song.song_id === songId
+            (song) => song.song_id === songId,
           );
           nextIndex = (currentIndex + 1) % songsList.length;
         }
@@ -127,7 +127,7 @@ const JamendoAudioPlayer = () => {
   const changePlayerCurrentTime = () => {
     progressBar.current.style.setProperty(
       "--seek-before-width",
-      `${(progressBar.current.value / songDuration) * 100}%`
+      `${(progressBar.current.value / songDuration) * 100}%`,
     );
     setCurrentTime(progressBar.current.value);
   };

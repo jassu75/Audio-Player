@@ -3,10 +3,10 @@ import useFetchFavorites from "../../hooks/Favorites/useFetchFavorites";
 import styles from "./favoritesList.module.css";
 import FavoriteCard from "./FavoriteCard";
 import { useDispatch, useSelector } from "react-redux";
-import { songsSelector } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import { favoritesSelector } from "../../redux/selectors/userPreferences.selector";
 import { useEffect } from "react";
-import { setSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 import FavoriteSkeleton from "../../Skeletons/FavoriteSkeleton";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
@@ -23,7 +23,7 @@ const FavoritesList = () => {
   const start = (page - 1) * 20;
   const end = start + 20;
 
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const favorites = useSelector(favoritesSelector);
 
   const dispatch = useDispatch();
@@ -35,10 +35,10 @@ const FavoritesList = () => {
   useEffect(() => {
     if (songsList && favorites) {
       const filteredSongList = songsList.filter((favorite) =>
-        favorites.includes(favorite.song_id)
+        favorites.includes(favorite.song_id),
       );
 
-      dispatch(setSongs(filteredSongList));
+      dispatch(setViewingSonglist(filteredSongList));
     }
   }, [favorites, dispatch]);
 

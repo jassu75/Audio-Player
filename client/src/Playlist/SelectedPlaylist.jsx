@@ -9,10 +9,8 @@ import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import PlaylistSkeleton from "../Skeletons/PlaylistSkeleton";
-import {
-  playlistsSelector,
-  songsSelector,
-} from "../redux/selectors/homepage.selector";
+import { playlistsSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 import { Pagination } from "@mui/material";
 import useFetchSongs from "../hooks/Songs/useFetchSongs";
 import useFetchFavoriteIds from "../hooks/Favorites/useFetchFavoriteIds";
@@ -22,7 +20,7 @@ const SelectedPlaylist = () => {
   const { userLoading, userError } = useFetchUserDetails();
   const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
   const allPlaylist = useSelector(playlistsSelector);
-  const playlistSongs = useSelector(songsSelector);
+  const playlistSongs = useSelector(viewingSonglistSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
 
   const [searchParams, setSearchParams] = useSearchParams();

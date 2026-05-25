@@ -30,10 +30,6 @@ const songsSlice = createSlice({
   name: "homepage",
   initialState,
   reducers: {
-    setSongs: (state, action) => {
-      state.songs = action.payload;
-      localStorage.setItem("songsList", JSON.stringify(action.payload));
-    },
     setCurrentSong: (state, action) => {
       state.currentSong = action.payload;
     },
@@ -109,7 +105,6 @@ const songsSlice = createSlice({
 });
 
 export const {
-  setSongs,
   setCurrentSong,
   addSongs,
   removeHomepageSong,

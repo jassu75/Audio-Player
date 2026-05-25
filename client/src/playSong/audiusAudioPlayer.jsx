@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import useAudiusAlbumSong from "../hooks/Audius/useAudiusAlbumSongs";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import AudioPlayerSkeleton from "../Skeletons/AudioPlayerSkeleton";
-import { audiusSongsSelector } from "../redux/selectors/homepage.selector";
+import { audiusviewingSonglistSelector } from "../redux/selectors/homepage.selector";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ShuffleOnIcon from "@mui/icons-material/ShuffleOn";
 import IconButton from "@mui/material/IconButton";
@@ -20,7 +20,7 @@ const AudiusAudioPlayer = () => {
     useAudiusAlbumSong(playlistId);
 
   const [id, setId] = useState(songId);
-  const songsList = useSelector(audiusSongsSelector);
+  const songsList = useSelector(audiusviewingSonglistSelector);
   const song = songsList?.find((song) => song.id === id);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -129,7 +129,7 @@ const AudiusAudioPlayer = () => {
   const changePlayerCurrentTime = () => {
     progressBar.current.style.setProperty(
       "--seek-before-width",
-      `${(progressBar.current.value / songDuration) * 100}%`
+      `${(progressBar.current.value / songDuration) * 100}%`,
     );
     setCurrentTime(progressBar.current.value);
   };

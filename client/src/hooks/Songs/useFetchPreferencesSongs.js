@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  jamendoSongsSelector,
-  songsSelector,
+  jamendoSongslistSelector,
   userSelector,
 } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import axios from "axios";
-import { setSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 import { recentlyPlayedSelector } from "../../redux/selectors/userPreferences.selector";
 
 const useFetchPreferenceSongs = (preference) => {
   const [songsLoading, setSongsLoading] = useState(false);
   const [songsError, setSongsError] = useState(false);
   const user = useSelector(userSelector);
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const recentlyPlayed = useSelector(recentlyPlayedSelector);
-  const popular = useSelector(jamendoSongsSelector);
+  const popular = useSelector(jamendoSongslistSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const useFetchPreferenceSongs = (preference) => {
           { user_id: user.user_id },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         const refinedResponse = response.data?.favorites?.reduce(
           (acc, favorite) => {
@@ -36,9 +36,9 @@ const useFetchPreferenceSongs = (preference) => {
 
             return acc;
           },
-          {}
+          {},
         );
-        dispatch(setSongs(refinedResponse));
+        dispatch(setViewingSonglist(refinedResponse));
       } catch (error) {
         console.error("error fetching favoriteIds", error);
         setSongsError(false);
@@ -56,16 +56,16 @@ const useFetchPreferenceSongs = (preference) => {
           { user_id: user.user_id },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         const refinedResponse = response.data?.most_listened?.reduce(
           (acc, song) => {
             acc[song.song_id] = song;
             return acc;
           },
-          {}
+          {},
         );
-        dispatch(setSongs(refinedResponse));
+        dispatch(setViewingSonglist(refinedResponse));
       } catch (error) {
         console.error("error fetching most listened", error);
         setSongsError(true);
@@ -75,11 +75,11 @@ const useFetchPreferenceSongs = (preference) => {
     };
 
     const fetchRecents = async () => {
-      dispatch(setSongs(recentlyPlayed));
+      dispatch(setViewingSonglist(recentlyPlayed));
     };
 
     const fetchPopular = () => {
-      dispatch(setSongs(popular));
+      dispatch(setViewingSonglist(popular));
     };
 
     if (!songsList && user && preference === "favorites") {

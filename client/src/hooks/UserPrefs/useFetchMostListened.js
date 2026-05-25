@@ -1,18 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  songsSelector,
-  userSelector,
-} from "../../redux/selectors/homepage.selector";
-import { setSongs } from "../../redux/slices/homepage.slice";
+import { userSelector } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
+
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 
 const useFetchMostListened = () => {
   const [mostListenedLoading, setMostListenedLoading] = useState(false);
   const [mostListenedError, setMostListenedError] = useState(false);
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   useEffect(() => {
     const fetchMostListened = async () => {
       try {
@@ -23,11 +22,11 @@ const useFetchMostListened = () => {
           { user_id: user.user_id },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         const refinedResponse = response.data?.most_listened || [];
 
-        dispatch(setSongs(refinedResponse));
+        dispatch(setViewingSonglist(refinedResponse));
       } catch (error) {
         console.error("error fetching most listened", error);
         setMostListenedError(true);

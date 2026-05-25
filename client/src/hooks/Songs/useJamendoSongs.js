@@ -1,18 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setJamendoSongs, setSongs } from "../../redux/slices/homepage.slice";
-import {
-  jamendoSongsSelector,
-  songsSelector,
-} from "../../redux/selectors/homepage.selector";
+import { setJamendoSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
+import { jamendoSongslistSelector } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 
 const useJamendoSongs = () => {
   const [jamendoSongsLoading, setJamendoSongsLoading] = useState(false);
   const [jamendoSongsError, setJamendoSongsError] = useState(false);
   const dispatch = useDispatch();
-  const jamendoSongs = useSelector(jamendoSongsSelector);
-  const songsList = useSelector(songsSelector);
+  const jamendoSongs = useSelector(jamendoSongslistSelector);
+  const songsList = useSelector(viewingSonglistSelector);
 
   useEffect(() => {
     const fetchJamendoSongs = async () => {
@@ -30,7 +29,7 @@ const useJamendoSongs = () => {
           artist: song.artist_name,
         }));
         dispatch(setJamendoSongs(refinedSongs));
-        dispatch(setSongs(refinedSongs));
+        dispatch(setViewingSonglist(refinedSongs));
       } catch (error) {
         setJamendoSongsError(true);
         console.error("Error fetching jamendo songs", error);
@@ -41,7 +40,7 @@ const useJamendoSongs = () => {
     if (!jamendoSongs) {
       fetchJamendoSongs();
     } else if (!songsList && jamendoSongs) {
-      dispatch(setSongs(jamendoSongs));
+      dispatch(setViewingSonglist(jamendoSongs));
     }
   }, [dispatch, jamendoSongs, songsList]);
 

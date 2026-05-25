@@ -12,10 +12,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import defaultMusicNote from "../assets/images/AudioUploadForm/defaultMusicImage.webp";
 import axios from "axios";
-import {
-  songsSelector,
-  userSelector,
-} from "../redux/selectors/homepage.selector";
+import { userSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 
 const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const dispatch = useDispatch();
@@ -25,7 +23,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [newSong, setNewSong] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const allSongs = useSelector(songsSelector);
+  const allSongs = useSelector(viewingSonglistSelector);
   const user = useSelector(userSelector);
 
   const songTitles = Object.values(allSongs ?? {})
@@ -65,7 +63,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
 
           const imageDetails = image
             ? await uploadImageToCloudinary(
-                new Blob([image], { type: "image/jpeg" })
+                new Blob([image], { type: "image/jpeg" }),
               )
             : { coverArt: defaultMusicNote, coverArtId: "static" };
 
@@ -90,7 +88,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             { uploadedSong },
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
           const song_id = response.data?.audio_details?.returning?.[0]?.song_id;
 
@@ -102,7 +100,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             },
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
 
           const songWithId = { ...uploadedSong, song_id };

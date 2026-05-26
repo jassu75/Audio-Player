@@ -67,9 +67,6 @@ const songsSlice = createSlice({
       };
       localStorage.setItem("audiusAlbums", JSON.stringify(data));
     },
-    setAudiusSongs: (state, action) => {
-      state.audiusSongs = action.payload;
-    },
 
     renamePlaylist: (state, action) => {
       const playlistId = action.payload.playlistId;
@@ -86,7 +83,6 @@ export const {
   setPlaylistDetails,
   deletePlaylistDetails,
   setJamendoSongs,
-  setAudiusSongs,
   setAudiusAlbums,
   renamePlaylist,
 } = songsSlice.actions;

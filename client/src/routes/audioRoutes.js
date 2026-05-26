@@ -1,7 +1,6 @@
 //Deprecate this
 import AudioPlayer from "../playSong/audioPlayer";
 import JamendoAudioPlayer from "../playSong/JamendoAudioPlayer";
-import AudiusAudioPlayer from "../playSong/audiusAudioPlayer";
 import PlaylistAudioPlayer from "../playSong/playlistAudioPlayer";
 import PreferenceAudioPlayer from "../playSong/PreferenceAudioPlayer";
 
@@ -18,10 +17,7 @@ const audioRoutes = [
     path: "/song/:songId",
     element: <JamendoAudioPlayer />,
   },
-  {
-    path: "/album/:playlistId/song/:songId",
-    element: <AudiusAudioPlayer />,
-  },
+
   {
     path: "/preference/:preference/song/:songId",
     element: <PreferenceAudioPlayer />,

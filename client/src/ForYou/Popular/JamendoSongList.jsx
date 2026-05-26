@@ -6,6 +6,7 @@ import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selec
 import useJamendoSongs from "../../hooks/Songs/useJamendoSongs";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
+import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
 import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import { useSearchParams } from "react-router-dom";
@@ -24,6 +25,7 @@ const JamendoSongList = () => {
 
   if (jamendoSongsLoading || !songsList) return <PlaylistSkeleton />;
   if (jamendoSongsError) return <ErrorPage />;
+  if (Object.keys(songsList).length === 0) return <EmptyHomePage />;
 
   return (
     <Grid2 className={styles.jamendo_songs}>
@@ -34,17 +36,19 @@ const JamendoSongList = () => {
       </Grid2>
       <Grid2 className={styles.songs_container}>
         <Grid2 className={styles.song_list}>
-          {songsList?.slice(start, end).map((song) => (
-            <JamendoSong
-              key={song.song_id}
-              songKey={song.song_id}
-              song={song}
-            />
-          ))}
+          {Object.entries(songsList)
+            .slice(start, end)
+            .map(([id, song]) => (
+              <JamendoSong
+                key={song.song_id}
+                songKey={song.song_id}
+                song={song}
+              />
+            ))}
         </Grid2>
         <Pagination
           variant="outlined"
-          count={Math.ceil(songsList.length / 20)}
+          count={Math.ceil(Object.entries(songsList).length / 20)}
           page={page}
           onChange={handleSetPage}
         />

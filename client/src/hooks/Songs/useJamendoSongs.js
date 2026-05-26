@@ -18,16 +18,23 @@ const useJamendoSongs = () => {
       try {
         setJamendoSongsLoading(true);
         const response = await axios.get("/api/jamendo/fetchTopSongs");
-        const refinedSongs = response.data.results.map((song) => ({
-          song_id: song.id,
-          title: song.name,
-          duration: song.duration,
-          album: song.name,
-          audio_url: song.audio,
-          cover_art: song.album_image,
-          release_year: song.releasedate.split("-")[0],
-          artist: song.artist_name,
-        }));
+        const refinedSongs = response.data.results.reduce((acc, song) => {
+          acc[song.id] = {
+            song_id: song.id,
+            title: song.name,
+            duration: song.duration,
+            album: song.album_name || song.name,
+            audio_url: song.audio,
+            cover_art: song.album_image,
+            release_year: song.releasedate?.split("-")[0] || "",
+            artist: song.artist_name,
+            genre: song.musicinfo?.tags?.genres || [],
+            last_played: null,
+            cover_art_id: null,
+            audio_url_id: null,
+          };
+          return acc;
+        }, {});
         dispatch(setJamendoSongs(refinedSongs));
         dispatch(setViewingSonglist(refinedSongs));
       } catch (error) {

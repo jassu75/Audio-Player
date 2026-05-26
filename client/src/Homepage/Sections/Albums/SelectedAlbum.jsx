@@ -8,13 +8,13 @@ import EmptyAlbum from "../../../HelperPages/EmptyPages/EmptyAlbum";
 import PlaylistSkeleton from "../../../Skeletons/PlaylistSkeleton";
 import { Pagination } from "@mui/material";
 import { useSelector } from "react-redux";
-import { audiusviewingSonglistSelector } from "../../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 
 const SelectedAlbum = () => {
   const { slug } = useParams();
   const slugArray = decodeURIComponent(slug).split("-");
   const playlistId = slugArray.pop();
-  const songsList = useSelector(audiusviewingSonglistSelector);
+  const songsList = useSelector(viewingSonglistSelector);
 
   const playlistTitle = slugArray.join("-");
   const { audiusAlbumSongLoading, audiusAlbumSongError } =

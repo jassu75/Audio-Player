@@ -2,22 +2,20 @@ import Grid2 from "@mui/material/Grid2";
 import styles from "./albumSongList.module.css";
 import AlbumSong from "./AlbumSong";
 import { useSelector } from "react-redux";
-import { audiusviewingSonglistSelector } from "../../../redux/selectors/homepage.selector";
 import EmptyHomePage from "../../../HelperPages/EmptyPages/EmptyHomepage";
+import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 
 const AlbumSongList = ({ playlistId, page }) => {
-  const songsList = useSelector(audiusviewingSonglistSelector);
+  const songsList = useSelector(viewingSonglistSelector);
   const start = (page - 1) * 20;
   const end = start + 20;
 
   return (
     <Grid2 className={styles.song_list}>
-      {songsList.length > 0 ? (
-        songsList
+      {songsList && Object.keys(songsList).length > 0 ? (
+        Object.entries(songsList)
           .slice(start, end)
-          .map((song) => (
-            <AlbumSong playlistId={playlistId} key={song.id} song={song} />
-          ))
+          .map(([id, song]) => <AlbumSong songKey={id} key={id} song={song} />)
       ) : (
         <EmptyHomePage />
       )}

@@ -39,6 +39,8 @@ const SelectedPlaylist = () => {
     return <ErrorPage />;
   }
 
+  if (Object.keys(playlistSongs).length === 0) return <EmptySongsPage />;
+
   return (
     <Grid2 className={styles.playlist_songs}>
       <Grid2 className={styles.title}>
@@ -47,24 +49,19 @@ const SelectedPlaylist = () => {
         </Typography>
         <PlaylistUploadButton playlistId={playlistId} />
       </Grid2>
-
-      {Object.keys(playlistSongs).length > 0 ? (
-        <Grid2 className={styles.songs_container}>
-          <PlaylistSongsList
-            playlistId={playlistId}
-            playlistSongs={playlistSongs}
-            page={page}
-          />
-          <Pagination
-            variant="outlined"
-            count={Math.ceil(Object.keys(playlistSongs).length / 20)}
-            page={Number(page)}
-            onChange={handleSetPage}
-          />
-        </Grid2>
-      ) : (
-        <EmptySongsPage />
-      )}
+      <Grid2 className={styles.songs_container}>
+        <PlaylistSongsList
+          playlistId={playlistId}
+          playlistSongs={playlistSongs}
+          page={page}
+        />
+        <Pagination
+          variant="outlined"
+          count={Math.ceil(Object.keys(playlistSongs).length / 20)}
+          page={Number(page)}
+          onChange={handleSetPage}
+        />
+      </Grid2>
     </Grid2>
   );
 };

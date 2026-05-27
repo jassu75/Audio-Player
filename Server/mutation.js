@@ -11,6 +11,7 @@ export const ADD_SONG = `
     $cover_art_id:String!
     $audio_url_id:String!
     $user_id:String!
+    $source:String!
   ) {
     audio_details:insert_audio_details(
       objects: {
@@ -25,6 +26,7 @@ export const ADD_SONG = `
         cover_art_id:$cover_art_id
         audio_url_id:$audio_url_id
         user_id:$user_id
+        source:$source
       }
     ) {
       returning {

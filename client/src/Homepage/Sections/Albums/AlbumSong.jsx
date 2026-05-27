@@ -1,13 +1,18 @@
 import Typography from "@mui/material/Typography";
 import styles from "./albumSong.module.css";
 import Grid2 from "@mui/material/Grid2";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  setPlayingIndex,
+  setPlayingSonglist,
+} from "../../../redux/slices/audioplayer.slice";
 
-const AlbumSong = ({ song, playlistId }) => {
-  const navigate = useNavigate();
+const AlbumSong = ({ song, songKey }) => {
+  const dispatch = useDispatch();
 
   const handleSongClick = () => {
-    navigate(`/album/${playlistId}/song/${song.id}`);
+    dispatch(setPlayingSonglist());
+    dispatch(setPlayingIndex(songKey));
   };
 
   return (

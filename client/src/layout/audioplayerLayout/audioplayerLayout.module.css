@@ -1,0 +1,39 @@
+@media (min-width: 901px) {
+  .layout {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+  }
+
+  .audioplayer {
+    width: 40%;
+    height: 100%;
+  }
+
+  .outlet {
+    width: 60%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .outlet_full {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .outlet {
+    width: 100%;
+    padding-bottom: 100px;
+  }
+
+  .outlet_full {
+    padding-bottom: 0;
+  }
+}

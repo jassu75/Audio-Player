@@ -4,8 +4,12 @@ import { Fragment } from "react";
 import GreenDot from "../../assets/images/Card/greenDot.png";
 import Album from "../../assets/images/Card/Album.png";
 import Time from "../../assets/images/Card/time.png";
-import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "../../Favorite/FavoriteIcon";
+import { useDispatch } from "react-redux";
+import {
+  setPlayingIndex,
+  setPlayingSonglist,
+} from "../../redux/slices/audioplayer.slice";
 
 const Genre = ({ genre }) => {
   if (!genre || genre.length === 0) return null;
@@ -52,10 +56,11 @@ const AlbumAndTime = ({ album, year }) => {
   ) : null;
 };
 
-const FavoriteCard = ({ favorite }) => {
-  const navigate = useNavigate();
+const FavoriteCard = ({ favorite, songKey }) => {
+  const dispatch = useDispatch();
   const handleFavoriteClick = () => {
-    navigate(`/preference/favorites/song/${favorite.song_id}`);
+    dispatch(setPlayingSonglist());
+    dispatch(setPlayingIndex(songKey));
   };
   return (
     <Grid2 className={styles.favorite_card} onClick={handleFavoriteClick}>

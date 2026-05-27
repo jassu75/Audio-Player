@@ -5,17 +5,15 @@ import UploadFile from "@mui/icons-material/UploadFile";
 import * as musicMetadata from "music-metadata-browser";
 import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
-import { addSongs } from "../redux/slices/homepage.slice";
+import { addViewingSong } from "../redux/slices/audioplayer.slice";
 import styles from "./playlistUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import defaultMusicNote from "../assets/images/AudioUploadForm/defaultMusicImage.webp";
 import axios from "axios";
-import {
-  songsSelector,
-  userSelector,
-} from "../redux/selectors/homepage.selector";
+import { userSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 
 const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const dispatch = useDispatch();
@@ -25,7 +23,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [newSong, setNewSong] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const allSongs = useSelector(songsSelector);
+  const allSongs = useSelector(viewingSonglistSelector);
   const user = useSelector(userSelector);
 
   const songTitles = Object.values(allSongs ?? {})
@@ -65,9 +63,11 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
 
           const imageDetails = image
             ? await uploadImageToCloudinary(
-                new Blob([image], { type: "image/jpeg" })
+                new Blob([image], { type: "image/jpeg" }),
               )
             : { coverArt: defaultMusicNote, coverArtId: "static" };
+
+          const audioSource = "user";
 
           const uploadedSong = {
             user_id: user.user_id,
@@ -83,6 +83,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             audio_url: audioDetails.audioUrl,
             cover_art_id: imageDetails.coverArtId,
             audio_url_id: audioDetails.audioUrlId,
+            source: audioSource,
           };
 
           const response = await axios.post(
@@ -90,7 +91,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             { uploadedSong },
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
           const song_id = response.data?.audio_details?.returning?.[0]?.song_id;
 
@@ -102,7 +103,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             },
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
 
           const songWithId = { ...uploadedSong, song_id };
@@ -125,7 +126,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
 
   useEffect(() => {
     if (newSong) {
-      dispatch(addSongs(newSong));
+      dispatch(addViewingSong(newSong));
     }
   }, [newSong, dispatch]);
 

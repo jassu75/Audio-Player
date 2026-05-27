@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../redux/selectors/homepage.selector";
-import { setSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 
 const useFetchSearchSongs = (searchText) => {
   const user = useSelector(userSelector);
@@ -21,7 +21,7 @@ const useFetchSearchSongs = (searchText) => {
           },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
 
         const refinedResponse = response.data?.searchResults?.reduce(
@@ -29,12 +29,12 @@ const useFetchSearchSongs = (searchText) => {
             acc[song.song_id] = song;
             return acc;
           },
-          {}
+          {},
         );
         if (Object.keys(refinedResponse).length === 0) setShowEmpty(true);
         else setShowEmpty(false);
 
-        dispatch(setSongs(refinedResponse));
+        dispatch(setViewingSonglist(refinedResponse));
         setShowRecentlyPlayed(false);
       } catch (error) {
         console.error("error fetching search songs", error);

@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  songsSelector,
-  userSelector,
-} from "../../redux/selectors/homepage.selector";
+import { userSelector } from "../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import axios from "axios";
-import { setSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 
 const useFetchFavorites = () => {
   const [favoritesLoading, setFavoritesLoading] = useState(false);
   const [favoritesError, setFavoritesError] = useState(false);
-  const songsList = useSelector(songsSelector);
+  const songsList = useSelector(viewingSonglistSelector);
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -26,11 +24,17 @@ const useFetchFavorites = () => {
           { user_id: user.user_id },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         const refinedResponse =
-          response.data?.favorites?.map((favorite) => favorite.song) || [];
-        dispatch(setSongs(refinedResponse));
+          response.data?.favorites?.reduce((acc, favorite) => {
+            const song = favorite.song;
+
+            acc[song.song_id] = song;
+
+            return acc;
+          }, {}) || {};
+        dispatch(setViewingSonglist(refinedResponse));
       } catch (error) {
         console.error("error fetching favorites", error);
         setFavoritesError(false);

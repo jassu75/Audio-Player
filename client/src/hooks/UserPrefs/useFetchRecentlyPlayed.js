@@ -21,9 +21,15 @@ const useFetchRecentlyPlayed = () => {
           { user_id: user.user_id },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
-        const refinedResponse = response.data?.recently_played || [];
+        const refinedResponse = response.data?.recently_played?.reduce(
+          (acc, song) => {
+            acc[song.song_id] = song;
+            return acc;
+          },
+          {},
+        );
         dispatch(setRecentlyPlayed(refinedResponse));
       } catch (error) {
         console.error("error fetching recently played", error);

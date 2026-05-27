@@ -10,7 +10,7 @@ import HomepageSkeleton from "../Skeletons/HomepageSkeleton";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSongs } from "../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
 import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 import {
   audiusAlbumsSelector,
@@ -38,7 +38,7 @@ const Homepage = () => {
   const error = userError || audiusAlbumsError;
 
   useEffect(() => {
-    dispatch(setSongs(null));
+    dispatch(setViewingSonglist(null));
   }, [dispatch]);
 
   if (error) return <ErrorPage />;

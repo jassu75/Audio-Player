@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setAudiusSongs } from "../../redux/slices/homepage.slice";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 
 const useAudiusAlbumSong = (playlistId) => {
   const [audiusAlbumSongLoading, setAudiusAlbumSongLoading] = useState(false);
@@ -15,15 +15,24 @@ const useAudiusAlbumSong = (playlistId) => {
         const url = `/api/audius/albumSongs/${playlistId}`;
         const response = await axios.get(url);
         const sourceUrl = response.data.sourceUrl;
-        const refinedAlbums = response.data?.data?.map((song) => ({
-          id: song.id,
-          title: song.title,
-          cover_art: song.artwork["480x480"],
-          duration: song.duration,
-          release_year: song.release_date?.split("-")[0],
-          audio_url: `${sourceUrl}/v1/tracks/${song.id}/stream`,
-        }));
-        dispatch(setAudiusSongs(refinedAlbums));
+        const refinedSongs = response.data?.data?.reduce((acc, song) => {
+          acc[song.id] = {
+            song_id: song.id,
+            title: song.title,
+            cover_art: song.artwork["480x480"],
+            duration: song.duration,
+            release_year: song.release_date?.split("-")[0] || "",
+            audio_url: `${sourceUrl}/v1/tracks/${song.id}/stream`,
+            album: "",
+            artist: "",
+            genre: [],
+            last_played: null,
+            cover_art_id: null,
+            audio_url_id: null,
+          };
+          return acc;
+        }, {});
+        dispatch(setViewingSonglist(refinedSongs));
       } catch (error) {
         setAudiusAlbumSongError(true);
         console.error("Error fetching Audius Album Songs", error);
@@ -32,10 +41,6 @@ const useAudiusAlbumSong = (playlistId) => {
       }
     };
     fetchAudiusAlbumSongs();
-
-    return () => {
-      dispatch(setAudiusSongs(null));
-    };
   }, []);
 
   return { audiusAlbumSongLoading, audiusAlbumSongError };

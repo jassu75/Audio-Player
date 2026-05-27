@@ -10,7 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { playlistsSelector } from "../../redux/selectors/homepage.selector";
 import { Radio } from "@mui/material";
-import { deleteSong } from "../../redux/slices/homepage.slice";
+import { deleteViewingSong } from "../../redux/slices/audioplayer.slice";
 import exclaimationMark from "../../assets/images/Homepage/ExclaimationMark.png";
 
 const PlaylistSelector = ({ filteredPlaylists, selected, handleSelect }) => {
@@ -79,7 +79,7 @@ const MoveSong = ({ open, onClose, songId, playlistId }) => {
 
   const playlists = useSelector(playlistsSelector);
   const filteredPlaylists = Object.entries(playlists).filter(
-    ([id]) => id !== playlistId
+    ([id]) => id !== playlistId,
   );
   const handleSelect = (id) => {
     setSelected(id);
@@ -101,9 +101,9 @@ const MoveSong = ({ open, onClose, songId, playlistId }) => {
           },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
-        dispatch(deleteSong(songId));
+        dispatch(deleteViewingSong(songId));
       } catch (error) {
         console.error("Error moving song", error);
       } finally {

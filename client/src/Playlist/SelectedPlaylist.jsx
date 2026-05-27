@@ -9,10 +9,8 @@ import PlaylistSongsList from "../Songlist/PlaylistSongsList/PlaylistSongsList";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import PlaylistSkeleton from "../Skeletons/PlaylistSkeleton";
-import {
-  playlistsSelector,
-  songsSelector,
-} from "../redux/selectors/homepage.selector";
+import { playlistsSelector } from "../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
 import { Pagination } from "@mui/material";
 import useFetchSongs from "../hooks/Songs/useFetchSongs";
 import useFetchFavoriteIds from "../hooks/Favorites/useFetchFavoriteIds";
@@ -22,7 +20,7 @@ const SelectedPlaylist = () => {
   const { userLoading, userError } = useFetchUserDetails();
   const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
   const allPlaylist = useSelector(playlistsSelector);
-  const playlistSongs = useSelector(songsSelector);
+  const playlistSongs = useSelector(viewingSonglistSelector);
   const playlistTitle = allPlaylist?.[playlistId]?.playlist_title;
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,6 +39,8 @@ const SelectedPlaylist = () => {
     return <ErrorPage />;
   }
 
+  if (Object.keys(playlistSongs).length === 0) return <EmptySongsPage />;
+
   return (
     <Grid2 className={styles.playlist_songs}>
       <Grid2 className={styles.title}>
@@ -49,24 +49,19 @@ const SelectedPlaylist = () => {
         </Typography>
         <PlaylistUploadButton playlistId={playlistId} />
       </Grid2>
-
-      {Object.keys(playlistSongs).length > 0 ? (
-        <Grid2 className={styles.songs_container}>
-          <PlaylistSongsList
-            playlistId={playlistId}
-            playlistSongs={playlistSongs}
-            page={page}
-          />
-          <Pagination
-            variant="outlined"
-            count={Math.ceil(Object.keys(playlistSongs).length / 20)}
-            page={Number(page)}
-            onChange={handleSetPage}
-          />
-        </Grid2>
-      ) : (
-        <EmptySongsPage />
-      )}
+      <Grid2 className={styles.songs_container}>
+        <PlaylistSongsList
+          playlistId={playlistId}
+          playlistSongs={playlistSongs}
+          page={page}
+        />
+        <Pagination
+          variant="outlined"
+          count={Math.ceil(Object.keys(playlistSongs).length / 20)}
+          page={Number(page)}
+          onChange={handleSetPage}
+        />
+      </Grid2>
     </Grid2>
   );
 };

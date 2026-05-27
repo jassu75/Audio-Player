@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
+import { useSelector } from "react-redux";
 import { currentSongSelector } from "../redux/selectors/audioplayer.selector";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -11,87 +9,21 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import styles from "./audioplayer.module.css";
+import useAudioPlayer from "./helpers/useAudioplayer";
+import { fmt } from "./helpers/audioplayer.utils";
 
 const Audioplayer = () => {
-  const dispatch = useDispatch();
-  const recentlyPlayed = useSelector(recentlyPlayedSelector);
   const song = useSelector(currentSongSelector);
-  const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const onTimeUpdate = () => setProgress(audio.currentTime);
-    const onLoadedMetadata = () => setDuration(audio.duration);
-
-    audio.addEventListener("timeupdate", onTimeUpdate);
-    audio.addEventListener("loadedmetadata", onLoadedMetadata);
-
-    return () => {
-      audio.removeEventListener("timeupdate", onTimeUpdate);
-      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
-    };
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || !song?.audio_url) return;
-
-    setProgress(0);
-    setIsPlaying(false);
-
-    audio.src = song.audio_url;
-    audio.load();
-
-    const onCanPlay = async () => {
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch (err) {
-        console.error("Error playing audio:", err);
-      }
-    };
-
-    audio.addEventListener("canplay", onCanPlay, { once: true });
-
-    return () => {
-      audio.removeEventListener("canplay", onCanPlay);
-      audio.pause();
-    };
-  }, [song]);
-
-  const togglePlay = async () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error("Playback error:", err);
-        }
-      }
-    }
-  };
-
-  const handleSeek = (_, val) => {
-    if (!audioRef.current) return;
-
-    audioRef.current.currentTime = val;
-    setProgress(val);
-  };
-
-  const fmt = (s) =>
-    `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  const {
+    audioRef,
+    isPlaying,
+    progress,
+    duration,
+    handleTogglePlay,
+    handlePlayNext,
+    handlePlayPrevious,
+    handleSliderChange,
+  } = useAudioPlayer();
 
   if (!song) return null;
 
@@ -115,13 +47,21 @@ const Audioplayer = () => {
         </Grid>
 
         <Grid className={styles.controls_container}>
-          <IconButton className={styles.arrow_button} size="small">
+          <IconButton
+            onClick={handlePlayPrevious}
+            className={styles.arrow_button}
+            size="small"
+          >
             <SkipPreviousIcon />
           </IconButton>
-          <IconButton onClick={togglePlay} className={styles.play_button}>
+          <IconButton onClick={handleTogglePlay} className={styles.play_button}>
             {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
           </IconButton>
-          <IconButton className={styles.arrow_button} size="small">
+          <IconButton
+            onClick={handlePlayNext}
+            className={styles.arrow_button}
+            size="small"
+          >
             <SkipNextIcon />
           </IconButton>
         </Grid>
@@ -133,7 +73,7 @@ const Audioplayer = () => {
             value={progress}
             min={0}
             max={duration || 100}
-            onChange={handleSeek}
+            onChange={handleSliderChange}
             className={styles.slider}
           />
           <Typography className={styles.time}>{fmt(duration)}</Typography>

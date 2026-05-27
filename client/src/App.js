@@ -1,16 +1,13 @@
-// src/App.js
-
 import "./App.css";
 import { useRoutes, BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 
-import audioRoutes from "./routes/audioRoutes";
 import mainRoutes from "./routes/mainRoutes";
 import authRoutes from "./routes/authRoutes";
 
 const AppRoutes = () => {
-  const routes = useRoutes([...mainRoutes, ...authRoutes, ...audioRoutes]);
+  const routes = useRoutes([...mainRoutes, ...authRoutes]);
 
   return routes;
 };

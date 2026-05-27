@@ -24,8 +24,13 @@ const useFetchMostListened = () => {
             headers: { "Content-Type": "application/json" },
           },
         );
-        const refinedResponse = response.data?.most_listened || [];
-
+        const refinedResponse = response.data?.most_listened?.reduce(
+          (acc, song) => {
+            acc[song.song_id] = song;
+            return acc;
+          },
+          {},
+        );
         dispatch(setViewingSonglist(refinedResponse));
       } catch (error) {
         console.error("error fetching most listened", error);

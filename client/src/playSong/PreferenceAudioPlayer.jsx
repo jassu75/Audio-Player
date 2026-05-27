@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import styles from "./playlistAudioPlayer.module.css";
+import styles from "./preferenceAudioPlayer.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";

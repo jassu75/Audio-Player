@@ -29,6 +29,7 @@ const MostPlayedList = () => {
   if (userLoading || mostListenedLoading || !songsList)
     return <PlaylistSkeleton />;
   if (userError || mostListenedError) return <ErrorPage />;
+  if (Object.keys(songsList).length === 0) return <EmptyHomePage />;
 
   return (
     <Grid2 className={styles.recent_songs}>
@@ -38,27 +39,23 @@ const MostPlayedList = () => {
         </Typography>
       </Grid2>
       <Grid2 className={styles.songs_container}>
-        {songsList.length > 0 ? (
-          <>
-            <Grid2 className={styles.song_list}>
-              {songsList?.slice(start, end).map((song) => (
-                <MostPlayedSong
-                  key={song.song_id}
-                  songKey={song.song_id}
-                  song={song}
-                />
-              ))}
-            </Grid2>
-            <Pagination
-              variant="outlined"
-              count={Math.ceil(songsList.length / 20)}
-              page={page}
-              onChange={handleSetPage}
-            />
-          </>
-        ) : (
-          <EmptyHomePage />
-        )}
+        <Grid2 className={styles.song_list}>
+          {Object.entries(songsList)
+            .slice(start, end)
+            .map(([id, song]) => (
+              <MostPlayedSong
+                key={song.song_id}
+                songKey={song.song_id}
+                song={song}
+              />
+            ))}
+        </Grid2>
+        <Pagination
+          variant="outlined"
+          count={Math.ceil(Object.entries(songsList).length / 20)}
+          page={page}
+          onChange={handleSetPage}
+        />
       </Grid2>
     </Grid2>
   );

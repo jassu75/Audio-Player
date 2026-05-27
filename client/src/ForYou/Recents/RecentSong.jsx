@@ -1,13 +1,17 @@
 import Typography from "@mui/material/Typography";
 import styles from "./recentSong.module.css";
 import Grid2 from "@mui/material/Grid2";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  setPlayingIndex,
+  setPlayingSonglist,
+} from "../../redux/slices/audioplayer.slice";
 
 const RecentSong = ({ songKey, song }) => {
-  const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleSongClick = () => {
-    navigate(`/preference/recents/song/${songKey}`);
+    dispatch(setPlayingSonglist());
+    dispatch(setPlayingIndex(songKey));
   };
 
   return (

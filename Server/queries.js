@@ -120,6 +120,8 @@ query FETCH_RECENTLY_PLAYED($user_id:String!){
     release_year
     title
     last_played
+    cover_art_id
+    audio_url_id
     
   }
 }

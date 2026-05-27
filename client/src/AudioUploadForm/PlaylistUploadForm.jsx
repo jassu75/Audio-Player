@@ -67,6 +67,8 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
               )
             : { coverArt: defaultMusicNote, coverArtId: "static" };
 
+          const audioSource = "user";
+
           const uploadedSong = {
             user_id: user.user_id,
             title: (
@@ -81,6 +83,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
             audio_url: audioDetails.audioUrl,
             cover_art_id: imageDetails.coverArtId,
             audio_url_id: audioDetails.audioUrlId,
+            source: audioSource,
           };
 
           const response = await axios.post(

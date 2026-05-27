@@ -4,13 +4,13 @@ import SearchSong from "./SearchSong";
 import styles from "./searchSongList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
-import { recentlyPlayedSongSelector } from "../redux/selectors/userPreferences.selector";
 import { useEffect } from "react";
 import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
+import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
 
 const SearchSongList = ({ showRecentlyPlayed }) => {
   const songsList = useSelector(viewingSonglistSelector);
-  const recentlyPlayed = useSelector(recentlyPlayedSongSelector);
+  const recentlyPlayed = useSelector(recentlyPlayedSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -18,6 +18,7 @@ const SearchSongList = ({ showRecentlyPlayed }) => {
       dispatch(setViewingSonglist(recentlyPlayed));
     }
   }, [dispatch, recentlyPlayed, showRecentlyPlayed]);
+
   return (
     <Grid2 className={styles.songlist_container}>
       {showRecentlyPlayed ? (
@@ -28,11 +29,17 @@ const SearchSongList = ({ showRecentlyPlayed }) => {
           RECENTLY PLAYED
         </Typography>
       ) : null}
-      {Object.entries(songsList ?? {})
-        .slice(0, 15)
-        .map(([id, song]) => (
-          <SearchSong key={id} songKey={id} song={song} />
-        ))}
+      {songsList && Object.keys(songsList).length > 0
+        ? Object.values(songsList)
+            .slice(0, 15)
+            .map((song) => (
+              <SearchSong
+                key={song.song_id}
+                songKey={song.song_id}
+                song={song}
+              />
+            ))
+        : null}
     </Grid2>
   );
 };

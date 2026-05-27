@@ -40,6 +40,7 @@ const RecentsList = () => {
   if (userLoading || recentlyPlayedLoading || !songsList)
     return <PlaylistSkeleton />;
   if (userError || recentlyPlayedError) return <ErrorPage />;
+  if (Object.keys(songsList).length === 0) return <EmptyHomePage />;
 
   return (
     <Grid2 className={styles.recent_songs}>
@@ -49,27 +50,23 @@ const RecentsList = () => {
         </Typography>
       </Grid2>
       <Grid2 className={styles.songs_container}>
-        {songsList.length > 0 ? (
-          <>
-            <Grid2 className={styles.song_list}>
-              {songsList?.slice(start, end).map((song) => (
-                <RecentSong
-                  key={song.song_id}
-                  songKey={song.song_id}
-                  song={song}
-                />
-              ))}
-            </Grid2>
-            <Pagination
-              variant="outlined"
-              count={Math.ceil(songsList.length / 20)}
-              page={page}
-              onChange={handleSetPage}
-            />
-          </>
-        ) : (
-          <EmptyHomePage />
-        )}
+        <Grid2 className={styles.song_list}>
+          {Object.values(songsList)
+            .slice(start, end)
+            .map((song) => (
+              <RecentSong
+                key={song.song_id}
+                songKey={song.song_id}
+                song={song}
+              />
+            ))}
+        </Grid2>
+        <Pagination
+          variant="outlined"
+          count={Math.ceil(Object.keys(songsList).length / 20)}
+          page={page}
+          onChange={handleSetPage}
+        />
       </Grid2>
     </Grid2>
   );

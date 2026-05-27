@@ -27,7 +27,13 @@ const useFetchFavorites = () => {
           },
         );
         const refinedResponse =
-          response.data?.favorites?.map((favorite) => favorite.song) || [];
+          response.data?.favorites?.reduce((acc, favorite) => {
+            const song = favorite.song;
+
+            acc[song.song_id] = song;
+
+            return acc;
+          }, {}) || {};
         dispatch(setViewingSonglist(refinedResponse));
       } catch (error) {
         console.error("error fetching favorites", error);

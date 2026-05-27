@@ -34,9 +34,13 @@ const FavoritesList = () => {
 
   useEffect(() => {
     if (songsList && favorites) {
-      const filteredSongList = songsList.filter((favorite) =>
-        favorites.includes(favorite.song_id),
-      );
+      const filteredSongList = Object.values(songsList).reduce((acc, song) => {
+        if (favorites.includes(song.song_id)) {
+          acc[song.song_id] = song;
+        }
+
+        return acc;
+      }, {});
 
       dispatch(setViewingSonglist(filteredSongList));
     }
@@ -45,6 +49,7 @@ const FavoritesList = () => {
   if (favoritesLoading || userLoading || favoritesIdLoading || !songsList)
     return <FavoriteSkeleton />;
   if (favoritesError || userError || favoritesIdError) return <ErrorPage />;
+  if (Object.keys(songsList).length === 0) return <EmptyHomePage />;
 
   return (
     <Grid2 className={styles.favorite_songs}>
@@ -54,23 +59,23 @@ const FavoritesList = () => {
         </Typography>
       </Grid2>
       <Grid2 className={styles.songs_container}>
-        {songsList.length > 0 ? (
-          <>
-            <Grid2 className={styles.favorites_container}>
-              {songsList?.slice(start, end).map((favorite) => (
-                <FavoriteCard key={favorite.song_id} favorite={favorite} />
-              ))}
-            </Grid2>
-            <Pagination
-              variant="outlined"
-              count={Math.ceil(Object.keys(favorites).length / 20)}
-              page={page}
-              onChange={handleSetPage}
-            />
-          </>
-        ) : (
-          <EmptyHomePage />
-        )}
+        <Grid2 className={styles.favorites_container}>
+          {Object.values(songsList)
+            .slice(start, end)
+            .map((song) => (
+              <FavoriteCard
+                key={song.song_id}
+                songKey={song.song_id}
+                favorite={song}
+              />
+            ))}
+        </Grid2>
+        <Pagination
+          variant="outlined"
+          count={Math.ceil(Object.entries(songsList).length / 20)}
+          page={page}
+          onChange={handleSetPage}
+        />
       </Grid2>
     </Grid2>
   );

@@ -14,7 +14,7 @@ import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
 import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
 import {
   audiusAlbumsSelector,
-  playlistsSelector,
+  userPlaylistsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
 
@@ -25,7 +25,7 @@ const Homepage = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(userSelector);
-  const playlists = useSelector(playlistsSelector);
+  const playlists = useSelector(userPlaylistsSelector);
   const audiusAlbums = useSelector(audiusAlbumsSelector);
 
   const loading =

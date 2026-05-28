@@ -6,14 +6,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  playlistsSelector,
+  userPlaylistsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  const playlists = useSelector(playlistsSelector);
+  const playlists = useSelector(userPlaylistsSelector);
   const navigate = useNavigate();
 
   const [firebaseUser, setFirebaseUser] = useState(null);
@@ -48,7 +48,7 @@ const useFetchUserDetails = () => {
         const response = await axios.post(
           "/api/checkExistingUser",
           { user_id: firebaseUser.uid },
-          { headers: { "Content-Type": "application/json" } }
+          { headers: { "Content-Type": "application/json" } },
         );
         dispatch(setUser(response.data?.users));
       } catch (error) {
@@ -72,7 +72,7 @@ const useFetchUserDetails = () => {
         const response = await axios.post(
           "/api/getPlaylists",
           { user_id: firebaseUser.uid },
-          { headers: { "Content-Type": "application/json" } }
+          { headers: { "Content-Type": "application/json" } },
         );
 
         const playlistHashMap = response.data.playlist_details.reduce(
@@ -81,7 +81,7 @@ const useFetchUserDetails = () => {
             acc[playlist_id] = rest;
             return acc;
           },
-          {}
+          {},
         );
         dispatch(setPlaylistDetails(playlistHashMap));
       } catch (error) {

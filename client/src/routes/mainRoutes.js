@@ -1,5 +1,5 @@
 import Homepage from "../Homepage/homepage";
-import SelectedPlaylist from "../Playlist/SelectedPlaylist";
+import SelectedPlaylist from "../playlist/SelectedPlaylist";
 import SelectedAlbum from "../Homepage/Sections/Albums/SelectedAlbum";
 import Search from "../Search/Search";
 import SelectedForYou from "../ForYou/SelectedForYou";

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Audioplayer from "../../audioplayer/Audioplayer";
+import Audioplayer from "../../components/audioplayer/Audioplayer";
 import styles from "./audioplayerLayout.module.css";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";

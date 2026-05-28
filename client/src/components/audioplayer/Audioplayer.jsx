@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { currentSongSelector } from "../redux/selectors/audioplayer.selector";
+import { currentSongSelector } from "../../redux/selectors/audioplayer.selector";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Slider from "@mui/material/Slider";
@@ -9,8 +9,8 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import styles from "./audioplayer.module.css";
-import useAudioPlayer from "./helpers/useAudioplayer";
-import { fmt } from "./helpers/audioplayer.utils";
+import useAudioPlayer from "./hooks/useAudioplayer";
+import { fmt } from "./utils/audioplayer.utils";
 
 const Audioplayer = () => {
   const song = useSelector(currentSongSelector);

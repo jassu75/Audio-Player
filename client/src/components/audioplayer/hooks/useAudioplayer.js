@@ -4,8 +4,8 @@ import {
   currentSongSelector,
   playingIndexSelector,
   playingSonglistSelector,
-} from "../../redux/selectors/audioplayer.selector";
-import { setPlayingIndex } from "../../redux/slices/audioplayer.slice";
+} from "../../../redux/selectors/audioplayer.selector";
+import { setPlayingIndex } from "../../../redux/slices/audioplayer.slice";
 
 const useAudioPlayer = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { Grid2, Pagination, Typography } from "@mui/material";
-import useFetchFavorites from "../../hooks/Favorites/useFetchFavorites";
+import useFetchFavorites from "./hooks/useFetchFavorites";
 import styles from "./favorites.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
@@ -9,7 +9,7 @@ import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 import FavoriteSkeleton from "../../Skeletons/FavoriteSkeleton";
 import Error from "../helpers/error/Error";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
-import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
+import useFetchFavoriteIds from "./hooks/useFetchFavoriteIds";
 import { useSearchParams } from "react-router-dom";
 import FavoriteCard from "../../components/favorites/favoritesCard/FavoriteCard";
 import EmptySongslist from "../../components/helpers/emptySongslist/EmptySongslist";

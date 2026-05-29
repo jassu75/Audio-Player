@@ -6,7 +6,7 @@ import styles from "./playlist.module.css";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import { Pagination } from "@mui/material";
-import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
+import useFetchFavoriteIds from "../favorites/hooks/useFetchFavoriteIds";
 import { PLAYLIST_HOOK_MAP } from "./consts/playlist.consts";
 import Error from "../helpers/error/Error";
 import EmptySongslist from "../../components/helpers/emptySongslist/EmptySongslist";

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAudiusAlbums } from "../../redux/slices/homepage.slice";
-import { audiusPlaylistsSelector } from "../../redux/selectors/homepage.selector";
+import { setAudiusAlbums } from "../../../redux/slices/homepage.slice";
+import { audiusPlaylistsSelector } from "../../../redux/selectors/homepage.selector";
 
-const useAudiusAlbums = () => {
+const useFetchAudiusAlbums = () => {
   const [audiusAlbumsLoading, setAudiusAlbumsLoading] = useState(false);
   const [audiusAlbumsError, setAudiusAlbumsError] = useState(false);
   const dispatch = useDispatch();
@@ -39,4 +39,4 @@ const useAudiusAlbums = () => {
   return { audiusAlbumsLoading, audiusAlbumsError };
 };
 
-export default useAudiusAlbums;
+export default useFetchAudiusAlbums;

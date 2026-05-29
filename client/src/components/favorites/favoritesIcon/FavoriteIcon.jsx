@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 import FilledHeartIcon from "@mui/icons-material/Favorite";
 import { favoritesSelector } from "../../../redux/selectors/userPreferences.selector";
-import useUpdateFavorites from "../../../hooks/Favorites/useUpdateFavorites";
+import useUpdateFavorites from "../../../pages/favorites/hooks/useUpdateFavorites";
 const FavoriteIcon = ({ songId }) => {
   const favorites = useSelector(favoritesSelector);
   const [isFavorite, setIsFavorite] = useState(() =>

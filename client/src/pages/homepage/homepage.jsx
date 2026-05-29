@@ -1,25 +1,25 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./homepage.module.css";
-import UserWelcome from "../components/navbar/Navbar";
-import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
-import HomepageForYouSection from "./Sections/HomepageForYouSection/HomepageForYouSection";
-import useAudiusAlbums from "../hooks/Audius/useAudiusAlbums";
-import HomepageAlbumSection from "./Sections/Albums/HomepageAlbumSection";
-import HomepageSkeleton from "../Skeletons/HomepageSkeleton";
-import useFetchUserDetails from "../hooks/useFetchUserDetails";
+import UserWelcome from "../../components/navbar/Navbar";
+import HomepagePlaylistSection from "../../components/homepage/playlistSection/HomepagePlaylistSection";
+import useFetchAudiusAlbums from "./hooks/useFetchAudiusAlbums";
+import HomepageSkeleton from "../../Skeletons/HomepageSkeleton";
+import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
-import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
+import useFetchRecentlyPlayed from "../../hooks/UserPrefs/useFetchRecentlyPlayed";
 import {
   audiusPlaylistsSelector,
   userPlaylistsSelector,
   userSelector,
-} from "../redux/selectors/homepage.selector";
-import Error from "../pages/helpers/error/Error";
+} from "../../redux/selectors/homepage.selector";
+import Error from "../helpers/error/Error";
+import HomepageForYouSection from "../../components/homepage/foryouSection/HomepageForYouSection";
+import HomepageAlbumSection from "../../components/homepage/albumSection/HomepageAlbumSection";
 
 const Homepage = () => {
-  const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
+  const { audiusAlbumsLoading, audiusAlbumsError } = useFetchAudiusAlbums();
   const { userLoading, userError } = useFetchUserDetails();
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import Grid2 from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 import styles from "./homepageAlbum.module.css";
 import Typography from "@mui/material/Typography";
-import defaultAlbumCover from "../../../assets/images/Homepage/DefaultAlbumCover.jpg";
+import defaultAlbumCover from "../../../../assets/images/Homepage/DefaultAlbumCover.jpg";
 
 const HomepageAlbum = ({ albumKey, album }) => {
   const navigate = useNavigate();

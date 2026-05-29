@@ -1,4 +1,4 @@
-import Homepage from "../Homepage/homepage";
+import Homepage from "../pages/homepage/homepage";
 import Search from "../Search/Search";
 import AudioplayerLayout from "../layout/audioplayerLayout/AudioplayerLayout";
 import Playlist from "../pages/playlist/Playlist";

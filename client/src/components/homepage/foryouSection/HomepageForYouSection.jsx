@@ -2,7 +2,7 @@ import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import forYouList from "../../../assets/json/forYou.json";
 import styles from "./homepageForYouSection.module.css";
-import HomepageForYouItem from "./HomepageForYouItem";
+import HomepageForYouItem from "./foryouItem/HomepageForYouItem";
 
 const HomepageForYouSection = () => {
   return (

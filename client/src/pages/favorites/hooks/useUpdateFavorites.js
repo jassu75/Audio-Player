@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { userSelector } from "../../redux/selectors/homepage.selector";
+import { userSelector } from "../../../redux/selectors/homepage.selector";
 import {
   addFavorite,
   deleteFavorite,
-} from "../../redux/slices/userPreferences.slice";
+} from "../../../redux/slices/userPreferences.slice";
 
 const useUpdateFavorites = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const useUpdateFavorites = () => {
         },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     } catch (error) {
       console.error("error adding favorites", error);
@@ -41,7 +41,7 @@ const useUpdateFavorites = () => {
         },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     } catch (error) {
       console.error("error deleting favorites", error);

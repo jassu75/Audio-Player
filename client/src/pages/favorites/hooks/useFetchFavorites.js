@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userSelector } from "../../redux/selectors/homepage.selector";
-import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
+import { userSelector } from "../../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 import axios from "axios";
-import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
+import { setViewingSonglist } from "../../../redux/slices/audioplayer.slice";
 
 const useFetchFavorites = () => {
   const [favoritesLoading, setFavoritesLoading] = useState(false);

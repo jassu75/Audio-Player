@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { userPlaylistsSelector } from "../../redux/selectors/homepage.selector";
+import { userPlaylistsSelector } from "../../../../redux/selectors/homepage.selector";
 import { Radio } from "@mui/material";
-import { deleteViewingSong } from "../../redux/slices/audioplayer.slice";
-import exclaimationMark from "../../assets/images/Homepage/ExclaimationMark.png";
+import { deleteViewingSong } from "../../../../redux/slices/audioplayer.slice";
+import exclaimationMark from "../../../../assets/images/Homepage/ExclaimationMark.png";
 
 const PlaylistSelector = ({ filteredPlaylists, selected, handleSelect }) => {
   return (

@@ -8,12 +8,12 @@ import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selec
 import { Pagination } from "@mui/material";
 import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
 import { PLAYLIST_HOOK_MAP } from "./consts/playlist.consts";
-import PlaylistSongsList from "../../Songlist/PlaylistSongsList/PlaylistSongsList";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import EmptySongsPage from "../../HelperPages/EmptyPages/EmptySongs";
 import PlaylistUploadButton from "../../CustomButtons/PlaylistUploadButton/PlaylistUploadButton";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import useGetPlaylistTitle from "./hooks/useGetPlaylistTitle";
+import PlaylistSongsList from "./helpers/playlistSongslist/PlaylistSongsList";
 
 const Playlist = () => {
   const { collection, playlistId } = useParams();

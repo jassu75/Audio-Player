@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import styles from "./PlaylistSong.module.css";
+import styles from "./playlistSong.module.css";
 import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
+import { Divider } from "@mui/material";
+
 import {
   deleteViewingSong,
   setPlayingIndex,
   setPlayingSonglist,
-} from "../../redux/slices/audioplayer.slice";
-import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
-import { Divider } from "@mui/material";
-import RenameSongTitle from "./RenameSongTitle";
-import MoveSong from "./MoveSong";
-import FavoriteIcon from "../../components/favorites/favoritesIcon/FavoriteIcon";
+} from "../../../../../redux/slices/audioplayer.slice";
+import FavoriteIcon from "../../../../favorites/favoritesIcon/FavoriteIcon";
+import RenameSongTitle from "../../renameSong/RenameSongTitle";
+import MoveSong from "../../moveSong/MoveSong";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const [anchorEl, setAnchorEl] = useState(null);

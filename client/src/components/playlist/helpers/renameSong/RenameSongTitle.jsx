@@ -6,7 +6,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import styles from "./renameSongTitle.module.css";
 import { useDispatch } from "react-redux";
-import { renameViewingSong } from "../../redux/slices/audioplayer.slice";
+import { renameViewingSong } from "../../../../redux/slices/audioplayer.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";

@@ -14,7 +14,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deletePlaylistDetails } from "../../redux/slices/homepage.slice";
 import axios from "axios";
 import RenamePlaylistTitle from "./RenamePlaylistTitle";
-import ShowMessage from "../../DialogBoxes/ShowMessage";
+import MessageModal from "../../components/helpers/messageModal/MessageModal";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const navigate = useNavigate();
@@ -139,7 +139,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
           </Menu>
         </Grid2>
       </div>
-      <ShowMessage
+      <MessageModal
         open={cantDeleteModal}
         onClose={() => setCantDeleteModal(false)}
         messageTitle="Cant delete Playlist!"

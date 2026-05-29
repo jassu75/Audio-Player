@@ -10,10 +10,10 @@ import {
   sendEmailVerification,
   signOut,
 } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { auth } from "../../../config/firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import ShowMessage from "../DialogBoxes/ShowMessage";
+import MessageModal from "../../helpers/messageModal/MessageModal";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const SignUp = () => {
         { email_id: email },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
       if (response.data?.users?.length > 0) {
         setMessageTitle("User already Exists!");
@@ -47,7 +47,7 @@ const SignUp = () => {
           const userCredential = await createUserWithEmailAndPassword(
             auth,
             email,
-            password
+            password,
           );
           const user = userCredential.user;
 
@@ -63,7 +63,7 @@ const SignUp = () => {
             { newUser },
             {
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
 
           await sendEmailVerification(user);
@@ -141,7 +141,7 @@ const SignUp = () => {
       <Backdrop className={styles.loader_backdrop} open={loading}>
         <CircularProgress className={styles.loader_spinner} />
       </Backdrop>
-      <ShowMessage
+      <MessageModal
         open={showMessage}
         messageTitle={messageTitile}
         message={message}

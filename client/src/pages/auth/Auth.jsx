@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import styles from "./userAuthentication.module.css";
-import SignIn from "./SignIn";
-import SignUp from "./SignUp";
-import musicNote from "../assets/images/SignUpAndLogin/musicNote.jpg";
-import authenticationMan from "../assets/images/SignUpAndLogin/AuthenticationMan.svg";
+import styles from "./auth.module.css";
+import SignIn from "../../components/auth/signin/SignIn";
+import SignUp from "../../components/auth/signup/SignUp";
+import musicNote from "../../assets/images/SignUpAndLogin/musicNote.jpg";
+import authenticationMan from "../../assets/images/SignUpAndLogin/AuthenticationMan.svg";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 
-const UserAuthentication = () => {
+const Auth = () => {
   const [view, setView] = useState("signIn");
 
   return (
@@ -66,4 +66,4 @@ const UserAuthentication = () => {
   );
 };
 
-export default UserAuthentication;
+export default Auth;

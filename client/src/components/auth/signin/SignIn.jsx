@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth, googleAuthProvider } from "../config/firebase";
+import { auth, googleAuthProvider } from "../../../config/firebase";
 import styles from "./signIn.module.css";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import Grid2 from "@mui/material/Grid2";
-import GoogleSignIn from "../assets/images/SignUpAndLogin/GoogleSignIn.svg";
+import GoogleSignIn from "../../../assets/images/SignUpAndLogin/GoogleSignIn.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { userSelector } from "../redux/selectors/homepage.selector";
-import ShowMessage from "../DialogBoxes/ShowMessage";
+import { userSelector } from "../../../redux/selectors/homepage.selector";
+import MessageModal from "../../helpers/messageModal/MessageModal";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -35,14 +35,14 @@ const SignIn = () => {
           { email_id: email },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         if (response.data?.users?.length > 0) {
           try {
             const userCredential = await signInWithEmailAndPassword(
               auth,
               email,
-              password
+              password,
             );
             const user = userCredential.user;
 
@@ -92,7 +92,7 @@ const SignIn = () => {
         { email_id: user.email },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       if (response.data?.users?.length > 0) {
@@ -109,7 +109,7 @@ const SignIn = () => {
           { newUser },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
 
         navigate("/", { replace: true });
@@ -170,7 +170,7 @@ const SignIn = () => {
       <Backdrop className={styles.loader_backdrop} open={loading}>
         <CircularProgress className={styles.loader_spinner} />
       </Backdrop>
-      <ShowMessage
+      <MessageModal
         open={showMessage}
         messageTitle={messageTitile}
         message={message}

@@ -1,14 +1,14 @@
-import UserAuthentication from "../SignUpAndLogin/UserAuthentication";
-import DirectToLogin from "../SignUpAndLogin/DirectToLogin";
+import Auth from "../pages/auth/Auth";
+import DirectToAuth from "../pages/helpers/directToAuth/DirectToLogin";
 
 const authRoutes = [
   {
     path: "/account",
-    element: <UserAuthentication />,
+    element: <Auth />,
   },
   {
     path: "/redirect",
-    element: <DirectToLogin />,
+    element: <DirectToAuth />,
   },
 ];
 

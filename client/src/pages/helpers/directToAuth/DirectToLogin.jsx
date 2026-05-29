@@ -1,10 +1,10 @@
 import Grid2 from "@mui/material/Grid2";
-import styles from "./directToLogin.module.css";
+import styles from "./directToAuth.module.css";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 
-const DirectToLogin = () => {
+const DirectToAuth = () => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     navigate("/account");
@@ -24,4 +24,4 @@ const DirectToLogin = () => {
   );
 };
 
-export default DirectToLogin;
+export default DirectToAuth;

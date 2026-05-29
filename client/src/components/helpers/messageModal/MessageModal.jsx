@@ -1,10 +1,10 @@
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import styles from "./showMessage.module.css";
+import styles from "./messageModal.module.css";
 import ButtonBase from "@mui/material/ButtonBase";
 
-const ShowMessage = ({ open, onClose, message, messageTitle }) => {
+const MessageModal = ({ open, onClose, message, messageTitle }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Grid2 container className={styles.modal_box}>
@@ -39,4 +39,4 @@ const ShowMessage = ({ open, onClose, message, messageTitle }) => {
   );
 };
 
-export default ShowMessage;
+export default MessageModal;

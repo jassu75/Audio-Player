@@ -13,7 +13,7 @@ import EmptySongsPage from "../../HelperPages/EmptyPages/EmptySongs";
 import PlaylistUploadButton from "../../CustomButtons/PlaylistUploadButton/PlaylistUploadButton";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import useGetPlaylistTitle from "./hooks/useGetPlaylistTitle";
-import PlaylistSongsList from "./helpers/playlistSongslist/PlaylistSongsList";
+import PlaylistSongsList from "../../components/playlist/playlistSongslist/PlaylistSongsList";
 
 const Playlist = () => {
   const { collection, playlistId } = useParams();

@@ -11,15 +11,15 @@ import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { Divider } from "@mui/material";
+import RenameSongTitle from "../../renameSong/RenameSongTitle";
+import MoveSong from "../../moveSong/MoveSong";
 
+import FavoriteIcon from "../../../favorites/favoritesIcon/FavoriteIcon";
 import {
   deleteViewingSong,
   setPlayingIndex,
   setPlayingSonglist,
-} from "../../../../../redux/slices/audioplayer.slice";
-import RenameSongTitle from "../../renameSong/RenameSongTitle";
-import MoveSong from "../../moveSong/MoveSong";
-import FavoriteIcon from "../../../../../pages/favorites/favoritesIcon/FavoriteIcon";
+} from "../../../../redux/slices/audioplayer.slice";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const [anchorEl, setAnchorEl] = useState(null);

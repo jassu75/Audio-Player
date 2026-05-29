@@ -1,8 +1,8 @@
 import Homepage from "../Homepage/homepage";
 import Search from "../Search/Search";
 import AudioplayerLayout from "../layout/audioplayerLayout/AudioplayerLayout";
-import Playlist from "../components/playlist/Playlist";
-import FavoritesList from "../pages/favorites/favoritesList/FavoritesList";
+import Playlist from "../pages/playlist/Playlist";
+import Favorites from "../pages/favorites/Favorites";
 
 const mainRoutes = [
   {
@@ -22,7 +22,7 @@ const mainRoutes = [
       },
       {
         path: "/favorites",
-        element: <FavoritesList />,
+        element: <Favorites />,
       },
     ],
   },

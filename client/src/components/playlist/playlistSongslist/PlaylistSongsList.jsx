@@ -1,8 +1,8 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./playlistSongsList.module.css";
 import { useSelector } from "react-redux";
+import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 import PlaylistSong from "./playlistSong/PlaylistSong";
-import { viewingSonglistSelector } from "../../../../redux/selectors/audioplayer.selector";
 
 const PlaylistSongsList = ({ playlistId, page }) => {
   const allSongs = useSelector(viewingSonglistSelector);

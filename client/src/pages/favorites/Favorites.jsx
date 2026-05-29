@@ -1,20 +1,20 @@
 import { Grid2, Pagination, Typography } from "@mui/material";
-import useFetchFavorites from "../../../hooks/Favorites/useFetchFavorites";
-import styles from "./favoritesList.module.css";
+import useFetchFavorites from "../../hooks/Favorites/useFetchFavorites";
+import styles from "./favorites.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
-import { favoritesSelector } from "../../../redux/selectors/userPreferences.selector";
+import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
+import { favoritesSelector } from "../../redux/selectors/userPreferences.selector";
 import { useEffect } from "react";
-import { setViewingSonglist } from "../../../redux/slices/audioplayer.slice";
-import FavoriteSkeleton from "../../../Skeletons/FavoriteSkeleton";
-import ErrorPage from "../../../HelperPages/ErrorPages/ErrorPage";
-import EmptyHomePage from "../../../HelperPages/EmptyPages/EmptyHomepage";
-import useFetchUserDetails from "../../../hooks/useFetchUserDetails";
-import useFetchFavoriteIds from "../../../hooks/Favorites/useFetchFavoriteIds";
+import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
+import FavoriteSkeleton from "../../Skeletons/FavoriteSkeleton";
+import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
+import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
+import useFetchUserDetails from "../../hooks/useFetchUserDetails";
+import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
 import { useSearchParams } from "react-router-dom";
-import FavoriteCard from "../favoritesCard/FavoriteCard";
+import FavoriteCard from "../../components/favorites/favoritesCard/FavoriteCard";
 
-const FavoritesList = () => {
+const Favorites = () => {
   const { userLoading, userError } = useFetchUserDetails();
   const { favoritesError, favoritesLoading } = useFetchFavorites();
   const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
@@ -80,4 +80,4 @@ const FavoritesList = () => {
     </Grid2>
   );
 };
-export default FavoritesList;
+export default Favorites;

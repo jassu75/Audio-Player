@@ -16,8 +16,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { Divider } from "@mui/material";
 import RenameSongTitle from "./RenameSongTitle";
-import FavoriteIcon from "../../Favorite/FavoriteIcon";
 import MoveSong from "./MoveSong";
+import FavoriteIcon from "../../components/favorites/favoritesIcon/FavoriteIcon";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const [anchorEl, setAnchorEl] = useState(null);

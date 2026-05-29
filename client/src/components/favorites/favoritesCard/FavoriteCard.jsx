@@ -1,15 +1,15 @@
 import { Grid2, Typography } from "@mui/material";
 import styles from "./favoriteCard.module.css";
 import { Fragment } from "react";
-import GreenDot from "../../assets/images/Card/greenDot.png";
-import Album from "../../assets/images/Card/Album.png";
-import Time from "../../assets/images/Card/time.png";
-import FavoriteIcon from "../../Favorite/FavoriteIcon";
+import GreenDot from "../../../assets/images/Card/greenDot.png";
+import Album from "../../../assets/images/Card/Album.png";
+import Time from "../../../assets/images/Card/time.png";
 import { useDispatch } from "react-redux";
 import {
   setPlayingIndex,
   setPlayingSonglist,
-} from "../../redux/slices/audioplayer.slice";
+} from "../../../redux/slices/audioplayer.slice";
+import FavoriteIcon from "../favoritesIcon/FavoriteIcon";
 
 const Genre = ({ genre }) => {
   if (!genre || genre.length === 0) return null;

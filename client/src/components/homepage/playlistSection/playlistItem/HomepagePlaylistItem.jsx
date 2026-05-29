@@ -11,10 +11,10 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { deletePlaylistDetails } from "../../redux/slices/homepage.slice";
+import { deletePlaylistDetails } from "../../../../redux/slices/homepage.slice";
 import axios from "axios";
-import RenamePlaylistTitle from "./RenamePlaylistTitle";
-import MessageModal from "../../components/helpers/messageModal/MessageModal";
+import RenamePlaylistTitle from "../../../helpers/modals/renamePlaylistModal/RenamePlaylistTitle";
+import MessageModal from "../../../helpers/modals/messageModal/MessageModal";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const navigate = useNavigate();

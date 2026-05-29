@@ -6,11 +6,11 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import styles from "./createPlaylistTitle.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addPlaylistDetails } from "../../redux/slices/homepage.slice";
+import { addPlaylistDetails } from "../../../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { userSelector } from "../../redux/selectors/homepage.selector";
+import { userSelector } from "../../../../redux/selectors/homepage.selector";
 
 const CreatePlaylistTitle = ({ open, onClose }) => {
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
           { uploadPlaylist },
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
         const id = response.data?.playlist_details?.returning?.[0]?.playlist_id;
         uploadPlaylist.id = id;

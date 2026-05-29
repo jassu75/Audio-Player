@@ -13,7 +13,7 @@ import {
 import { auth } from "../../../config/firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import MessageModal from "../../helpers/messageModal/MessageModal";
+import MessageModal from "../../helpers/modals/messageModal/MessageModal";
 
 const SignUp = () => {
   const navigate = useNavigate();

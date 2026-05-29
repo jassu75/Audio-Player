@@ -12,7 +12,7 @@ import GoogleSignIn from "../../../assets/images/SignUpAndLogin/GoogleSignIn.svg
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { userSelector } from "../../../redux/selectors/homepage.selector";
-import MessageModal from "../../helpers/messageModal/MessageModal";
+import MessageModal from "../../helpers/modals/messageModal/MessageModal";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");

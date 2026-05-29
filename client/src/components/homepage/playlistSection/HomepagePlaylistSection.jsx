@@ -1,7 +1,7 @@
 import { Grid2, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import styles from "./homepagePlaylistSection.module.css";
-import HomepagePlaylistItem from "../../../Songlist/HomepagePlaylists/HomepagePlaylistItem";
+import HomepagePlaylistItem from "./playlistItem/HomepagePlaylistItem";
 import { userPlaylistsSelector } from "../../../redux/selectors/homepage.selector";
 
 const HomepagePlaylistSection = () => {

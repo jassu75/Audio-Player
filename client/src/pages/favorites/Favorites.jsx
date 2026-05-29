@@ -7,12 +7,12 @@ import { favoritesSelector } from "../../redux/selectors/userPreferences.selecto
 import { useEffect } from "react";
 import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 import FavoriteSkeleton from "../../Skeletons/FavoriteSkeleton";
-import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
-import EmptyHomePage from "../../HelperPages/EmptyPages/EmptyHomepage";
+import Error from "../helpers/error/Error";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
 import { useSearchParams } from "react-router-dom";
 import FavoriteCard from "../../components/favorites/favoritesCard/FavoriteCard";
+import EmptySongslist from "../../components/helpers/emptySongslist/EmptySongslist";
 
 const Favorites = () => {
   const { userLoading, userError } = useFetchUserDetails();
@@ -48,8 +48,8 @@ const Favorites = () => {
 
   if (favoritesLoading || userLoading || favoritesIdLoading || !songsList)
     return <FavoriteSkeleton />;
-  if (favoritesError || userError || favoritesIdError) return <ErrorPage />;
-  if (Object.keys(songsList).length === 0) return <EmptyHomePage />;
+  if (favoritesError || userError || favoritesIdError) return <Error />;
+  if (Object.keys(songsList).length === 0) return <EmptySongslist />;
 
   return (
     <Grid2 className={styles.favorite_songs}>

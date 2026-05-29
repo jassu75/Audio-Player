@@ -1,7 +1,6 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./homepage.module.css";
 import UserWelcome from "../components/navbar/Navbar";
-import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
 import HomepageForYouSection from "./Sections/HomepageForYouSection/HomepageForYouSection";
 import useAudiusAlbums from "../hooks/Audius/useAudiusAlbums";
@@ -17,6 +16,7 @@ import {
   userPlaylistsSelector,
   userSelector,
 } from "../redux/selectors/homepage.selector";
+import Error from "../pages/helpers/error/Error";
 
 const Homepage = () => {
   const { audiusAlbumsLoading, audiusAlbumsError } = useAudiusAlbums();
@@ -41,7 +41,7 @@ const Homepage = () => {
     dispatch(setViewingSonglist(null));
   }, [dispatch]);
 
-  if (error) return <ErrorPage />;
+  if (error) return <Error />;
 
   return loading ? (
     <HomepageSkeleton />

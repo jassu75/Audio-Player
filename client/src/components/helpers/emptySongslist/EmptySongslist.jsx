@@ -1,5 +1,5 @@
 import Grid2 from "@mui/material/Grid2";
-import styles from "./emptySongs.module.css";
+import styles from "./emptySongslist.module.css";
 import Typography from "@mui/material/Typography";
 
 const EmptySongsPage = () => {

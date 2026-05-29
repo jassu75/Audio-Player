@@ -1,11 +1,11 @@
 import Grid2 from "@mui/material/Grid2";
-import styles from "./errorPage.module.css";
+import styles from "./error.module.css";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ErrorPage = () => {
+const Error = () => {
   const [loading, setLoading] = useState(false);
   const handleError = () => {
     setLoading(true);
@@ -35,4 +35,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default Error;

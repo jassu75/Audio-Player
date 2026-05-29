@@ -8,8 +8,8 @@ import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selec
 import { Pagination } from "@mui/material";
 import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
 import { PLAYLIST_HOOK_MAP } from "./consts/playlist.consts";
-import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
-import EmptySongsPage from "../../HelperPages/EmptyPages/EmptySongs";
+import Error from "../helpers/error/Error";
+import EmptySongslist from "../../components/helpers/emptySongslist/EmptySongslist";
 import PlaylistUploadButton from "../../components/playlist/playlistUploadButton/PlaylistUploadButton";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import useGetPlaylistTitle from "./hooks/useGetPlaylistTitle";
@@ -35,11 +35,11 @@ const Playlist = () => {
   }
 
   if (userFetch.error || playlistFetch.error || favoritesIdsFetch.error) {
-    return <ErrorPage />;
+    return <Error />;
   }
 
   if (songsList && Object.keys(songsList).length === 0)
-    return <EmptySongsPage />;
+    return <EmptySongslist />;
 
   return (
     <Grid2 className={styles.playlist_songs}>

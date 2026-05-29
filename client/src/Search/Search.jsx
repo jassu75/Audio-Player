@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import SearchSongList from "./SearchSongList";
 import { useSearchParams } from "react-router-dom";
 import useFetchUserDetails from "../hooks/useFetchUserDetails";
-import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
+import Error from "../pages/helpers/error/Error";
 import SearchSkeleton from "../Skeletons/SearchSkeleton";
 import useFetchSearchSongs from "../hooks/Songs/useFetchSearchSongs";
 
@@ -26,7 +26,7 @@ const Search = () => {
 
   if (userLoading || recentlyPlayedLoading) return <SearchSkeleton />;
 
-  if (userError) return <ErrorPage />;
+  if (userError) return <Error />;
 
   return (
     <Grid2 className={styles.container}>

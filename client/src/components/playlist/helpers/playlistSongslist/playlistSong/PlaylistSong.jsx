@@ -17,9 +17,9 @@ import {
   setPlayingIndex,
   setPlayingSonglist,
 } from "../../../../../redux/slices/audioplayer.slice";
-import FavoriteIcon from "../../../../favorites/favoritesIcon/FavoriteIcon";
 import RenameSongTitle from "../../renameSong/RenameSongTitle";
 import MoveSong from "../../moveSong/MoveSong";
+import FavoriteIcon from "../../../../../pages/favorites/favoritesIcon/FavoriteIcon";
 
 const PlaylistSong = ({ playlistId, songKey, song }) => {
   const [anchorEl, setAnchorEl] = useState(null);

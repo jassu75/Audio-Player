@@ -2,7 +2,7 @@ import Homepage from "../Homepage/homepage";
 import Search from "../Search/Search";
 import AudioplayerLayout from "../layout/audioplayerLayout/AudioplayerLayout";
 import Playlist from "../components/playlist/Playlist";
-import FavoritesList from "../components/favorites/favoritesList/FavoritesList";
+import FavoritesList from "../pages/favorites/favoritesList/FavoritesList";
 
 const mainRoutes = [
   {

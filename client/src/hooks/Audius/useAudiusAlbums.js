@@ -2,25 +2,28 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAudiusAlbums } from "../../redux/slices/homepage.slice";
-import { audiusAlbumsSelector } from "../../redux/selectors/homepage.selector";
+import { audiusPlaylistsSelector } from "../../redux/selectors/homepage.selector";
 
 const useAudiusAlbums = () => {
   const [audiusAlbumsLoading, setAudiusAlbumsLoading] = useState(false);
   const [audiusAlbumsError, setAudiusAlbumsError] = useState(false);
   const dispatch = useDispatch();
-  const audiusAlbums = useSelector(audiusAlbumsSelector);
+  const audiusAlbums = useSelector(audiusPlaylistsSelector);
 
   useEffect(() => {
     const fetchAudiusAlbums = async () => {
       try {
         setAudiusAlbumsLoading(true);
         const response = await axios.get("/json/audius.json");
-        const refinedAlbums = response.data.data.map((album) => ({
-          id: album.id,
-          title: album.playlist_name,
-          cover_art: album.artwork["150x150"],
-        }));
-        dispatch(setAudiusAlbums(refinedAlbums));
+        const refinedResponse = response.data.data.reduce((acc, album) => {
+          acc[album.id] = {
+            id: album.id,
+            title: album.playlist_name,
+            cover_art: album.artwork["150x150"],
+          };
+          return acc;
+        }, {});
+        dispatch(setAudiusAlbums(refinedResponse));
       } catch (error) {
         setAudiusAlbumsError(true);
         console.error("Error fetching Audius Albums", error);

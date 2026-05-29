@@ -1,23 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
+import { useDispatch } from "react-redux";
 import { setViewingSonglist } from "../../../redux/slices/audioplayer.slice";
-import { userPlaylistsSelector } from "../../../redux/selectors/homepage.selector";
 
 const useFetchUserPlaylist = (playlistId) => {
-  const userPlaylists = useSelector(userPlaylistsSelector);
-  const playlistTitle = userPlaylists?.[playlistId]?.playlist_title;
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-  const songsList = useSelector(viewingSonglistSelector);
+
   useEffect(() => {
     const fetchUserPlaylist = async () => {
       try {
         setLoading(true);
         setError(false);
+        dispatch(setViewingSonglist(null));
         const response = await axios.post(
           "/api/fetchPlaylistSongs",
           { playlist_id: playlistId },
@@ -42,11 +38,10 @@ const useFetchUserPlaylist = (playlistId) => {
         setLoading(false);
       }
     };
-    if (!songsList) {
-      fetchUserPlaylist();
-    }
-  }, [dispatch, songsList, playlistId]);
 
-  return { loading, error, playlistTitle };
+    fetchUserPlaylist();
+  }, [dispatch, playlistId]);
+
+  return { loading, error };
 };
 export default useFetchUserPlaylist;

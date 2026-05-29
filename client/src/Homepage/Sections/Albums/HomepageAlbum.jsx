@@ -8,7 +8,7 @@ const HomepageAlbum = ({ albumKey, album }) => {
   const navigate = useNavigate();
 
   const handleAlbumClick = () => {
-    navigate(`/album/${encodeURIComponent(album.title)}-${albumKey}?page=1`);
+    navigate(`/playlists/audius/${albumKey}?page=1`);
   };
 
   const handleAlbumCoverError = (e) => {

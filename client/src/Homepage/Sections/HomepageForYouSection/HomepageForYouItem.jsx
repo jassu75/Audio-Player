@@ -7,7 +7,7 @@ const HomepageForYouItem = ({ forYouKey, forYouItem }) => {
   const navigate = useNavigate();
 
   const handlePlaylistClick = () => {
-    navigate(`/foryou/${forYouItem.foryou_title}/?page=1`);
+    navigate(`${forYouItem.path}`);
   };
 
   return (
@@ -16,7 +16,7 @@ const HomepageForYouItem = ({ forYouKey, forYouItem }) => {
         <img
           loading="lazy"
           className={styles.playlist_image}
-          src={forYouItem?.foryou_cover_art}
+          src={forYouItem?.cover_art}
           alt=""
         />
         <Grid2 className={styles.playlist_content}>
@@ -25,7 +25,7 @@ const HomepageForYouItem = ({ forYouKey, forYouItem }) => {
               variant="homepageSongTitle"
               className={styles.playlist_title}
             >
-              {forYouItem?.foryou_title}
+              {forYouItem?.title}
             </Typography>
           </Grid2>
         </Grid2>

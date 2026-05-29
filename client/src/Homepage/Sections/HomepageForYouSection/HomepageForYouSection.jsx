@@ -15,8 +15,8 @@ const HomepageForYouSection = () => {
       <Grid2 className={styles.playlist_list}>
         {forYouList.data.map((forYouItem) => (
           <HomepageForYouItem
-            key={forYouItem.foryou_id}
-            forYouKey={forYouItem.foryou_id}
+            key={forYouItem.id}
+            forYouKey={forYouItem.id}
             forYouItem={forYouItem}
           />
         ))}

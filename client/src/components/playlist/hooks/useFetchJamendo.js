@@ -2,23 +2,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { jamendoSongslistSelector } from "../../../redux/selectors/homepage.selector";
-import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 import { setJamendoSongs } from "../../../redux/slices/homepage.slice";
 import { setViewingSonglist } from "../../../redux/slices/audioplayer.slice";
 
 const useFetchJamendo = () => {
-  const playlistTitle = "Audio in Jamendo";
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const jamendoSongslist = useSelector(jamendoSongslistSelector);
-  const songslist = useSelector(viewingSonglistSelector);
 
   useEffect(() => {
+    if (jamendoSongslist) {
+      dispatch(setViewingSonglist(jamendoSongslist));
+      setLoading(false);
+      return;
+    }
+
     const fetchJamendo = async () => {
       try {
         setLoading(true);
+        setError(false);
+        dispatch(setViewingSonglist(null));
         const response = await axios.get("/api/jamendo/fetchTopSongs");
         const refinedResponse = response.data.results.reduce((acc, song) => {
           acc[song.id] = {
@@ -46,14 +50,11 @@ const useFetchJamendo = () => {
         setLoading(false);
       }
     };
-    if (!jamendoSongslist) {
-      fetchJamendo();
-    } else if (!songslist) {
-      dispatch(setViewingSonglist(jamendoSongslist));
-    }
-  }, [dispatch, jamendoSongslist, songslist]);
 
-  return { loading, error, playlistTitle };
+    fetchJamendo();
+  }, [dispatch, jamendoSongslist]);
+
+  return { loading, error };
 };
 
 export default useFetchJamendo;

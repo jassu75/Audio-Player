@@ -2,23 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setViewingSonglist } from "../../../redux/slices/audioplayer.slice";
-import { useParams } from "react-router-dom";
 
-const useFetchAudius = () => {
-  const playlistTitle = "Audio in Audius";
-
-  const [loading, setLoading] = useState(false);
+const useFetchAudius = (playlistId) => {
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-
-  const { slug } = useParams();
-  const slugArray = decodeURIComponent(slug).split("-");
-  const playlistId = slugArray.pop();
 
   useEffect(() => {
     const fetchAudius = async () => {
       try {
         setLoading(true);
+        setError(false);
+        dispatch(setViewingSonglist(null));
         const url = `/api/audius/albumSongs/${playlistId}`;
         const response = await axios.get(url);
         const sourceUrl = response.data.sourceUrl;
@@ -48,9 +43,9 @@ const useFetchAudius = () => {
       }
     };
     fetchAudius();
-  }, []);
+  }, [dispatch, playlistId]);
 
-  return { loading, error, playlistTitle };
+  return { loading, error };
 };
 
 export default useFetchAudius;

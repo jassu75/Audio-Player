@@ -42,7 +42,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
         { playlist_id: playlistKey },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
       dispatch(deletePlaylistDetails(playlistKey));
     } catch (error) {
@@ -60,7 +60,7 @@ const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   };
 
   const handlePlaylistClick = () => {
-    navigate(`/playlists/${playlistKey}?page=1`);
+    navigate(`/playlists/user-playlist/${playlistKey}?page=1`);
   };
 
   return (

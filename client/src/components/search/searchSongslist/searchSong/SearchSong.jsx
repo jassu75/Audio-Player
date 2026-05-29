@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import {
   setPlayingIndex,
   setPlayingSonglist,
-} from "../redux/slices/audioplayer.slice";
+} from "../../../../redux/slices/audioplayer.slice";
 
 const SearchSong = ({ songKey, song }) => {
   const dispatch = useDispatch();

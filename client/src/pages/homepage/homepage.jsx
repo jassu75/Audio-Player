@@ -3,7 +3,7 @@ import styles from "./homepage.module.css";
 import UserWelcome from "../../components/navbar/Navbar";
 import HomepagePlaylistSection from "../../components/homepage/playlistSection/HomepagePlaylistSection";
 import useFetchAudiusAlbums from "./hooks/useFetchAudiusAlbums";
-import HomepageSkeleton from "../../Skeletons/HomepageSkeleton";
+import HomepageSkeleton from "../../components/skeletons/homepage/HomepageSkeleton";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

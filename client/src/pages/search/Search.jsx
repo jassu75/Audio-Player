@@ -2,15 +2,15 @@ import Grid2 from "@mui/material/Grid2";
 import styles from "./search.module.css";
 import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import SearchSongList from "./SearchSongList";
 import { useSearchParams } from "react-router-dom";
-import useFetchUserDetails from "../hooks/useFetchUserDetails";
-import Error from "../pages/helpers/error/Error";
-import SearchSkeleton from "../Skeletons/SearchSkeleton";
-import useFetchSearchSongs from "../hooks/Songs/useFetchSearchSongs";
+import useFetchUserDetails from "../../hooks/useFetchUserDetails";
+import Error from "../helpers/error/Error";
+import SearchSkeleton from "../../components/skeletons/search/SearchSkeleton";
+import useFetchSearchSongs from "../../hooks/Songs/useFetchSearchSongs";
 
-import EmptySearch from "./EmptySearch";
-import useFetchRecentlyPlayed from "../hooks/UserPrefs/useFetchRecentlyPlayed";
+import EmptySearch from "../../components/helpers/emptyState/emptySearch/EmptySearch";
+import useFetchRecentlyPlayed from "../../hooks/UserPrefs/useFetchRecentlyPlayed";
+import SearchSongList from "../../components/search/searchSongslist/SearchSongList";
 
 const Search = () => {
   const { userLoading, userError } = useFetchUserDetails();

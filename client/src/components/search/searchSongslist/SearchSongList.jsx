@@ -1,12 +1,12 @@
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import SearchSong from "./SearchSong";
 import styles from "./searchSongList.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
+import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 import { useEffect } from "react";
-import { setViewingSonglist } from "../redux/slices/audioplayer.slice";
-import { recentlyPlayedSelector } from "../redux/selectors/userPreferences.selector";
+import { setViewingSonglist } from "../../../redux/slices/audioplayer.slice";
+import { recentlyPlayedSelector } from "../../../redux/selectors/userPreferences.selector";
+import SearchSong from "./searchSong/SearchSong";
 
 const SearchSongList = ({ showRecentlyPlayed }) => {
   const songsList = useSelector(viewingSonglistSelector);

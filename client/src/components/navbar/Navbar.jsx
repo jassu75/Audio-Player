@@ -1,12 +1,12 @@
-import styles from "./userWelcome.module.css";
+import styles from "./navbar.module.css";
 import Grid2 from "@mui/material/Grid2";
 import { useSelector } from "react-redux";
-import HomepageUploadButton from "../../../CustomButtons/HomepageUploadButton/HomepageUploadButton";
-import Profile from "./Profile";
+import Profile from "./profile/Profile";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
-import { userSelector } from "../../../redux/selectors/homepage.selector";
+import { userSelector } from "../../redux/selectors/homepage.selector";
+import CreatePlaylistButton from "./createPlaylistButton/CreatePlaylistButton";
 const UserWelcome = () => {
   const user = useSelector(userSelector);
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const UserWelcome = () => {
           <IconButton onClick={handleSearchClick}>
             <SearchIcon className={styles.search_icon} />
           </IconButton>
-          <HomepageUploadButton />
+          <CreatePlaylistButton />
         </Grid2>
       </Grid2>
     </>

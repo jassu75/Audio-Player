@@ -58,7 +58,7 @@ const Profile = ({ username }) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const refinedAssets = assets.data?.assets.flatMap((asset) => {
           const result = [];
@@ -80,7 +80,7 @@ const Profile = ({ username }) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         logout();

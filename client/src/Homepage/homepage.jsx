@@ -1,6 +1,6 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./homepage.module.css";
-import UserWelcome from "./Sections/UserWelcome/UserWelcome";
+import UserWelcome from "../components/navbar/Navbar";
 import ErrorPage from "../HelperPages/ErrorPages/ErrorPage";
 import HomepagePlaylistSection from "./Sections/Playlists/HomepagePlaylistSection";
 import HomepageForYouSection from "./Sections/HomepageForYouSection/HomepageForYouSection";

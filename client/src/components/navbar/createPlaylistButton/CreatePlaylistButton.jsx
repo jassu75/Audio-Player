@@ -2,11 +2,11 @@ import Grid2 from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 
 import AddIcon from "@mui/icons-material/Add";
-import styles from "./homepageUploadButton.module.css";
+import styles from "./createPlaylistButton.module.css";
 import { useState } from "react";
-import CreatePlaylistTitle from "../../Songlist/HomepagePlaylists/CreatePlaylistTitle";
+import CreatePlaylistTitle from "../../../Songlist/HomepagePlaylists/CreatePlaylistTitle";
 
-const HomepageUploadButton = () => {
+const CreatePlaylistButton = () => {
   const [isPlaylistModalOpen, setPlaylistModalOpen] = useState(false);
   const closePlaylistModal = () => setPlaylistModalOpen(false);
 
@@ -29,4 +29,4 @@ const HomepageUploadButton = () => {
   );
 };
 
-export default HomepageUploadButton;
+export default CreatePlaylistButton;

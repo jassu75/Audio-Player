@@ -10,7 +10,7 @@ import useFetchFavoriteIds from "../../hooks/Favorites/useFetchFavoriteIds";
 import { PLAYLIST_HOOK_MAP } from "./consts/playlist.consts";
 import ErrorPage from "../../HelperPages/ErrorPages/ErrorPage";
 import EmptySongsPage from "../../HelperPages/EmptyPages/EmptySongs";
-import PlaylistUploadButton from "../../CustomButtons/PlaylistUploadButton/PlaylistUploadButton";
+import PlaylistUploadButton from "../../components/playlist/playlistUploadButton/PlaylistUploadButton";
 import PlaylistSkeleton from "../../Skeletons/PlaylistSkeleton";
 import useGetPlaylistTitle from "./hooks/useGetPlaylistTitle";
 import PlaylistSongsList from "../../components/playlist/playlistSongslist/PlaylistSongsList";

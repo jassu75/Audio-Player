@@ -1,9 +1,8 @@
-import Homepage from "../Homepage/homepage";
-import SelectedPlaylist from "../Playlist/SelectedPlaylist";
-import SelectedAlbum from "../Homepage/Sections/Albums/SelectedAlbum";
-import Search from "../Search/Search";
-import SelectedForYou from "../ForYou/SelectedForYou";
+import Homepage from "../pages/homepage/homepage";
+import Search from "../pages/search/Search";
 import AudioplayerLayout from "../layout/audioplayerLayout/AudioplayerLayout";
+import Playlist from "../pages/playlist/Playlist";
+import Favorites from "../pages/favorites/Favorites";
 
 const mainRoutes = [
   {
@@ -14,20 +13,16 @@ const mainRoutes = [
         element: <Homepage />,
       },
       {
-        path: "/playlists/:playlistId",
-        element: <SelectedPlaylist />,
-      },
-      {
-        path: "/album/:slug",
-        element: <SelectedAlbum />,
+        path: "/playlists/:collection/:playlistId?",
+        element: <Playlist />,
       },
       {
         path: "/search",
         element: <Search />,
       },
       {
-        path: "/foryou/:foryouTitle",
-        element: <SelectedForYou />,
+        path: "/favorites",
+        element: <Favorites />,
       },
     ],
   },

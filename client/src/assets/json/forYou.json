@@ -1,24 +1,28 @@
 {
   "data": [
     {
-      "foryou_cover_art": "/images/ForYou/FavoritesItem.jpeg",
-      "foryou_title": "Favorites",
-      "foryou_id": "4d56e421-0b43-5b35-a22f-518e661142b0"
+      "cover_art": "/images/ForYou/FavoritesItem.jpeg",
+      "title": "Favorites",
+      "id": "4d56e421-0b43-5b35-a22f-518e661142b0",
+      "path": "/favorites"
     },
     {
-      "foryou_cover_art": "/images/ForYou/RecentsItem.png",
-      "foryou_title": "Recents",
-      "foryou_id": "6e122898-417a-5d28-9ac5-b3484d6f7e61"
+      "cover_art": "/images/ForYou/RecentsItem.png",
+      "title": "Recently Played",
+      "id": "6e122898-417a-5d28-9ac5-b3484d6f7e61",
+      "path": "/playlists/recently-played/?page=1"
     },
     {
-      "foryou_cover_art": "/images/ForYou/TopSongsItem.jpg",
-      "foryou_title": "Most Played",
-      "foryou_id": "b87f2e78-9f0d-4b73-b27b-8a9a69c9d7e2"
+      "cover_art": "/images/ForYou/TopSongsItem.jpg",
+      "title": "Most Played",
+      "id": "b87f2e78-9f0d-4b73-b27b-8a9a69c9d7e2",
+      "path": "/playlists/most-played/?page=1"
     },
     {
-      "foryou_cover_art": "/images/ForYou/PopularItem.jpeg",
-      "foryou_title": "Popular",
-      "foryou_id": "2a847b94-71d6-5cc1-9bb0-062372efc43d"
+      "cover_art": "/images/ForYou/PopularItem.jpeg",
+      "title": "Jamendo",
+      "id": "2a847b94-71d6-5cc1-9bb0-062372efc43d",
+      "path": "/playlists/jamendo/?page=1"
     }
   ]
 }

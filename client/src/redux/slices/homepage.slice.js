@@ -42,7 +42,7 @@ const songsSlice = createSlice({
     },
     deletePlaylistDetails: (state, action) => {
       delete state.playlists[action.payload];
-      localStorage.setItem("playlists", JSON.stringify(state.playlists));
+      sessionStorage.setItem("playlists", JSON.stringify(state.playlists));
     },
 
     setUser: (state, action) => {

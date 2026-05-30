@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 const useCloudinaryImageUpload = () => {
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +18,7 @@ const useCloudinaryImageUpload = () => {
           formData,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         return response.data;
       }

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setPlaylistDetails, setUser } from "../redux/slices/homepage.slice";
-import { auth } from "../config/firebase";
+import { setPlaylistDetails, setUser } from "../../redux/slices/homepage.slice";
+import { auth } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import {
   userPlaylistsSelector,
   userSelector,
-} from "../redux/selectors/homepage.selector";
+} from "../../redux/selectors/homepage.selector";
 
 const useFetchUserDetails = () => {
   const dispatch = useDispatch();

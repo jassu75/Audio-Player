@@ -8,11 +8,11 @@ import { useEffect } from "react";
 import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
 import FavoriteSkeleton from "../../components/skeletons/favorites/FavoriteSkeleton";
 import Error from "../helpers/error/Error";
-import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import useFetchFavoriteIds from "./hooks/useFetchFavoriteIds";
 import { useSearchParams } from "react-router-dom";
 import FavoriteCard from "../../components/favorites/favoritesCard/FavoriteCard";
 import EmptySongslist from "../../components/helpers/emptyState/emptyPlaylist/EmptySongslist";
+import useFetchUserDetails from "../../hooks/user/useFetchUserDetails";
 
 const Favorites = () => {
   const { userLoading, userError } = useFetchUserDetails();

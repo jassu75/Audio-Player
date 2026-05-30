@@ -4,44 +4,69 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
-import styles from "./renamePlaylistTitle.module.css";
-import { useDispatch } from "react-redux";
-import { renamePlaylist } from "../../../../redux/slices/homepage.slice";
+import styles from "./createPlaylistTitle.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addPlaylistDetails } from "../../../../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
+import { userSelector } from "../../../../../redux/selectors/homepage.selector";
 
-const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
+const CreatePlaylistTitle = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const user = useSelector(userSelector);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const images = [
+    "/images/PlaylistCoverArt/playlist1.png",
+    "/images/PlaylistCoverArt/playlist2.png",
+    "/images/PlaylistCoverArt/playlist3.jpeg",
+    "/images/PlaylistCoverArt/playlist4.jpeg",
+    "/images/PlaylistCoverArt/playlist5.png",
+    "/images/PlaylistCoverArt/playlist6.png",
+    "/images/PlaylistCoverArt/playlist7.jpeg",
+    "/images/PlaylistCoverArt/playlist8.jpeg",
+    "/images/PlaylistCoverArt/playlist9.png",
+    "/images/PlaylistCoverArt/playlist10.jpeg",
+  ];
 
   const handleInput = (e) => {
     setErrorMessage(false);
     setTitle(e.target.value);
   };
 
-  const handleRename = async () => {
-    if (!title) {
-      setErrorMessage("Enter a playlist title");
-    } else if (title === playlistTitle) {
-      setErrorMessage("Please enter a different playlist title");
-    } else {
-      try {
+  const handleDone = async () => {
+    try {
+      if (!title) {
+        setErrorMessage("Enter a playlist title");
+      } else {
         setLoading(true);
-        const payload = { playlistId: playlistId, newTitle: title };
-        dispatch(renamePlaylist(payload));
-        await axios.post("/api/updateplaylisttitle", payload, {
-          headers: { "Content-Type": "application/json" },
-        });
-      } catch (error) {
-        console.error("Error renaming playlist song", error);
-      } finally {
-        setTitle("");
-        setLoading(false);
-        onClose();
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+
+        const uploadPlaylist = {
+          playlist_title: title,
+          playlist_cover_art: randomImage,
+          user_id: user.user_id,
+        };
+        const response = await axios.post(
+          "/api/addPlaylist",
+          { uploadPlaylist },
+          {
+            headers: { "Content-Type": "application/json" },
+          },
+        );
+        const id = response.data?.playlist_details?.returning?.[0]?.playlist_id;
+        uploadPlaylist.id = id;
+        dispatch(addPlaylistDetails(uploadPlaylist));
       }
+    } catch (error) {
+      console.error("Error creating playlist", error);
+    } finally {
+      setTitle("");
+      setLoading(false);
+      onClose();
     }
   };
 
@@ -59,7 +84,6 @@ const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
             onChange={handleInput}
             fullWidth
             className={styles.input}
-            placeholder={playlistTitle}
             slotProps={{
               htmlInput: {
                 maxLength: 32,
@@ -99,7 +123,7 @@ const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
                 </Typography>
               </Grid2>
             </ButtonBase>
-            <ButtonBase onClick={handleRename} disabled={loading}>
+            <ButtonBase onClick={handleDone} disabled={loading}>
               <Grid2
                 className={`${styles.done_button} ${loading}
  ? styles.disabled_button : ""
@@ -123,4 +147,4 @@ const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
   );
 };
 
-export default RenamePlaylistTitle;
+export default CreatePlaylistTitle;

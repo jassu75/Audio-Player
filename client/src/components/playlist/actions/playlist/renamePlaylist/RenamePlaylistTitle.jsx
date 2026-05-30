@@ -4,14 +4,14 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
-import styles from "./renameSongTitle.module.css";
+import styles from "./renamePlaylistTitle.module.css";
 import { useDispatch } from "react-redux";
+import { renamePlaylist } from "../../../../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { renameViewingSong } from "../../../redux/slices/audioplayer.slice";
 
-const RenameSongTitle = ({ open, onClose, songId, songTitle }) => {
+const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,15 +24,15 @@ const RenameSongTitle = ({ open, onClose, songId, songTitle }) => {
 
   const handleRename = async () => {
     if (!title) {
-      setErrorMessage("Enter a song title");
-    } else if (title === songTitle) {
-      setErrorMessage("Please enter a different song title");
+      setErrorMessage("Enter a playlist title");
+    } else if (title === playlistTitle) {
+      setErrorMessage("Please enter a different playlist title");
     } else {
       try {
         setLoading(true);
-        const payload = { songId: songId, newTitle: title };
-        dispatch(renameViewingSong(payload));
-        await axios.post("/api/updatesongtitle", payload, {
+        const payload = { playlistId: playlistId, newTitle: title };
+        dispatch(renamePlaylist(payload));
+        await axios.post("/api/updateplaylisttitle", payload, {
           headers: { "Content-Type": "application/json" },
         });
       } catch (error) {
@@ -50,16 +50,16 @@ const RenameSongTitle = ({ open, onClose, songId, songTitle }) => {
       <Modal open={open} onClose={onClose}>
         <Grid2 className={styles.modal_box}>
           <Typography variant="RedirectText" className={styles.edit_title_text}>
-            New Song Title
+            New Playlist Title
           </Typography>
           <TextField
-            label="Song Title"
+            label="Playlist Title"
             variant="outlined"
             value={title}
             onChange={handleInput}
             fullWidth
             className={styles.input}
-            placeholder={songTitle}
+            placeholder={playlistTitle}
             slotProps={{
               htmlInput: {
                 maxLength: 32,
@@ -123,4 +123,4 @@ const RenameSongTitle = ({ open, onClose, songId, songTitle }) => {
   );
 };
 
-export default RenameSongTitle;
+export default RenamePlaylistTitle;

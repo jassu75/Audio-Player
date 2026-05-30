@@ -11,8 +11,8 @@ import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { Divider } from "@mui/material";
-import RenameSongTitle from "../../renameSong/RenameSongTitle";
-import MoveSong from "../../moveSong/MoveSong";
+import RenameSongTitle from "../../actions/song/renameSong/RenameSongTitle";
+import MoveSong from "../../actions/song/moveSong/MoveSong";
 
 import FavoriteIcon from "../../../favorites/favoritesIcon/FavoriteIcon";
 import {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 
 const useCloudinaryAudioUpload = () => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const useCloudinaryAudioUpload = () => {
           formData,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         return response.data;
       }

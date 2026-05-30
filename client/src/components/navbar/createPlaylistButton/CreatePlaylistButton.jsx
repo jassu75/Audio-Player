@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./createPlaylistButton.module.css";
 import { useState } from "react";
-import CreatePlaylistTitle from "../../helpers/modals/createPlaylistModal/CreatePlaylistTitle";
+import CreatePlaylistTitle from "../../playlist/actions/playlist/createPlaylist/CreatePlaylistTitle";
 
 const CreatePlaylistButton = () => {
   const [isPlaylistModalOpen, setPlaylistModalOpen] = useState(false);

@@ -3,17 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import UploadFile from "@mui/icons-material/UploadFile";
 import * as musicMetadata from "music-metadata-browser";
-import useCloudinaryAudioUpload from "./useCloudinaryAudioUpload";
-import useCloudinaryImageUpload from "./useCloudinaryImageUpload";
-import { addViewingSong } from "../redux/slices/audioplayer.slice";
+import useCloudinaryAudioUpload from "../../../../../hooks/cloudinary/useCloudinaryAudioUpload";
+import useCloudinaryImageUpload from "../../../../../hooks/cloudinary/useCloudinaryImageUpload";
+import { addViewingSong } from "../../../../../redux/slices/audioplayer.slice";
 import styles from "./playlistUploadForm.module.css";
 import Grid2 from "@mui/material/Grid2";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
-import defaultMusicNote from "../assets/images/AudioUploadForm/defaultMusicImage.webp";
+import defaultMusicNote from "../../../../../assets/images/AudioUploadForm/defaultMusicImage.webp";
 import axios from "axios";
-import { userSelector } from "../redux/selectors/homepage.selector";
-import { viewingSonglistSelector } from "../redux/selectors/audioplayer.selector";
+import { userSelector } from "../../../../../redux/selectors/homepage.selector";
+import { viewingSonglistSelector } from "../../../../../redux/selectors/audioplayer.selector";
 
 const PlaylistUploadForm = ({ open, onClose, playlistId }) => {
   const dispatch = useDispatch();

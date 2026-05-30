@@ -3,17 +3,17 @@ import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import styles from "./playlist.module.css";
-import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 import { viewingSonglistSelector } from "../../redux/selectors/audioplayer.selector";
 import { Pagination } from "@mui/material";
 import useFetchFavoriteIds from "../favorites/hooks/useFetchFavoriteIds";
 import { PLAYLIST_HOOK_MAP } from "./consts/playlist.consts";
 import Error from "../helpers/error/Error";
 import EmptySongslist from "../../components/helpers/emptyState/emptyPlaylist/EmptySongslist";
-import PlaylistUploadButton from "../../components/playlist/playlistUploadButton/PlaylistUploadButton";
+import PlaylistUploadButton from "../../components/playlist/helpers/playlistUploadButton/PlaylistUploadButton";
 import PlaylistSkeleton from "../../components/skeletons/playlist/PlaylistSkeleton";
 import useGetPlaylistTitle from "./hooks/useGetPlaylistTitle";
 import PlaylistSongsList from "../../components/playlist/playlistSongslist/PlaylistSongsList";
+import useFetchUserDetails from "../../hooks/user/useFetchUserDetails";
 
 const Playlist = () => {
   const { collection, playlistId } = useParams();

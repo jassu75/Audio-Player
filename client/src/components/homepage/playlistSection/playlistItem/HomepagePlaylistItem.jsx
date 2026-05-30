@@ -13,8 +13,8 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deletePlaylistDetails } from "../../../../redux/slices/homepage.slice";
 import axios from "axios";
-import RenamePlaylistTitle from "../../../helpers/modals/renamePlaylistModal/RenamePlaylistTitle";
 import MessageModal from "../../../helpers/modals/messageModal/MessageModal";
+import RenamePlaylistTitle from "../../../playlist/actions/playlist/renamePlaylist/RenamePlaylistTitle";
 
 const HomepagePlaylistItem = ({ playlistKey, playlistItem }) => {
   const navigate = useNavigate();

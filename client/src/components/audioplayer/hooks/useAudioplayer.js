@@ -5,7 +5,10 @@ import {
   playingIndexSelector,
   playingSonglistSelector,
 } from "../../../redux/selectors/audioplayer.selector";
-import { setPlayingIndex } from "../../../redux/slices/audioplayer.slice";
+import {
+  setPlayingIndex,
+  setPlayingSonglist,
+} from "../../../redux/slices/audioplayer.slice";
 
 const useAudioPlayer = () => {
   const dispatch = useDispatch();
@@ -18,6 +21,7 @@ const useAudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -111,6 +115,18 @@ const useAudioPlayer = () => {
     setProgress(val);
   };
 
+  const handleExpand = () => {
+    setIsExpanded(true);
+  };
+  const handleCollapse = () => {
+    setIsExpanded(false);
+  };
+
+  const handleClose = () => {
+    dispatch(setPlayingSonglist(null));
+    dispatch(setPlayingIndex(0));
+  };
+
   return {
     audioRef,
     isPlaying,
@@ -120,6 +136,10 @@ const useAudioPlayer = () => {
     handlePlayNext,
     handlePlayPrevious,
     handleSliderChange,
+    isExpanded,
+    handleCollapse,
+    handleExpand,
+    handleClose,
   };
 };
 

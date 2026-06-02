@@ -9,9 +9,14 @@ import { useSelector } from "react-redux";
 import { currentSongSelector } from "../../../../redux/selectors/audioplayer.selector";
 import Grid from "@mui/material/Grid";
 
-const Miniplayer = ({ audioplayerProps, handleExpand }) => {
-  const { isPlaying, handlePlayPrevious, handleTogglePlay, handlePlayNext } =
-    audioplayerProps;
+const Miniplayer = ({ audioplayerProps }) => {
+  const {
+    isPlaying,
+    handlePlayPrevious,
+    handleTogglePlay,
+    handlePlayNext,
+    handleExpand,
+  } = audioplayerProps;
 
   const song = useSelector(currentSongSelector);
 

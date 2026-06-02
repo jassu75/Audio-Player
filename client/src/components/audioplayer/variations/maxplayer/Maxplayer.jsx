@@ -7,13 +7,14 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useSelector } from "react-redux";
+import CloseIcon from "@mui/icons-material/Close";
 
 import styles from "./maxplayer.module.css";
 import { fmt } from "../../utils/audioplayer.utils";
 import { currentSongSelector } from "../../../../redux/selectors/audioplayer.selector";
 import Grid from "@mui/material/Grid";
 
-const Maxplayer = ({ audioplayerProps, open, handleCollapse }) => {
+const Maxplayer = ({ audioplayerProps }) => {
   const song = useSelector(currentSongSelector);
   const {
     isPlaying,
@@ -23,20 +24,22 @@ const Maxplayer = ({ audioplayerProps, open, handleCollapse }) => {
     handlePlayNext,
     handlePlayPrevious,
     handleSliderChange,
+    isExpanded,
+    handleCollapse,
+    handleClose,
   } = audioplayerProps;
 
   return (
     <Grid
-      className={`${styles.container} ${open ? styles.overlay_open : ""}`}
+      className={`${styles.container} ${isExpanded ? styles.overlay_open : ""}`}
       direction={"column"}
     >
       <Grid className={styles.header}>
-        <IconButton
-          onClick={handleCollapse}
-          className={styles.down_button}
-          aria-label="Close fullscreen player"
-        >
+        <IconButton onClick={handleCollapse} className={styles.down_button}>
           <KeyboardArrowDownIcon />
+        </IconButton>
+        <IconButton onClick={handleClose}>
+          <CloseIcon />
         </IconButton>
       </Grid>
 

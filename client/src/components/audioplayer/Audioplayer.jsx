@@ -12,15 +12,6 @@ const Audioplayer = () => {
   const audioPlayerProps = useAudioPlayer();
   const isDesktop = useMediaQuery("(min-width: 901px)");
 
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleExpand = () => {
-    setIsExpanded(true);
-  };
-  const handleCollapse = () => {
-    setIsExpanded(false);
-  };
-
   if (!song) return null;
 
   return (
@@ -30,15 +21,8 @@ const Audioplayer = () => {
         <Expandedplayer audioplayerProps={audioPlayerProps} />
       ) : (
         <>
-          <Miniplayer
-            audioplayerProps={audioPlayerProps}
-            handleExpand={handleExpand}
-          />
-          <Maxplayer
-            audioplayerProps={audioPlayerProps}
-            open={isExpanded}
-            handleCollapse={handleCollapse}
-          />
+          <Miniplayer audioplayerProps={audioPlayerProps} />
+          <Maxplayer audioplayerProps={audioPlayerProps} />
         </>
       )}
     </>

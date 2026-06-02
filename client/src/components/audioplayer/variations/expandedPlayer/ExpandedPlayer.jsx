@@ -10,6 +10,7 @@ import styles from "./expandedplayer.module.css";
 import { fmt } from "../../utils/audioplayer.utils";
 import { useSelector } from "react-redux";
 import { currentSongSelector } from "../../../../redux/selectors/audioplayer.selector";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Expandedplayer = ({ audioplayerProps }) => {
   const song = useSelector(currentSongSelector);
@@ -21,11 +22,17 @@ const Expandedplayer = ({ audioplayerProps }) => {
     handleTogglePlay,
     handlePlayNext,
     handleSliderChange,
+    handleClose,
   } = audioplayerProps;
 
   return (
     <Grid className={styles.container}>
       <Grid className={styles.content} direction={"column"}>
+        <Grid className={styles.header}>
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </Grid>
         <Grid className={styles.cover}>
           <img
             loading="lazy"

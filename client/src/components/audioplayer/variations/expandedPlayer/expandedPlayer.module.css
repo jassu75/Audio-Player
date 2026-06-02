@@ -19,8 +19,16 @@
   gap: 20px;
 }
 
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 90%;
+  padding: 5px 10px;
+}
 .cover {
-  width: 80%;
+  width: 75%;
   max-width: 400px;
   aspect-ratio: 1;
 }

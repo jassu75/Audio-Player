@@ -5,7 +5,7 @@ const audioplayer = JSON.parse(sessionStorage.getItem("audioplayer"));
 const initialState = {
   viewingSonglist: audioplayer?.viewingSonglist || null,
   playingSonglist: audioplayer?.playingSonglist || null,
-  playingIndex: audioplayer?.playingIndex || 0,
+  playingIndex: audioplayer?.playingIndex || null,
 };
 
 const sync = (state) => {
@@ -46,18 +46,24 @@ const audioplayerSlice = createSlice({
       state.playingIndex = action.payload;
       sync(state);
     },
+    clearPlayingContext: (state) => {
+      state.playingIndex = null;
+      state.playingSonglist = null;
+      sync(state);
+    },
     playNext: (state) => {
       if (state.playingSonglist) {
-        state.playingIndex =
-          (state.playingIndex + 1) % state.playingSonglist.length;
+        const keys = Object.keys(state.playingSonglist);
+        const currentPos = keys.indexOf(String(state.playingIndex));
+        state.playingIndex = keys[(currentPos + 1) % keys.length];
         sync(state);
       }
     },
     playPrevious: (state) => {
       if (state.playingSonglist) {
-        state.playingIndex =
-          (state.playingIndex - 1 + state.playingSonglist.length) %
-          state.playingSonglist.length;
+        const keys = Object.keys(state.playingSonglist);
+        const currentPos = keys.indexOf(String(state.playingIndex));
+        state.playingIndex = keys[(currentPos - 1 + keys.length) % keys.length];
         sync(state);
       }
     },
@@ -71,6 +77,7 @@ export const {
   renameViewingSong,
   setPlayingSonglist,
   setPlayingIndex,
+  clearPlayingContext,
   playNext,
   playPrevious,
 } = audioplayerSlice.actions;

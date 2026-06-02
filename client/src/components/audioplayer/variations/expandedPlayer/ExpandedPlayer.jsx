@@ -27,7 +27,7 @@ const Expandedplayer = ({ audioplayerProps }) => {
 
   return (
     <Grid className={styles.container}>
-      <Grid className={styles.content} direction={"column"}>
+      <Grid className={styles.content} direction={"column"} container>
         <Grid className={styles.header}>
           <IconButton onClick={handleClose}>
             <CloseIcon />

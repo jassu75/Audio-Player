@@ -33,6 +33,7 @@ const Maxplayer = ({ audioplayerProps }) => {
     <Grid
       className={`${styles.container} ${isExpanded ? styles.overlay_open : ""}`}
       direction={"column"}
+      container
     >
       <Grid className={styles.header}>
         <IconButton onClick={handleCollapse} className={styles.down_button}>

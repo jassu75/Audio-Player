@@ -25,17 +25,17 @@ const Expandedplayer = ({ audioplayerProps }) => {
 
   return (
     <Grid className={styles.container}>
-      <Grid className={styles.content}>
+      <Grid className={styles.content} direction={"column"}>
         <Grid className={styles.cover}>
           <img
             loading="lazy"
             src={song.cover_art}
             alt={song.title ?? ""}
-            className={styles.coverImage}
+            className={styles.cover_image}
           />
         </Grid>
 
-        <Grid className={styles.songInfo}>
+        <Grid className={styles.song_info}>
           <Typography className={styles.title}>{song.title}</Typography>
           <Typography className={styles.artist}>{song.artist}</Typography>
         </Grid>
@@ -43,21 +43,21 @@ const Expandedplayer = ({ audioplayerProps }) => {
         <Grid className={styles.controls}>
           <IconButton
             onClick={handlePlayPrevious}
-            className={styles.skipButton}
+            className={styles.skip_button}
           >
             <SkipPreviousIcon />
           </IconButton>
 
-          <IconButton onClick={handleTogglePlay} className={styles.playButton}>
+          <IconButton onClick={handleTogglePlay} className={styles.play_button}>
             {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
           </IconButton>
 
-          <IconButton onClick={handlePlayNext} className={styles.skipButton}>
+          <IconButton onClick={handlePlayNext} className={styles.skip_button}>
             <SkipNextIcon />
           </IconButton>
         </Grid>
 
-        <Grid className={styles.progressBar}>
+        <Grid className={styles.progress_bar}>
           <Typography className={styles.time}>{fmt(progress)}</Typography>
 
           <Slider

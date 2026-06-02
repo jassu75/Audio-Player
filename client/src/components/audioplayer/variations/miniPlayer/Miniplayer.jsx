@@ -9,25 +9,25 @@ import { useSelector } from "react-redux";
 import { currentSongSelector } from "../../../../redux/selectors/audioplayer.selector";
 import Grid from "@mui/material/Grid";
 
-const Miniplayer = ({ audioplayerProps }) => {
+const Miniplayer = ({ audioplayerProps, handleExpand }) => {
   const { isPlaying, handlePlayPrevious, handleTogglePlay, handlePlayNext } =
     audioplayerProps;
 
   const song = useSelector(currentSongSelector);
 
   return (
-    <Grid className={styles.container}>
+    <Grid className={styles.container} onClick={handleExpand}>
       <Grid className={styles.content}>
         <Grid className={styles.cover}>
           <img
             loading="lazy"
             src={song.cover_art}
             alt={song.title ?? ""}
-            className={styles.coverImage}
+            className={styles.cover_image}
           />
         </Grid>
 
-        <Grid className={styles.songInfo}>
+        <Grid className={styles.song_info}>
           <Typography className={styles.title}>{song.title}</Typography>
           <Typography className={styles.artist}>{song.artist}</Typography>
         </Grid>
@@ -35,19 +35,19 @@ const Miniplayer = ({ audioplayerProps }) => {
         <Grid className={styles.controls}>
           <IconButton
             onClick={handlePlayPrevious}
-            className={styles.skipButton}
+            className={styles.skip_button}
             size="small"
           >
             <SkipPreviousIcon />
           </IconButton>
 
-          <IconButton onClick={handleTogglePlay} className={styles.playButton}>
+          <IconButton onClick={handleTogglePlay} className={styles.play_button}>
             {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
           </IconButton>
 
           <IconButton
             onClick={handlePlayNext}
-            className={styles.skipButton}
+            className={styles.skip_button}
             size="small"
           >
             <SkipNextIcon />

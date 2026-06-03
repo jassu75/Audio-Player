@@ -1,0 +1,124 @@
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  background-color: #202020;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 40px;
+
+  transform: translateY(100%);
+  transition: transform 400ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+
+.overlay_open {
+  transform: translateY(0);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 8px;
+}
+
+.down_button:global(.MuiIconButton-root) {
+  color: #ffffff;
+  font-size: 32px;
+}
+
+.cover {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  padding: 24px 0;
+}
+
+.cover_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+.song_info {
+  width: 100%;
+  max-width: 320px;
+  padding-bottom: 24px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist {
+  font-size: 14px;
+  font-weight: 300;
+  color: #a0998f;
+  font-style: italic;
+  padding-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress_bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  padding-bottom: 32px;
+}
+
+.time {
+  font-size: 12px;
+  color: #a0998f;
+  min-width: 36px;
+}
+
+.slider:global(.MuiSlider-root) {
+  flex: 1;
+  color: #d4af37;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.skip_button:global(.MuiIconButton-root) {
+  color: #ffffff;
+  font-size: 32px;
+}
+
+.play_button:global(.MuiIconButton-root) {
+  background-color: #ffffff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+}
+
+.play_button:global(.MuiIconButton-root):hover {
+  background-color: #f2f2f2;
+}

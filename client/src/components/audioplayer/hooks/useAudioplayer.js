@@ -5,19 +5,26 @@ import {
   playingIndexSelector,
   playingSonglistSelector,
 } from "../../../redux/selectors/audioplayer.selector";
-import { setPlayingIndex } from "../../../redux/slices/audioplayer.slice";
+import {
+  clearPlayingContext,
+  playNext,
+  playPrevious,
+} from "../../../redux/slices/audioplayer.slice";
 
 const useAudioPlayer = () => {
   const dispatch = useDispatch();
   const song = useSelector(currentSongSelector);
   const playingSonglist = useSelector(playingSonglistSelector);
-  const playingSonglistRef = useRef(playingSonglist);
   const playingIndex = useSelector(playingIndexSelector);
-  const playingIndexRef = useRef(playingIndex);
+
+  const playingSonglistRef = useRef(null);
+  const playingIndexRef = useRef(null);
+
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -37,24 +44,33 @@ const useAudioPlayer = () => {
 
   useEffect(() => {
     const audio = audioRef.current;
+    if (!audio) return;
+
+    const onEnded = () => {
+      if (!playingSonglistRef.current) return;
+      dispatch(playNext());
+    };
+
+    audio.addEventListener("ended", onEnded);
+    return () => audio.removeEventListener("ended", onEnded);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
     if (!audio || !song?.audio_url) return;
 
-    setProgress(0);
-    setIsPlaying(false);
-    audio.src = song.audio_url;
-    audio.load();
-
-    if (
-      playingSonglistRef.current === playingSonglist &&
-      playingIndexRef.current === playingIndex
-    )
-      return;
+    if (audio.src === song.audio_url) return;
 
     playingSonglistRef.current = playingSonglist;
     playingIndexRef.current = playingIndex;
 
-    const onCanPlay = async () => {
+    setProgress(0);
+    setIsPlaying(false);
+
+    const playAudio = async () => {
       try {
+        audio.src = song.audio_url;
+        await audio.load();
         await audio.play();
         setIsPlaying(true);
       } catch (err) {
@@ -62,15 +78,16 @@ const useAudioPlayer = () => {
       }
     };
 
-    audio.addEventListener("canplay", onCanPlay, { once: true });
+    playAudio();
 
     return () => {
-      audio.removeEventListener("canplay", onCanPlay);
       audio.pause();
     };
   }, [song, playingSonglist, playingIndex]);
 
-  const handleTogglePlay = async () => {
+  const handleTogglePlay = async (e) => {
+    e.stopPropagation();
+
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -89,20 +106,13 @@ const useAudioPlayer = () => {
     }
   };
 
-  const handlePlayNext = () => {
-    if (!playingSonglist) return;
-    const keys = Object.keys(playingSonglist);
-    const currentPos = keys.indexOf(String(playingIndex));
-    dispatch(setPlayingIndex(keys[(currentPos + 1) % keys.length]));
+  const handlePlayNext = (e) => {
+    e.stopPropagation();
+    dispatch(playNext());
   };
-
-  const handlePlayPrevious = () => {
-    if (!playingSonglist) return;
-    const keys = Object.keys(playingSonglist);
-    const currentPos = keys.indexOf(String(playingIndex));
-    dispatch(
-      setPlayingIndex(keys[(currentPos - 1 + keys.length) % keys.length]),
-    );
+  const handlePlayPrevious = (e) => {
+    e.stopPropagation();
+    dispatch(playPrevious());
   };
 
   const handleSliderChange = (_, val) => {
@@ -110,6 +120,11 @@ const useAudioPlayer = () => {
     audioRef.current.currentTime = val;
     setProgress(val);
   };
+
+  const handleExpand = () => setIsExpanded(true);
+  const handleCollapse = () => setIsExpanded(false);
+
+  const handleClose = () => dispatch(clearPlayingContext());
 
   return {
     audioRef,
@@ -120,6 +135,10 @@ const useAudioPlayer = () => {
     handlePlayNext,
     handlePlayPrevious,
     handleSliderChange,
+    isExpanded,
+    handleCollapse,
+    handleExpand,
+    handleClose,
   };
 };
 

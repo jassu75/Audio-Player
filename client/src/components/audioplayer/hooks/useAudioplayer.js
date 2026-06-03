@@ -85,7 +85,9 @@ const useAudioPlayer = () => {
     };
   }, [song, playingSonglist, playingIndex]);
 
-  const handleTogglePlay = async () => {
+  const handleTogglePlay = async (e) => {
+    e.stopPropagation();
+
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -104,8 +106,14 @@ const useAudioPlayer = () => {
     }
   };
 
-  const handlePlayNext = () => dispatch(playNext());
-  const handlePlayPrevious = () => dispatch(playPrevious());
+  const handlePlayNext = (e) => {
+    e.stopPropagation();
+    dispatch(playNext());
+  };
+  const handlePlayPrevious = (e) => {
+    e.stopPropagation();
+    dispatch(playPrevious());
+  };
 
   const handleSliderChange = (_, val) => {
     if (!audioRef.current) return;

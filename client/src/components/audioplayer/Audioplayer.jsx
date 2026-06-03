@@ -3,7 +3,6 @@ import { currentSongSelector } from "../../redux/selectors/audioplayer.selector"
 import useAudioPlayer from "./hooks/useAudioplayer";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Miniplayer from "./variations/miniPlayer/Miniplayer";
-import { useState } from "react";
 import Maxplayer from "./variations/maxplayer/Maxplayer";
 import Expandedplayer from "./variations/expandedplayer/Expandedplayer";
 

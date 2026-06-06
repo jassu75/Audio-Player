@@ -35,6 +35,7 @@ import fetchFavoriteIds from "./routes/queryRoutes/fetchFavoriteIds.js";
 import fetchFavorites from "./routes/queryRoutes/fetchFavorites.js";
 import fetchAssets from "./routes/queryRoutes/fetchAssets.js";
 import fetchRandomSongs from "./routes/queryRoutes/fetchRandomSongs.js";
+import fetchSystemPlaylists from "./routes/queryRoutes/fetchSystemPlaylists.js";
 
 import uploadCloudinaryImage from "./Cloudinary/uploadImage.js";
 import uploadCloudinaryAudio from "./Cloudinary/uploadAudio.js";
@@ -78,6 +79,7 @@ app.use(fetchFavoriteIds);
 app.use(fetchFavorites);
 app.use(fetchAssets);
 app.use(fetchRandomSongs);
+app.use(fetchSystemPlaylists);
 
 app.use(uploadCloudinaryImage);
 app.use(uploadCloudinaryAudio);

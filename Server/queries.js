@@ -68,6 +68,20 @@ query GET_PLAYLISTS($user_id: String!) {
 
 `;
 
+export const FETCH_SYSTEM_PLAYLISTS = `
+  query FETCH_SYSTEM_PLAYLISTS @cached {
+    playlist_details(where: { 
+      user_id: { _is_null: true },
+      source: { _neq: "user" }
+    }) {
+      playlist_id
+      playlist_title
+      playlist_cover_art
+      source
+    }
+  }
+`;
+
 export const VERIFY_PLAYLIST_EMPTY = `
 query VERIFY_PLAYLIST_EMPTY($playlist_id:uuid!){
   playlist_songs(where:{playlist_id:{_eq:$playlist_id}},limit:1){

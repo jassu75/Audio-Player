@@ -1,28 +1,56 @@
-import Homepage from "../pages/homepage/homepage";
+import RequireAudioplayer from "../protected/components/audioplayer/RequireAudioplayer";
+import RequireStates from "../protected/states/RequireStates";
+
+import Homepage from "../pages/homepage/Homepage";
 import Search from "../pages/search/Search";
-import AudioplayerLayout from "../layout/audioplayerLayout/AudioplayerLayout";
 import Playlist from "../pages/playlist/Playlist";
 import Favorites from "../pages/favorites/Favorites";
+import PlaylistSkeleton from "../components/skeletons/playlist/PlaylistSkeleton";
+import SearchSkeleton from "../components/skeletons/search/SearchSkeleton";
+import FavoriteSkeleton from "../components/skeletons/favorites/FavoriteSkeleton";
+import HomepageSkeleton from "../components/skeletons/homepage/HomepageSkeleton";
 
 const mainRoutes = [
   {
-    element: <AudioplayerLayout />,
+    element: <RequireAudioplayer />,
     children: [
       {
         path: "/",
-        element: <Homepage />,
+        element: (
+          <RequireStates
+            requires={["user", "playlistCollection"]}
+            skeleton={<HomepageSkeleton />}
+          >
+            <Homepage />
+          </RequireStates>
+        ),
       },
       {
-        path: "/playlists/:collection/:playlistId?",
-        element: <Playlist />,
+        path: "/playlists/:playlistId?",
+        element: (
+          <RequireStates
+            requires={["user", "playlistCollection", "favorites"]}
+            skeleton={<PlaylistSkeleton />}
+          >
+            <Playlist />
+          </RequireStates>
+        ),
       },
       {
         path: "/search",
-        element: <Search />,
+        element: (
+          <RequireStates requires={["user"]} skeleton={<SearchSkeleton />}>
+            <Search />
+          </RequireStates>
+        ),
       },
       {
         path: "/favorites",
-        element: <Favorites />,
+        element: (
+          <RequireStates requires={["user"]} skeleton={<FavoriteSkeleton />}>
+            <Favorites />
+          </RequireStates>
+        ),
       },
     ],
   },

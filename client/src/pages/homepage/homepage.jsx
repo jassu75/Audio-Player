@@ -1,57 +1,21 @@
 import Grid2 from "@mui/material/Grid2";
 import styles from "./homepage.module.css";
 import UserWelcome from "../../components/navbar/Navbar";
-import HomepagePlaylistSection from "../../components/homepage/playlistSection/HomepagePlaylistSection";
-import useFetchAudiusAlbums from "./hooks/useFetchAudiusAlbums";
+
+import PlaylistRail from "../../components/playlisRail/PlaylistRail";
+import { useSelector } from "react-redux";
+import { playlistCollectionSelector } from "../../redux/selectors/homepage.selector";
 import HomepageSkeleton from "../../components/skeletons/homepage/HomepageSkeleton";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setViewingSonglist } from "../../redux/slices/audioplayer.slice";
-import useFetchRecentlyPlayed from "../../hooks/UserPrefs/useFetchRecentlyPlayed";
-import {
-  audiusPlaylistsSelector,
-  userPlaylistsSelector,
-  userSelector,
-} from "../../redux/selectors/homepage.selector";
-import Error from "../helpers/error/Error";
-import HomepageForYouSection from "../../components/homepage/foryouSection/HomepageForYouSection";
-import HomepageAlbumSection from "../../components/homepage/albumSection/HomepageAlbumSection";
-import useFetchUserDetails from "../../hooks/user/useFetchUserDetails";
-
 const Homepage = () => {
-  const { audiusAlbumsLoading, audiusAlbumsError } = useFetchAudiusAlbums();
-  const { userLoading, userError } = useFetchUserDetails();
-  const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
-  const dispatch = useDispatch();
+  const playlistCollection = useSelector(playlistCollectionSelector);
+  if (!playlistCollection) return <HomepageSkeleton />;
 
-  const user = useSelector(userSelector);
-  const playlists = useSelector(userPlaylistsSelector);
-  const audiusAlbums = useSelector(audiusPlaylistsSelector);
-
-  const loading =
-    userLoading ||
-    audiusAlbumsLoading ||
-    recentlyPlayedLoading ||
-    !user ||
-    !playlists ||
-    !audiusAlbums;
-  const error = userError || audiusAlbumsError;
-
-  useEffect(() => {
-    dispatch(setViewingSonglist(null));
-  }, [dispatch]);
-
-  if (error) return <Error />;
-
-  return loading ? (
-    <HomepageSkeleton />
-  ) : (
+  return (
     <Grid2 className={styles.container}>
       <UserWelcome />
-      <HomepageForYouSection />
-
-      <HomepagePlaylistSection />
-      <HomepageAlbumSection />
+      {playlistCollection.map((collection) => (
+        <PlaylistRail key={collection.id} collection={collection} />
+      ))}
     </Grid2>
   );
 };

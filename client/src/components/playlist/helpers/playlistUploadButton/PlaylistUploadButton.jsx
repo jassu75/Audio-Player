@@ -4,15 +4,16 @@ import uploadButton from "../../../../assets/images/Homepage/UploadIcon.jpg";
 import styles from "./playlistUploadButton.module.css";
 import PlaylistUploadForm from "../../actions/playlist/uploadPlaylist/PlaylistUploadForm";
 
-const showButoonForCollections = ["user-playlist"];
-const PlaylistUploadButton = ({ collection, playlistId }) => {
+const PlaylistUploadButton = ({ type, playlistId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
 
   const closeModal = () => setIsModalOpen(false);
 
-  if (!showButoonForCollections.includes(collection)) return null;
+  const show = type === "user";
+
+  if (show) return null;
 
   return (
     <div>

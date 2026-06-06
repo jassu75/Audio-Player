@@ -3,17 +3,14 @@ import styles from "./search.module.css";
 import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useSearchParams } from "react-router-dom";
-import Error from "../helpers/error/Error";
 import SearchSkeleton from "../../components/skeletons/search/SearchSkeleton";
 import useFetchSearchSongs from "./hooks/useFetchSearchSongs";
 
 import EmptySearch from "../../components/helpers/emptyState/emptySearch/EmptySearch";
 import useFetchRecentlyPlayed from "../../hooks/UserPrefs/useFetchRecentlyPlayed";
 import SearchSongList from "../../components/search/searchSongslist/SearchSongList";
-import useFetchUserDetails from "../../hooks/user/useFetchUserDetails";
 
 const Search = () => {
-  const { userLoading, userError } = useFetchUserDetails();
   const { recentlyPlayedLoading } = useFetchRecentlyPlayed();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,9 +21,7 @@ const Search = () => {
     setSearchParams({ searchtext: e.target.value }, { replace: true });
   };
 
-  if (userLoading || recentlyPlayedLoading) return <SearchSkeleton />;
-
-  if (userError) return <Error />;
+  if (recentlyPlayedLoading) return <SearchSkeleton />;
 
   return (
     <Grid2 className={styles.container}>

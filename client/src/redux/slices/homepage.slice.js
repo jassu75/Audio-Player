@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const Expiry = 7 * 24 * 60 * 60 * 1000;
+const EXPIRY = {
+  user: 7 * 24 * 60 * 60 * 1000,
+  playlistCollection: 30 * 24 * 60 * 60 * 1000,
+};
 
 const checkExpired = (key, defaultValue) => {
   const storedItem = localStorage.getItem(key);
-  if (!storedItem) {
-    return defaultValue;
-  }
+  if (!storedItem) return defaultValue;
+
   const { data, timestamp } = JSON.parse(storedItem);
-  if (Date.now() - timestamp < Expiry) {
+  if (Date.now() - timestamp < EXPIRY[key]) {
     return data;
   } else {
     localStorage.removeItem(key);
@@ -16,75 +18,59 @@ const checkExpired = (key, defaultValue) => {
   }
 };
 
+const setWithTimestamp = (key, data) => {
+  localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
+};
+
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
-  playlists: JSON.parse(sessionStorage.getItem("playlists")) || null,
-  jamendoSongs: checkExpired("jamendoSongs", null),
-  audiusAlbums: checkExpired("audiusAlbums", null),
-  audiusSongs: null,
+  user: checkExpired("user", null),
+  playlistCollection: checkExpired("playlistCollection", null),
 };
 
 const songsSlice = createSlice({
   name: "homepage",
   initialState,
   reducers: {
-    setPlaylistDetails: (state, action) => {
-      state.playlists = action.payload;
-      sessionStorage.setItem("playlists", JSON.stringify(action.payload));
-    },
-    addPlaylistDetails: (state, action) => {
-      const { id, ...playlistWithoutId } = action.payload;
-      if (!state.playlists) {
-        state.playlists = {};
-      }
-      state.playlists[id] = playlistWithoutId;
-      sessionStorage.setItem("playlists", JSON.stringify(state.playlists));
-    },
-    deletePlaylistDetails: (state, action) => {
-      delete state.playlists[action.payload];
-      sessionStorage.setItem("playlists", JSON.stringify(state.playlists));
-    },
-
     setUser: (state, action) => {
       state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
+      setWithTimestamp("user", action.payload);
     },
 
-    setJamendoSongs: (state, action) => {
-      state.jamendoSongs = action.payload;
-      const data = {
-        data: action.payload,
-        timestamp: Date.now(),
+    setPlaylistCollection: (state, action) => {
+      state.playlistCollection = action.payload;
+      setWithTimestamp("playlistCollection", state.playlistCollection);
+    },
+
+    updatePlaylistCollection: (state, action) => {
+      const { collectionId, playlistId, data } = action.payload;
+      state.playlistCollection[collectionId][playlistId] = {
+        ...state.playlistCollection[collectionId][playlistId],
+        ...data,
       };
-      localStorage.setItem("jamendoSongs", JSON.stringify(data));
+      setWithTimestamp("playlistCollection", state.playlistCollection);
     },
 
-    setAudiusAlbums: (state, action) => {
-      state.audiusAlbums = action.payload;
-      const data = {
-        data: action.payload,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem("audiusAlbums", JSON.stringify(data));
+    deleteFromPlaylistCollection: (state, action) => {
+      const { collectionId, playlistId } = action.payload;
+      delete state.playlistCollection[collectionId][playlistId];
+      setWithTimestamp("playlistCollection", state.playlistCollection);
     },
 
-    renamePlaylist: (state, action) => {
-      const playlistId = action.payload.playlistId;
-      const newTitle = action.payload.newTitle;
-      state.playlists[playlistId].playlist_title = newTitle;
-      localStorage.setItem("playlists", JSON.stringify(state.playlists));
+    renameInPlaylistCollection: (state, action) => {
+      const { collectionId, playlistId, newTitle } = action.payload;
+      state.playlistCollection[collectionId][playlistId].playlist_title =
+        newTitle;
+      setWithTimestamp("playlistCollection", state.playlistCollection);
     },
   },
 });
 
 export const {
   setUser,
-  addPlaylistDetails,
-  setPlaylistDetails,
-  deletePlaylistDetails,
-  setJamendoSongs,
-  setAudiusAlbums,
-  renamePlaylist,
+  setPlaylistCollection,
+  updatePlaylistCollection,
+  deleteFromPlaylistCollection,
+  renameInPlaylistCollection,
 } = songsSlice.actions;
 
 export default songsSlice.reducer;

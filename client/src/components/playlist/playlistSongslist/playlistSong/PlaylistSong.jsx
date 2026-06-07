@@ -10,8 +10,9 @@ import {
 } from "../../../../redux/slices/audioplayer.slice";
 import PlaylistSongMenu from "./playlistSongMenu/PlaylistSongMenu";
 
-const PlaylistSong = ({ playlistId, song }) => {
+const PlaylistSong = ({ playlistId, song, type }) => {
   const dispatch = useDispatch();
+  const showMenu = type === "user";
 
   const handleSongClick = () => {
     dispatch(setPlayingSonglist());
@@ -47,7 +48,9 @@ const PlaylistSong = ({ playlistId, song }) => {
         </Grid2>
       </Grid2>
 
-      <PlaylistSongMenu song={song} playlistId={playlistId} />
+      {showMenu ? (
+        <PlaylistSongMenu song={song} playlistId={playlistId} />
+      ) : null}
     </Grid2>
   );
 };

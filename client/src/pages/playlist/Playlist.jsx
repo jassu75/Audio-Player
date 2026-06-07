@@ -45,7 +45,7 @@ const Playlist = () => {
         <PlaylistUploadButton type={type} playlistId={playlistId} />
       </Grid2>
       <Grid2 className={styles.songs_container}>
-        <PlaylistSongsList playlistId={playlistId} page={page} />
+        <PlaylistSongsList playlistId={playlistId} page={page} type={type} />
         <Pagination
           variant="outlined"
           count={Math.ceil(Object.keys(viewingSongsList).length / 20)}

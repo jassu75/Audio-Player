@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.selector";
 import PlaylistSong from "./playlistSong/PlaylistSong";
 
-const PlaylistSongsList = ({ playlistId, page }) => {
+const PlaylistSongsList = ({ playlistId, page, type }) => {
   const viewingSonglist = useSelector(viewingSonglistSelector);
   const start = (page - 1) * 20;
   const end = start + 20;
@@ -18,6 +18,7 @@ const PlaylistSongsList = ({ playlistId, page }) => {
             key={song.song_id}
             playlistId={playlistId}
             song={song}
+            type={type}
           />
         ))}
     </Grid2>

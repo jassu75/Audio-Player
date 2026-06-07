@@ -6,7 +6,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Grid2 from "@mui/material/Grid2";
 import styles from "./renamePlaylistTitle.module.css";
 import { useDispatch } from "react-redux";
-import { renamePlaylist } from "../../../../../redux/slices/homepage.slice";
+import { renameInPlaylistCollection } from "../../../../../redux/slices/homepage.slice";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
@@ -31,7 +31,7 @@ const RenamePlaylistTitle = ({ open, onClose, playlistId, playlistTitle }) => {
       try {
         setLoading(true);
         const payload = { playlistId: playlistId, newTitle: title };
-        dispatch(renamePlaylist(payload));
+        dispatch(renameInPlaylistCollection(payload));
         await axios.post("/api/updateplaylisttitle", payload, {
           headers: { "Content-Type": "application/json" },
         });

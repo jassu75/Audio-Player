@@ -12,10 +12,8 @@ import useFetchFavoriteIds from "./hooks/useFetchFavoriteIds";
 import { useSearchParams } from "react-router-dom";
 import FavoriteCard from "../../components/favorites/favoritesCard/FavoriteCard";
 import EmptySongslist from "../../components/helpers/emptyState/emptyPlaylist/EmptySongslist";
-import useFetchUserDetails from "../../hooks/user/useFetchUserDetails";
 
 const Favorites = () => {
-  const { userLoading, userError } = useFetchUserDetails();
   const { favoritesError, favoritesLoading } = useFetchFavorites();
   const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,9 +44,9 @@ const Favorites = () => {
     }
   }, [favorites, dispatch]);
 
-  if (favoritesLoading || userLoading || favoritesIdLoading || !songsList)
+  if (favoritesLoading || favoritesIdLoading || !songsList)
     return <FavoriteSkeleton />;
-  if (favoritesError || userError || favoritesIdError) return <Error />;
+  if (favoritesError || favoritesIdError) return <Error />;
   if (Object.keys(songsList).length === 0) return <EmptySongslist />;
 
   return (

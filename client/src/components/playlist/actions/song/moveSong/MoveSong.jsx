@@ -8,10 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { userPlaylistsSelector } from "../../../../../redux/selectors/homepage.selector";
+import { playlistCollectionSelector } from "../../../../../redux/selectors/homepage.selector";
 import { Radio } from "@mui/material";
 import { deleteViewingSong } from "../../../../../redux/slices/audioplayer.slice";
 import exclaimationMark from "../../../../../assets/images/Homepage/ExclaimationMark.png";
+import usePlaylistMetadata from "../../../../../pages/playlist/hooks/usePlaylistMetadata";
 
 const PlaylistSelector = ({ filteredPlaylists, selected, handleSelect }) => {
   return (
@@ -76,11 +77,13 @@ const MoveSong = ({ open, onClose, songId, playlistId }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [selected, setSelected] = useState(null);
+  const { collectionId } = usePlaylistMetadata(playlistId);
+  const playlistCollection = useSelector(playlistCollectionSelector);
 
-  const playlists = useSelector(userPlaylistsSelector);
-  const filteredPlaylists = Object.entries(playlists).filter(
-    ([id]) => id !== playlistId,
-  );
+  const collection = playlistCollection.find((c) => c.id === collectionId);
+  const filteredPlaylists =
+    collection?.collection.filter((p) => p.playlist_id !== playlistId) ?? [];
+
   const handleSelect = (id) => {
     setSelected(id);
     setErrorMessage("");

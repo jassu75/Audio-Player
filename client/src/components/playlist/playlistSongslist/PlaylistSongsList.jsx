@@ -5,24 +5,21 @@ import { viewingSonglistSelector } from "../../../redux/selectors/audioplayer.se
 import PlaylistSong from "./playlistSong/PlaylistSong";
 
 const PlaylistSongsList = ({ playlistId, page }) => {
-  const allSongs = useSelector(viewingSonglistSelector);
+  const viewingSonglist = useSelector(viewingSonglistSelector);
   const start = (page - 1) * 20;
   const end = start + 20;
 
   return (
     <Grid2 className={styles.song_list}>
-      {allSongs
-        ? Object.entries(allSongs)
-            .slice(start, end)
-            .map(([id, song]) => (
-              <PlaylistSong
-                key={id}
-                playlistId={playlistId}
-                songKey={id}
-                song={song}
-              />
-            ))
-        : null}
+      {Object.values(viewingSonglist)
+        .slice(start, end)
+        .map((song) => (
+          <PlaylistSong
+            key={song.song_id}
+            playlistId={playlistId}
+            song={song}
+          />
+        ))}
     </Grid2>
   );
 };

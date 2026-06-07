@@ -41,32 +41,3 @@
   padding-top: 10px;
   height: 100%;
 }
-
-.song_actions {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  padding-left: 10px;
-}
-
-.loader {
-  color: #ffffff;
-}
-
-.menu_item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-
-.divider {
-  background-color: #666666;
-}
-.delete_item_text {
-  color: #ff7f7f;
-}
-
-.icon {
-  color: #ffffff;
-}

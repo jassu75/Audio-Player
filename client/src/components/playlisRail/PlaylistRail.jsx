@@ -4,7 +4,7 @@ import styles from "./playlistRail.module.css";
 import PlaylistRailItem from "./playlistRailItem/PlaylistRailItem";
 
 const PlaylistRail = ({ collection }) => {
-  if (!collection || collection.length === 0) {
+  if (!collection || collection.collection?.length === 0) {
     return null;
   }
 

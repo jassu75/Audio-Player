@@ -17,7 +17,7 @@ const Playlist = () => {
   const { playlistId } = useParams();
   const { collectionId, type, playlistTitle } = usePlaylistMetadata(playlistId);
   const { loading, error } = useFetchPlaylist(collectionId, playlistId);
-  const songsList = useSelector(viewingSonglistSelector);
+  const viewingSongsList = useSelector(viewingSonglistSelector);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") || "1";
@@ -26,7 +26,7 @@ const Playlist = () => {
     setSearchParams({ page: value }, { replace: true });
   };
 
-  if (!songsList || loading) {
+  if (!viewingSongsList || loading) {
     return <PlaylistSkeleton />;
   }
 
@@ -34,8 +34,7 @@ const Playlist = () => {
     return <Error />;
   }
 
-  if (songsList && Object.keys(songsList).length === 0)
-    return <EmptySongslist />;
+  if (Object.keys(viewingSongsList).length === 0) return <EmptySongslist />;
 
   return (
     <Grid2 className={styles.playlist_songs}>
@@ -49,7 +48,7 @@ const Playlist = () => {
         <PlaylistSongsList playlistId={playlistId} page={page} />
         <Pagination
           variant="outlined"
-          count={Math.ceil(Object.keys(songsList).length / 20)}
+          count={Math.ceil(Object.keys(viewingSongsList).length / 20)}
           page={Number(page)}
           onChange={handleSetPage}
         />

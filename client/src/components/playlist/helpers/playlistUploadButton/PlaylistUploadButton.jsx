@@ -11,9 +11,9 @@ const PlaylistUploadButton = ({ type, playlistId }) => {
 
   const closeModal = () => setIsModalOpen(false);
 
-  const show = type === "user";
+  const hide = type !== "user";
 
-  if (show) return null;
+  if (hide) return null;
 
   return (
     <div>

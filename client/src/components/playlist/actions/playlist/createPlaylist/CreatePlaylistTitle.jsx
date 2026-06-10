@@ -29,14 +29,13 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
   const handleDone = async () => {
     try {
       setLoading(true);
-      const randomImage =
-        PLAYLIST_COVER_IMAGES[
-          Math.floor(Math.random() * PLAYLIST_COVER_IMAGES.length)
-        ];
+      const randomImageKey = Object.keys(PLAYLIST_COVER_IMAGES)[
+        Math.floor(Math.random() * Object.keys(PLAYLIST_COVER_IMAGES).length)
+      ];
 
       const uploadPlaylist = {
         playlist_title: title,
-        playlist_cover_art: randomImage,
+        playlist_cover_art: randomImageKey,
         user_id: user.user_id,
         source: "user",
       };
@@ -47,7 +46,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
       const newPlaylist = {
         playlist_id: playlistId,
         playlist_title: title,
-        playlist_cover_art: randomImage,
+        playlist_cover_art: randomImageKey,
       };
 
       dispatch(addPlaylist(newPlaylist));

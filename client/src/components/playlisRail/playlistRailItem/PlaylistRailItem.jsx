@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import usePlaylistRailItem from "./hooks/usePlaylistRailItem";
 import PlaylistRailItemMenu from "../playlistRailItemMenu/PlaylistRailItemMenu";
 import { useNavigate } from "react-router-dom";
+import { getUserPlaylistRailCover } from "../utils/playlistRail.utils";
 
 const PlaylistRailItem = ({ playlist, type }) => {
   const playlistRailItemProps = usePlaylistRailItem();
@@ -15,6 +16,8 @@ const PlaylistRailItem = ({ playlist, type }) => {
     navigate(`/playlists/${playlist.playlist_id}?page=1`);
   };
 
+  const playlistCover = getUserPlaylistRailCover(playlist?.playlist_cover_art);
+
   return (
     <div className={styles.playlist_card_container}>
       <div
@@ -24,7 +27,7 @@ const PlaylistRailItem = ({ playlist, type }) => {
         <img
           loading="lazy"
           className={styles.playlist_image}
-          src={playlist?.playlist_cover_art}
+          src={playlistCover}
           alt=""
         />
         <Grid2 className={styles.playlist_content}>

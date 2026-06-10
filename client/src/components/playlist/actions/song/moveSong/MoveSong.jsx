@@ -13,39 +13,48 @@ import { Radio } from "@mui/material";
 import { deleteViewingSong } from "../../../../../redux/slices/audioplayer.slice";
 import exclaimationMark from "../../../../../assets/images/Homepage/ExclaimationMark.png";
 import usePlaylistMetadata from "../../../../../pages/playlist/hooks/usePlaylistMetadata";
+import { getUserPlaylistRailCover } from "../../../../playlisRail/utils/playlistRail.utils";
 
 const PlaylistSelector = ({ filteredPlaylists, selected, handleSelect }) => {
   return (
     <Grid2 className={styles.playlist_container}>
       {filteredPlaylists.length > 0 ? (
-        filteredPlaylists.map(([id, playlist]) => (
-          <ButtonBase
-            key={id}
-            className={`${styles.playlist_item} ${
-              selected === id ? styles.selected_item : ""
-            }`}
-            onClick={() => handleSelect(id)}
-          >
-            <Radio
-              checked={selected === id}
-              onChange={() => handleSelect(id)}
-            />
-            <img
-              loading="lazy"
-              alt=""
-              src={playlist.playlist_cover_art}
-              className={styles.playlist_image}
-            />
-            <Grid2 className={styles.playlist_content}>
-              <Typography
-                variant="RedirectText"
-                className={styles.playlist_title}
-              >
-                {playlist?.playlist_title}
-              </Typography>
-            </Grid2>
-          </ButtonBase>
-        ))
+        filteredPlaylists.map(([id, playlist]) => {
+          const playlistCover = getUserPlaylistRailCover(
+            playlist?.playlist_cover_art,
+          );
+
+          return (
+            <ButtonBase
+              key={id}
+              className={`${styles.playlist_item} ${
+                selected === id ? styles.selected_item : ""
+              }`}
+              onClick={() => handleSelect(id)}
+            >
+              <Radio
+                checked={selected === id}
+                onChange={() => handleSelect(id)}
+              />
+
+              <img
+                loading="lazy"
+                alt=""
+                src={playlistCover}
+                className={styles.playlist_image}
+              />
+
+              <Grid2 className={styles.playlist_content}>
+                <Typography
+                  variant="RedirectText"
+                  className={styles.playlist_title}
+                >
+                  {playlist?.playlist_title}
+                </Typography>
+              </Grid2>
+            </ButtonBase>
+          );
+        })
       ) : (
         <Typography>No playlists available</Typography>
       )}

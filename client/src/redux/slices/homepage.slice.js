@@ -22,9 +22,17 @@ const setWithTimestamp = (key, data) => {
   localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
 };
 
+const setInSessionStorage = (key, data) => {
+  sessionStorage.setItem(key, JSON.stringify(data));
+};
+
+const getFromSessionStorage = (key) => {
+  return JSON.parse(sessionStorage.getItem(key)) || null;
+};
+
 const initialState = {
   user: checkExpired("user", null),
-  playlistCollection: checkExpired("playlistCollection", null),
+  playlistCollection: getFromSessionStorage("playlistCollection"),
 };
 
 const songsSlice = createSlice({
@@ -38,7 +46,7 @@ const songsSlice = createSlice({
 
     setPlaylistCollection: (state, action) => {
       state.playlistCollection = action.payload;
-      setWithTimestamp("playlistCollection", state.playlistCollection);
+      setInSessionStorage("playlistCollection", action.payload);
     },
 
     addPlaylist: (state, action) => {
@@ -49,8 +57,7 @@ const songsSlice = createSlice({
       if (collection) {
         collection.collection.push(newPlaylist);
       }
-
-      setWithTimestamp("playlistCollection", state.playlistCollection);
+      setInSessionStorage("playlistCollection", state.playlistCollection);
     },
 
     deletePlaylist: (state, action) => {
@@ -64,14 +71,14 @@ const songsSlice = createSlice({
         );
         if (index !== -1) collection.collection.splice(index, 1);
       }
-      setWithTimestamp("playlistCollection", state.playlistCollection);
+      setInSessionStorage("playlistCollection", state.playlistCollection);
     },
 
     renamePlaylist: (state, action) => {
       const { collectionId, playlistId, newTitle } = action.payload;
       state.playlistCollection[collectionId][playlistId].playlist_title =
         newTitle;
-      setWithTimestamp("playlistCollection", state.playlistCollection);
+      setInSessionStorage("playlistCollection", state.playlistCollection);
     },
   },
 });

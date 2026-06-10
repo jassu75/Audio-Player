@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import axiosAuth from "../../../../config/axiosAuth";
-import deletePlaylistDetails from "../../../../redux/slices/homepage.slice";
+import { deletePlaylist } from "../../../../redux/slices/homepage.slice";
 
 const usePlaylistRailItem = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const usePlaylistRailItem = () => {
       setLoading("delete");
 
       await axiosAuth.post("/api/deletePlaylist", { playlist_id: playlistId });
-      dispatch(deletePlaylistDetails(playlistId));
+      dispatch(deletePlaylist(playlistId));
     } catch (error) {
       setCantDeleteModal(true);
       console.error("Error deleting Playlist", error);

@@ -10,7 +10,8 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { userSelector } from "../../../../../redux/selectors/homepage.selector";
-import { updatePlaylistCollection } from "../../../../../redux/slices/homepage.slice";
+import { addPlaylist } from "../../../../../redux/slices/homepage.slice";
+import { PLAYLIST_COVER_IMAGES } from "../../../../../assets/assets.consts";
 
 const CreatePlaylistTitle = ({ open, onClose }) => {
   const dispatch = useDispatch();
@@ -18,19 +19,7 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
   const [loading, setLoading] = useState(false);
   const user = useSelector(userSelector);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const images = [
-    "/images/PlaylistCoverArt/playlist1.png",
-    "/images/PlaylistCoverArt/playlist2.png",
-    "/images/PlaylistCoverArt/playlist3.jpeg",
-    "/images/PlaylistCoverArt/playlist4.jpeg",
-    "/images/PlaylistCoverArt/playlist5.png",
-    "/images/PlaylistCoverArt/playlist6.png",
-    "/images/PlaylistCoverArt/playlist7.jpeg",
-    "/images/PlaylistCoverArt/playlist8.jpeg",
-    "/images/PlaylistCoverArt/playlist9.png",
-    "/images/PlaylistCoverArt/playlist10.jpeg",
-  ];
+  const doneDisabled = loading || !title;
 
   const handleInput = (e) => {
     setErrorMessage(false);
@@ -39,28 +28,29 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
 
   const handleDone = async () => {
     try {
-      if (!title) {
-        setErrorMessage("Enter a playlist title");
-      } else {
-        setLoading(true);
-        const randomImage = images[Math.floor(Math.random() * images.length)];
+      setLoading(true);
+      const randomImage =
+        PLAYLIST_COVER_IMAGES[
+          Math.floor(Math.random() * PLAYLIST_COVER_IMAGES.length)
+        ];
 
-        const uploadPlaylist = {
-          playlist_title: title,
-          playlist_cover_art: randomImage,
-          user_id: user.user_id,
-        };
-        const response = await axios.post(
-          "/api/addPlaylist",
-          { uploadPlaylist },
-          {
-            headers: { "Content-Type": "application/json" },
-          },
-        );
-        const id = response.data?.playlist_details?.returning?.[0]?.playlist_id;
-        uploadPlaylist.id = id;
-        dispatch(updatePlaylistCollection(uploadPlaylist));
-      }
+      const uploadPlaylist = {
+        playlist_title: title,
+        playlist_cover_art: randomImage,
+        user_id: user.user_id,
+        source: "user",
+      };
+      const response = await axios.post("/api/addPlaylist", { uploadPlaylist });
+      const playlistId =
+        response.data?.playlist_details?.returning?.[0]?.playlist_id;
+
+      const newPlaylist = {
+        playlist_id: playlistId,
+        playlist_title: title,
+        playlist_cover_art: randomImage,
+      };
+
+      dispatch(addPlaylist(newPlaylist));
     } catch (error) {
       console.error("Error creating playlist", error);
     } finally {
@@ -83,6 +73,8 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
             value={title}
             onChange={handleInput}
             fullWidth
+            error={!!errorMessage}
+            helperText={errorMessage || " "}
             className={styles.input}
             slotProps={{
               htmlInput: {
@@ -99,43 +91,36 @@ const CreatePlaylistTitle = ({ open, onClose }) => {
               "& .MuiInputLabel-root.Mui-focused": {
                 color: "yellow",
               },
+              "& .MuiFormHelperText-root": {
+                color: "#ff7f7f",
+              },
             }}
           />
-          <Grid2 className={styles.error_message_container}>
-            {errorMessage ? (
-              <Typography variant="ErrorText" className={styles.error_text}>
-                {errorMessage}
-              </Typography>
-            ) : null}
-          </Grid2>
+
           <Grid2 className={styles.action_buttons_container}>
-            <ButtonBase onClick={onClose} disabled={loading}>
-              <Grid2
-                className={`${styles.cancel_button} ${
-                  loading ? styles.disabled_button : ""
-                }`}
+            <ButtonBase
+              onClick={onClose}
+              disabled={loading}
+              className={styles.cancel_button}
+            >
+              <Typography
+                className={styles.cancel_button_text}
+                variant="UploadSongText"
               >
-                <Typography
-                  className={styles.cancel_button_text}
-                  variant="UploadSongText"
-                >
-                  CANCEL
-                </Typography>
-              </Grid2>
+                CANCEL
+              </Typography>
             </ButtonBase>
-            <ButtonBase onClick={handleDone} disabled={loading}>
-              <Grid2
-                className={`${styles.done_button} ${loading}
- ? styles.disabled_button : ""
-                        }`}
+            <ButtonBase
+              onClick={handleDone}
+              disabled={doneDisabled}
+              className={styles.done_button}
+            >
+              <Typography
+                variant="UploadSongText"
+                className={styles.done_button_text}
               >
-                <Typography
-                  variant="UploadSongText"
-                  className={styles.done_button_text}
-                >
-                  DONE
-                </Typography>
-              </Grid2>
+                DONE
+              </Typography>
             </ButtonBase>
           </Grid2>
         </Grid2>

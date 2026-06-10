@@ -41,22 +41,33 @@ const songsSlice = createSlice({
       setWithTimestamp("playlistCollection", state.playlistCollection);
     },
 
-    updatePlaylistCollection: (state, action) => {
-      const { collectionId, playlistId, data } = action.payload;
-      state.playlistCollection[collectionId][playlistId] = {
-        ...state.playlistCollection[collectionId][playlistId],
-        ...data,
-      };
+    addPlaylist: (state, action) => {
+      const newPlaylist = action.payload;
+      const collection = state.playlistCollection.find(
+        (c) => c.type === "user",
+      );
+      if (collection) {
+        collection.collection.push(newPlaylist);
+      }
+
       setWithTimestamp("playlistCollection", state.playlistCollection);
     },
 
-    deleteFromPlaylistCollection: (state, action) => {
-      const { collectionId, playlistId } = action.payload;
-      delete state.playlistCollection[collectionId][playlistId];
+    deletePlaylist: (state, action) => {
+      const playlistId = action.payload;
+      const collection = state.playlistCollection.find(
+        (c) => c.type === "user",
+      );
+      if (collection) {
+        const index = collection.collection.findIndex(
+          (p) => p.playlist_id === playlistId,
+        );
+        if (index !== -1) collection.collection.splice(index, 1);
+      }
       setWithTimestamp("playlistCollection", state.playlistCollection);
     },
 
-    renameInPlaylistCollection: (state, action) => {
+    renamePlaylist: (state, action) => {
       const { collectionId, playlistId, newTitle } = action.payload;
       state.playlistCollection[collectionId][playlistId].playlist_title =
         newTitle;
@@ -68,9 +79,9 @@ const songsSlice = createSlice({
 export const {
   setUser,
   setPlaylistCollection,
-  updatePlaylistCollection,
-  deleteFromPlaylistCollection,
-  renameInPlaylistCollection,
+  addPlaylist,
+  deletePlaylist,
+  renamePlaylist,
 } = songsSlice.actions;
 
 export default songsSlice.reducer;

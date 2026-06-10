@@ -21,17 +21,6 @@
   width: 95%;
 }
 
-.error_message_container {
-  display: flex;
-  width: 95%;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.error_text {
-  color: #ff7f7f;
-}
-
 .action_buttons_container {
   display: flex;
   justify-content: space-between;
@@ -39,36 +28,32 @@
   padding-top: 20px;
 }
 
-.cancel_button {
+.cancel_button:global(.MuiButtonBase-root) {
   border-radius: 8px;
-  background-color: #333333;
+  background-color: #9f5fd4;
   padding: 10px 20px;
 }
 
-.cancel_button_text {
-  color: #ffffff;
+.cancel_button:global(.MuiButtonBase-root):hover {
+  background-color: #b87fe0;
 }
 
-.cancel_button:hover {
-  background-color: #7d3fbe;
+.cancel_button:global(.MuiButtonBase-root.Mui-disabled) {
+  background-color: #5a3080;
 }
 
-.done_button {
+.done_button:global(.MuiButtonBase-root) {
   border-radius: 8px;
-  background-color: #6a8dff;
+  background-color: #99b8ff;
   padding: 10px 20px;
 }
 
-.done_button_text {
-  color: #ffffff;
+.done_button:global(.MuiButtonBase-root):hover {
+  background-color: #b8ccff;
 }
 
-.done_button:hover {
-  background-color: #5472d3;
-}
-
-.disabled_button {
-  background-color: #808080;
+.done_button:global(.MuiButtonBase-root.Mui-disabled) {
+  background-color: #6a80c4;
 }
 
 .loader_backdrop {

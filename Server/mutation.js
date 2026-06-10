@@ -58,12 +58,14 @@ export const ADD_PLAYLIST = `
     $playlist_title: String!
     $playlist_cover_art: String!
     $user_id: String!
+    $source: source!
   ) {
     playlist_details:insert_playlist_details(
       objects: {
         playlist_title: $playlist_title
         playlist_cover_art: $playlist_cover_art
         user_id: $user_id
+        source: $source
       }
     ) {
       returning {

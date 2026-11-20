@@ -1,55 +1,36 @@
-import type { User } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../config/firebase";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { userSelector } from "../redux/selectors/homepageSelectors";
 import { setUser } from "../redux/slices/homepageSlice";
-import { postApi } from "../services/api";
+import { fetchSessionUser } from "../services/session";
+import { resetSessionState } from "../redux/rootReducer";
+
 const useFetchUser = () => {
     const dispatch = useAppDispatch();
     const user = useAppSelector(userSelector);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-            if (authUser) {
-                setFirebaseUser(authUser);
-            }
-            else {
+        if (user) return;
+        const controller = new AbortController();
+        setError(false);
+        fetchSessionUser(controller.signal).then(profile => {
+            if (!controller.signal.aborted) dispatch(setUser(profile));
+        }).catch((reason: unknown) => {
+            if (controller.signal.aborted) return;
+            if (axios.isAxiosError(reason) && reason.response?.status === 401) {
+                sessionStorage.clear();
+                dispatch(resetSessionState());
                 navigate("/account", { replace: true });
+            } else {
+                setError(true);
             }
         });
-        return () => unsubscribe();
-    }, [navigate]);
-    useEffect(() => {
-        const fetchUser = async () => {
-            if (!firebaseUser)
-                return;
-            try {
-                setLoading(true);
-                setError(false);
-                const options = { user_id: firebaseUser.uid };
-                const response = await postApi("/api/checkExistingUser", options);
-                if (!response.data?.users)
-                    throw new Error("User profile not found");
-                dispatch(setUser(response.data.users));
-            }
-            catch (error) {
-                setError(true);
-                console.error("Error fetching user details:", error);
-            }
-            finally {
-                setLoading(false);
-            }
-        };
-        if (firebaseUser && user?.user_id !== firebaseUser.uid) {
-            fetchUser();
-        }
-    }, [dispatch, firebaseUser, user]);
-    return { loading: loading || (!error && (!firebaseUser || user?.user_id !== firebaseUser.uid)), error };
+        return () => controller.abort();
+    }, [dispatch, navigate, user]);
+    return { loading: !user && !error, error };
 };
+
 export default useFetchUser;

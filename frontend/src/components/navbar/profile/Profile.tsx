@@ -6,20 +6,21 @@ import Grid from "@mui/material/Grid";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
-import { signOut } from "firebase/auth";
 import { useState } from "react";
 import defaultAvatar from "../../../assets/images/Homepage/DefaultAvatar.jpeg";
-import { auth } from "../../../config/firebase";
+import { useAppSelector } from "../../../redux/hooks";
+import { userSelector } from "../../../redux/selectors/homepageSelectors";
+import { endUserSession } from "../../../services/session";
 import { postApi } from "../../../services/api";
 import type { ProfileProps } from "./types/Profile.types";
 import type { Asset } from "../../../hooks/cloudinary/types/useCloudinaryUpload.types";
 import styles from "./profile.module.css";
 const logout = () => {
-    localStorage.clear();
     sessionStorage.clear();
     window.location.replace("/account");
 };
 const Profile = ({ username }: ProfileProps) => {
+    const user = useAppSelector(userSelector);
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [signOutLoading, setSignOutLoading] = useState(false);
     const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
@@ -32,7 +33,7 @@ const Profile = ({ username }: ProfileProps) => {
     const handleSignout = async () => {
         try {
             setSignOutLoading(true);
-            await signOut(auth);
+            await endUserSession();
             logout();
         }
         catch (error) {
@@ -46,13 +47,10 @@ const Profile = ({ username }: ProfileProps) => {
     const handleDeleteAccount = async () => {
         try {
             setDeleteAccountLoading(true);
-            const currentUser = auth.currentUser;
-            const token = await currentUser?.getIdToken();
-            if (token && currentUser) {
-                const assets = await postApi("/api/fetchassets", { user_id: currentUser.uid }, {
+            if (user) {
+                const assets = await postApi("/api/fetchassets", { user_id: user.user_id }, {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                 });
                 const refinedAssets = assets.data?.assets.flatMap((asset) => {
@@ -67,9 +65,9 @@ const Profile = ({ username }: ProfileProps) => {
                 await postApi("/api/deleteuser", { assets: refinedAssets }, {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                 });
+                await endUserSession();
                 logout();
             }
         }

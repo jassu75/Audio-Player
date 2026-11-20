@@ -12,6 +12,7 @@ import { currentSongSelector } from "../../../../redux/selectors/audioPlayerSele
 import type { ExpandedPlayerProps } from "./types/ExpandedPlayer.types";
 import { formatTime } from "../../utils/audioPlayer.utils";
 import styles from "./expandedPlayer.module.css";
+import SongCover from "../../../helpers/song-cover/SongCover";
 const ExpandedPlayer = ({ audioPlayerProps }: ExpandedPlayerProps) => {
     const song = useAppSelector(currentSongSelector);
     const { isPlaying, playbackError, progress, duration, handlePlayPrevious, handleTogglePlay, handlePlayNext, handleSliderChange, handleClose, } = audioPlayerProps;
@@ -25,7 +26,7 @@ const ExpandedPlayer = ({ audioPlayerProps }: ExpandedPlayerProps) => {
           </IconButton>
         </Grid>
         <Grid className={styles.cover}>
-          <img loading="lazy" src={song.cover_art} alt={song.title ?? ""} className={styles.cover_image}/>
+          <SongCover loading="lazy" src={song.cover_art} alt={song.title ?? ""} className={styles.cover_image}/>
         </Grid>
 
         <Grid className={styles.song_info}>

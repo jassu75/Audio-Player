@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import * as musicMetadata from "music-metadata";
 import React, { useState } from "react";
-import defaultMusicNote from "../../../../../assets/images/AudioUploadForm/defaultMusicImage.webp";
+import { DEFAULT_SONG_COVER } from "../../../../helpers/song-cover/songCover.utils";
 import useCloudinaryAudioUpload from "../../../../../hooks/cloudinary/useCloudinaryAudioUpload";
 import useCloudinaryImageUpload from "../../../../../hooks/cloudinary/useCloudinaryImageUpload";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
@@ -60,7 +60,7 @@ const PlaylistUploadForm = ({ open, onClose, playlistId }: PlaylistUploadProps) 
                     const image = metadata.common.picture?.[0]?.data ?? null;
                     const imageDetails = image
                         ? await uploadImageToCloudinary(new Blob([Uint8Array.from(image)], { type: "image/jpeg" }))
-                        : { coverArt: defaultMusicNote, coverArtId: "static" };
+                        : { coverArt: DEFAULT_SONG_COVER, coverArtId: "static" };
                     const audioSource = "user";
                     const uploadedSong: Omit<Song, "song_id"> = {
                         user_id: user.user_id,

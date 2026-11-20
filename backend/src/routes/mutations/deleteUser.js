@@ -4,6 +4,7 @@ import client from "../../Config/hasura.js";
 import firebaseAuthenticate from "../../MiddleWare/firebaseAuthenticate.js";
 import firebaseAuth from "../../Config/firebase.js";
 import deleteAssets from "../../services/cloudinary/deleteAssets.js";
+import { clearSessionCookie } from "../../services/session.js";
 const router = Router();
 router.post("/api/deleteuser", firebaseAuthenticate, async (req, res) => {
     try {
@@ -14,6 +15,7 @@ router.post("/api/deleteuser", firebaseAuthenticate, async (req, res) => {
         }
         await client.request(DELETE_USER, { user_id: user_id });
         await firebaseAuth.deleteUser(user_id);
+        clearSessionCookie(res);
         res.status(200).json("User Deleted Successfully");
     }
     catch (error) {

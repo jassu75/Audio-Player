@@ -5,6 +5,7 @@ import type { PlaylistSongProps } from "./types/PlaylistSong.types";
 import styles from "./playlistSong.module.css";
 import { playSong, } from "../../../../redux/slices/audioPlayerSlice";
 import PlaylistSongMenu from "./playlist-song-menu/PlaylistSongMenu";
+import SongCover from "../../../helpers/song-cover/SongCover";
 const PlaylistSong = ({ playlistId, song, type }: PlaylistSongProps) => {
     const dispatch = useAppDispatch();
     const showMenu = type === "user";
@@ -13,7 +14,7 @@ const PlaylistSong = ({ playlistId, song, type }: PlaylistSongProps) => {
     };
     return (<Grid className={styles.song_card}>
       <Grid className={styles.song_card_info} onClick={handleSongClick}>
-        <img loading="lazy" className={styles.song_image} src={song?.cover_art} alt=""/>
+        <SongCover loading="lazy" className={styles.song_image} src={song?.cover_art} alt=""/>
         <Grid className={styles.song_content}>
           <Grid className={styles.song_title}>
             <Typography variant="homepageSongTitle" className={styles.song_title}>

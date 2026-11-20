@@ -47,7 +47,7 @@ describe.each([
         expect(axios.post).toHaveBeenLastCalledWith(`/api/update${kind}title`, {
             [kind === "playlist" ? "playlistId" : "songId"]: kind === "playlist" ? "p1" : "s1",
             newTitle: "Renamed",
-        });
+        }, expect.objectContaining({ withCredentials: true, headers: { "X-Musify-Request": "1" } }));
         expect(store.getState().audioplayer.playingSongList?.s1.title).toBe(kind === "song" ? "Renamed" : "Original");
         vi.restoreAllMocks();
     });

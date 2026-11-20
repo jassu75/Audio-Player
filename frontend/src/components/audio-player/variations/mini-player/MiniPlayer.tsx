@@ -8,6 +8,7 @@ import { useAppSelector } from "../../../../redux/hooks";
 import { currentSongSelector } from "../../../../redux/selectors/audioPlayerSelectors";
 import type { MiniPlayerProps } from "./types/MiniPlayer.types";
 import styles from "./miniPlayer.module.css";
+import SongCover from "../../../helpers/song-cover/SongCover";
 
 const MiniPlayer = ({ audioPlayerProps }: MiniPlayerProps) => {
   const {
@@ -37,8 +38,8 @@ const MiniPlayer = ({ audioPlayerProps }: MiniPlayerProps) => {
           onClick={handleExpand}
           aria-label={"Open player for " + song.title}
         >
-          <img
-            src={song.cover_art || "/icons/icon-192.png"}
+          <SongCover
+            src={song.cover_art}
             alt=""
             className={styles.cover_image}
           />

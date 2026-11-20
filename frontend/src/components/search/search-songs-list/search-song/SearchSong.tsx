@@ -3,13 +3,14 @@ import { useAppDispatch } from "../../../../redux/hooks";
 import { playSong, } from "../../../../redux/slices/audioPlayerSlice";
 import type { SearchSongProps } from "./types/SearchSong.types";
 import styles from "./searchSong.module.css";
+import SongCover from "../../../helpers/song-cover/SongCover";
 const SearchSong = ({ songKey, song }: SearchSongProps) => {
     const dispatch = useAppDispatch();
     const handleSongClick = () => {
         dispatch(playSong(songKey));
     };
     return (<Grid className={styles.song_card_info} onClick={handleSongClick}>
-      <img loading="lazy" className={styles.song_image} src={song?.cover_art} alt=""/>
+      <SongCover loading="lazy" className={styles.song_image} src={song?.cover_art} alt=""/>
       <Grid className={styles.song_content}>
         <Grid className={styles.song_title}>
           <Typography variant="homepageSongTitle" className={styles.song_title}>

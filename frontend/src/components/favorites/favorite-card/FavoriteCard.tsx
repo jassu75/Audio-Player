@@ -8,6 +8,7 @@ import { playSong, } from "../../../redux/slices/audioPlayerSlice";
 import type { AlbumAndTimeProps, FavoriteCardProps, GenreProps } from "./types/FavoriteCard.types";
 import FavoriteIcon from "../favorite-icon/FavoriteIcon";
 import styles from "./favoriteCard.module.css";
+import SongCover from "../../helpers/song-cover/SongCover";
 const Genre = ({ genre }: GenreProps) => {
     if (!genre || genre.length === 0)
         return null;
@@ -46,7 +47,7 @@ const FavoriteCard = ({ favorite, songKey }: FavoriteCardProps) => {
     };
     return (<Grid className={styles.favorite_card} onClick={handleFavoriteClick}>
       <Grid className={styles.image_container}>
-        <img className={styles.favorite_image} loading="lazy" src={favorite.cover_art} alt=""/>
+        <SongCover className={styles.favorite_image} loading="lazy" src={favorite.cover_art} alt=""/>
         <Genre genre={favorite.genre}/>
         <Grid className={styles.favorite_icon_container}>
           <FavoriteIcon songId={favorite.song_id}/>

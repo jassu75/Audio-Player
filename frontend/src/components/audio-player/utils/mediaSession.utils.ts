@@ -1,4 +1,5 @@
 import type { MediaSessionConnection, MediaSessionControls } from "./types/mediaSession.types";
+import { DEFAULT_SONG_COVER, getSongCoverArt } from "../../helpers/song-cover/songCover.utils";
 
 export const connectMediaSession = (audio: HTMLAudioElement, controls: MediaSessionControls): MediaSessionConnection => {
   if (!("mediaSession" in navigator)) return { setTrack: () => undefined, dispose: () => undefined };
@@ -54,9 +55,9 @@ export const connectMediaSession = (audio: HTMLAudioElement, controls: MediaSess
         session.metadata = null;
         session.playbackState = "none";
       } else if (typeof MediaMetadata !== "undefined") {
-        let artwork = new URL("/icons/icon-512.png", window.location.origin).href;
-        try { artwork = new URL(song.cover_art || artwork, window.location.href).href; }
-        catch { artwork = new URL("/icons/icon-512.png", window.location.origin).href; }
+        let artwork: string;
+        try { artwork = new URL(getSongCoverArt(song.cover_art), window.location.href).href; }
+        catch { artwork = new URL(DEFAULT_SONG_COVER, window.location.origin).href; }
         session.metadata = new MediaMetadata({ title: song.title, artist: song.artist, album: song.album, artwork: [{ src: artwork }] });
       }
       updatePosition();

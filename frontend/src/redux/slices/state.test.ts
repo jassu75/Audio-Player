@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
-import { makeSong } from "../../test/fixtures";
+import { createTestStore, makeSong, makeUser } from "../../test/fixtures";
+import { resetSessionState } from "../rootReducer";
 import audioPlayer, { deleteSong, playNext, playPrevious } from "./audioPlayerSlice";
 import userPreferences, { addFavorite, addRecentlyPlayed, setRecentlyPlayed } from "./userPreferencesSlice";
 test("history accepts old dictionaries and can record another listen", () => {
@@ -28,4 +29,18 @@ test("favorites cannot contain the same song twice", () => {
     let state = userPreferences(undefined, addFavorite("s1"));
     state = userPreferences(state, addFavorite("s1"));
     expect(state.favorites).toEqual(["s1"]);
+});
+
+test("changing or ending a session clears the previous account's profile, library, preferences, and queue", () => {
+    const store = createTestStore({
+        homepage: { user: makeUser(), playlistCollection: [{ id: "mine", title: "Mine", type: "user", collection: [] }] },
+        audioplayer: { viewingSongList: { s1: makeSong() }, playingSongList: { s1: makeSong() }, playingIndex: "s1" },
+        userPrefs: { favorites: ["s1"], recentlyPlayed: [makeSong()], listens: { s1: 3 } },
+    });
+    store.dispatch(resetSessionState());
+    expect(store.getState()).toEqual({
+        homepage: { user: null, playlistCollection: null },
+        audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null },
+        userPrefs: { favorites: null, recentlyPlayed: null, listens: null },
+    });
 });

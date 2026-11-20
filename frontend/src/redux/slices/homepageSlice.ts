@@ -1,30 +1,10 @@
 import type { RenamePlaylistPayload } from "./types/homepageSlice.types";
-import type { CachedValue } from "../../utils/types/storage.types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { HomepageState } from "./types/homepageSlice.types";
 import type { Playlist, PlaylistCollection } from "../../components/playlist-rail/types/playlist.types";
 import type { UserProfile } from "../../hooks/types/useFetchUser.types";
 import { readStoredJson, writeStoredJson } from "../../utils/storage";
-const EXPIRY = {
-    user: 7 * 24 * 60 * 60 * 1000,
-    playlistCollection: 30 * 24 * 60 * 60 * 1000,
-};
-const checkExpired = <T,>(key: keyof typeof EXPIRY, defaultValue: T): T => {
-    const storedItem = readStoredJson<CachedValue<T>>(localStorage, key);
-    if (!storedItem)
-        return defaultValue;
-    const { data, timestamp } = storedItem;
-    if (Date.now() - timestamp < EXPIRY[key]) {
-        return data;
-    }
-    else {
-        return defaultValue;
-    }
-};
-const setWithTimestamp = (key: string, data: unknown) => {
-    writeStoredJson(localStorage, key, { data, timestamp: Date.now() });
-};
 const setInSessionStorage = (key: string, data: unknown) => {
     writeStoredJson(sessionStorage, key, data);
 };
@@ -32,7 +12,7 @@ const getFromSessionStorage = <T,>(key: string) => {
     return readStoredJson<T>(sessionStorage, key);
 };
 const initialState: HomepageState = {
-    user: checkExpired<UserProfile | null>("user", null),
+    user: null,
     playlistCollection: getFromSessionStorage<PlaylistCollection[]>("playlistCollection"),
 };
 const homepageSlice = createSlice({
@@ -41,7 +21,6 @@ const homepageSlice = createSlice({
     reducers: {
         setUser: (state, action: PayloadAction<UserProfile | null>) => {
             state.user = action.payload;
-            setWithTimestamp("user", action.payload);
         },
         setPlaylistCollection: (state, action: PayloadAction<PlaylistCollection[]>) => {
             state.playlistCollection = action.payload;

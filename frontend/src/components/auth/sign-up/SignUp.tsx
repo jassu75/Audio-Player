@@ -7,7 +7,7 @@ import { FirebaseError } from "firebase/app";
 import { createUserWithEmailAndPassword, sendEmailVerification, signOut, } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../../config/firebase";
+import { auth, authReady } from "../../../config/firebase";
 import { postApi } from "../../../services/api";
 import MessageModal from "../../helpers/modals/message-modal/MessageModal";
 import styles from "./signUp.module.css";
@@ -34,6 +34,7 @@ const SignUp = () => {
             }
             else {
                 try {
+                    await authReady;
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     const user = userCredential.user;
                     const newUser = {
@@ -43,7 +44,7 @@ const SignUp = () => {
                         sign_in_method: "email",
                     };
                     await postApi("/api/addUser", { newUser }, {
-                        headers: { "Content-Type": "application/json" },
+                        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
                     });
                     await sendEmailVerification(user);
                     await signOut(auth);
@@ -80,6 +81,7 @@ const SignUp = () => {
             console.error("Error during registration:", err instanceof Error ? err.message : String(err));
         }
         finally {
+            await signOut(auth);
             setLoading(false);
         }
     };

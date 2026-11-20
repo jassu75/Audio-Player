@@ -13,6 +13,7 @@ import { currentSongSelector } from "../../../../redux/selectors/audioPlayerSele
 import { formatTime } from "../../utils/audioPlayer.utils";
 import type { MaxPlayerProps } from "./types/MaxPlayer.types";
 import styles from "./maxPlayer.module.css";
+import SongCover from "../../../helpers/song-cover/SongCover";
 
 const MaxPlayer = ({ audioPlayerProps }: MaxPlayerProps) => {
   const song = useAppSelector(currentSongSelector);
@@ -26,7 +27,7 @@ const MaxPlayer = ({ audioPlayerProps }: MaxPlayerProps) => {
         <IconButton onClick={handleClose} aria-label="Stop playback"><CloseIcon /></IconButton>
       </header>
       <div className={styles.player_body}>
-        <div className={styles.cover}><img src={song.cover_art || "/icons/icon-512.png"} alt={song.album ? "Cover for " + song.album : "Track artwork"} className={styles.cover_image} /></div>
+        <div className={styles.cover}><SongCover src={song.cover_art} alt={song.album ? "Cover for " + song.album : "Track artwork"} className={styles.cover_image} /></div>
         <div className={styles.song_info}><h2 id="mobile-player-title" className={styles.title}>{song.title}</h2><p className={styles.artist}>{song.artist || "Unknown artist"}</p></div>
         <div className={styles.progress_bar}>
           <Slider aria-label="Playback position" value={Math.min(progress, duration || 1)} min={0} max={duration || 1} disabled={!duration} onChange={handleSliderChange} getAriaValueText={formatTime} className={styles.slider} />

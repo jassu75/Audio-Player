@@ -3,6 +3,8 @@ import type { Playlist } from "../../components/playlist-rail/types/playlist.typ
 import type { Song } from "../../components/playlist/playlist-songs-list/playlist-song/types/song.types";
 import type { Asset } from "../../hooks/cloudinary/types/useCloudinaryUpload.types";
 export interface ApiEndpoints {
+    "/api/auth/session": Endpoint<{ idToken: string }, { users: UserProfile }>;
+    "/api/auth/logout": Endpoint<Record<string, never>>;
     "/api/checkExistingUser": Endpoint<UserRequest, {
         users: UserProfile | null;
     }>;

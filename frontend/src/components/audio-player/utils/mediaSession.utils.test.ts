@@ -2,6 +2,7 @@ import { fireEvent } from "@testing-library/react";
 import { afterEach, expect, test, vi } from "vitest";
 import { makeSong } from "../../../test/fixtures";
 import { connectMediaSession } from "./mediaSession.utils";
+import { DEFAULT_SONG_COVER } from "../../helpers/song-cover/songCover.utils";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -74,4 +75,14 @@ test("playback remains available without Media Session support", () => {
   const connection = connectMediaSession(audio, controls);
   expect(() => connection.setTrack(makeSong())).not.toThrow();
   expect(() => connection.dispose()).not.toThrow();
+});
+
+test("lock-screen artwork uses the original default for missing or historical covers", () => {
+  const { session, audio, controls } = setup();
+  const connection = connectMediaSession(audio, controls);
+  for (const cover_art of ["", "/static/media/defaultMusicImage.oldhash.webp"]) {
+    connection.setTrack(makeSong({ cover_art }));
+    expect(session.metadata?.artwork[0]?.src).toBe(new URL(DEFAULT_SONG_COVER, window.location.origin).href);
+  }
+  connection.dispose();
 });

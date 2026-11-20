@@ -4,14 +4,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleSignIn from "../../../assets/images/SignUpAndLogin/GoogleSignIn.svg";
-import { auth, googleAuthProvider } from "../../../config/firebase";
-import { useAppSelector } from "../../../redux/hooks";
-import { userSelector } from "../../../redux/selectors/homepageSelectors";
+import { auth, authReady, googleAuthProvider } from "../../../config/firebase";
 import { postApi } from "../../../services/api";
+import { createUserSession } from "../../../services/session";
 import MessageModal from "../../helpers/modals/message-modal/MessageModal";
 import styles from "./signIn.module.css";
 const SignIn = () => {
@@ -19,7 +18,6 @@ const SignIn = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const userFromDB = useAppSelector(userSelector);
     const [showMessage, setShowMessage] = useState(false);
     const [messageTitle, setMessageTitle] = useState("");
     const [message, setMessage] = useState("");
@@ -27,56 +25,31 @@ const SignIn = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            if (!userFromDB || userFromDB.email_id !== email) {
-                const response = await postApi("/api/verifyemail", { email_id: email }, {
-                    headers: { "Content-Type": "application/json" },
-                });
-                if (response.data?.users?.length > 0) {
-                    try {
-                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        if (user.emailVerified) {
-                            navigate("/", { replace: true });
-                        }
-                        else {
-                            setMessageTitle("Email not Verfied!");
-                            setMessage("Please verify your email and then login");
-                            setShowMessage(true);
-                        }
-                    }
-                    catch (err) {
-                        if (err instanceof FirebaseError && err.code === "auth/invalid-credential") {
-                            setMessageTitle("Incorrect Credentials!");
-                            setMessage("Email ID or Password is Invalid");
-                        }
-                        else {
-                            setMessageTitle("Login Failed!");
-                            setMessage("Please try again");
-                            console.error("Login failed", err);
-                        }
-                        setShowMessage(true);
-                    }
-                }
-                else {
-                    setMessageTitle("User does not exist!");
-                    setMessage("Please register first");
-                    setShowMessage(true);
-                }
+            await authReady;
+            const { user } = await signInWithEmailAndPassword(auth, email, password);
+            if (!user.emailVerified) {
+                await signOut(auth);
+                setMessageTitle("Email not verified");
+                setMessage("Please verify your email and then log in.");
+                setShowMessage(true);
+                return;
             }
-        }
-        catch (err) {
-            setMessageTitle("Login Failed!");
-            setMessage("Please try again");
+            await createUserSession(user);
+            navigate("/", { replace: true });
+        } catch (error) {
+            setMessageTitle("Login failed");
+            setMessage(error instanceof FirebaseError && error.code === "auth/invalid-credential"
+                ? "Email or password is invalid."
+                : "Unable to sign in. Please try again.");
             setShowMessage(true);
-            console.error("Login failed", err);
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     };
     const handleGoogleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         try {
+            await authReady;
             const userCredential = await signInWithPopup(auth, googleAuthProvider);
             setLoading(true);
             const user = userCredential.user;
@@ -84,6 +57,7 @@ const SignIn = () => {
                 headers: { "Content-Type": "application/json" },
             });
             if (response.data?.users?.length > 0) {
+                await createUserSession(user);
                 navigate("/", { replace: true });
             }
             else {
@@ -94,8 +68,9 @@ const SignIn = () => {
                     sign_in_method: "google",
                 };
                 await postApi("/api/addUser", { newUser }, {
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
                 });
+                await createUserSession(user);
                 navigate("/", { replace: true });
             }
         }

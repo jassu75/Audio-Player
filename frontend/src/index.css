@@ -1,0 +1,4 @@
+
+html { min-height: 100%; -webkit-text-size-adjust: 100%; }
+body { min-height: 100dvh; }
+button, a, input { touch-action: manipulation; }

@@ -8,7 +8,6 @@ query CHECK_EXISTING_USER($user_id: String!) {
 
   }
 `;
-
 export const VERIFY_EMAIL = `
 query VERIFY_EMAIL($email_id: String) {
   users(where: { email_id: { _eq: $email_id } }) {
@@ -16,7 +15,6 @@ query VERIFY_EMAIL($email_id: String) {
   }
 }
 `;
-
 export const FETCH_PLAYLIST_SONGS = `
 query FETCH_PLAYLIST_SONGS($playlist_id: uuid!) {
   playlists: playlist_songs(where: {playlist_id: {_eq: $playlist_id}}) {
@@ -38,7 +36,6 @@ query FETCH_PLAYLIST_SONGS($playlist_id: uuid!) {
 }
 
 `;
-
 export const FETCH_USER_SONGS_RANDOMLY = `
 query FETCH_USER_SONGS_RANDOMLY($user_id: String!) {
   randomSongs:fetch_user_songs_randomly(args: {userid: $user_id}) {
@@ -56,7 +53,6 @@ query FETCH_USER_SONGS_RANDOMLY($user_id: String!) {
 }
 
 `;
-
 export const GET_PLAYLISTS = `
 query GET_PLAYLISTS($user_id: String!) {
   playlist_details(where: { user_id: { _eq: $user_id } }) {
@@ -67,7 +63,6 @@ query GET_PLAYLISTS($user_id: String!) {
 }
 
 `;
-
 export const FETCH_SYSTEM_PLAYLISTS = `
   query FETCH_SYSTEM_PLAYLISTS @cached {
     playlist_details(where: { 
@@ -81,7 +76,6 @@ export const FETCH_SYSTEM_PLAYLISTS = `
     }
   }
 `;
-
 export const VERIFY_PLAYLIST_EMPTY = `
 query VERIFY_PLAYLIST_EMPTY($playlist_id:uuid!){
   playlist_songs(where:{playlist_id:{_eq:$playlist_id}},limit:1){
@@ -89,7 +83,6 @@ query VERIFY_PLAYLIST_EMPTY($playlist_id:uuid!){
   }
 }
 `;
-
 export const FETCH_SEARCH_SONGS = `
 query FETCH_SEARCH_SONGS($user_id: String!, $search_text: String!) {
   searchResults:audio_details(
@@ -117,7 +110,6 @@ query FETCH_SEARCH_SONGS($user_id: String!, $search_text: String!) {
 
 
 `;
-
 export const FETCH_RECENTLY_PLAYED = `
 query FETCH_RECENTLY_PLAYED($user_id:String!){
   recently_played:audio_details(
@@ -140,7 +132,6 @@ query FETCH_RECENTLY_PLAYED($user_id:String!){
   }
 }
 `;
-
 export const FETCH_MOST_LISTENED = `
 query FETCH_MOST_LISTENED($user_id:String!){
   most_listened:audio_details(
@@ -163,7 +154,6 @@ query FETCH_MOST_LISTENED($user_id:String!){
   }
 }
 `;
-
 export const FETCH_FAVORITE_IDS = `
 query FETCH_FAVORITE_IDS($user_id: String!) {
   favoriteIds:favorites(where: {user_id: {_eq: $user_id}}) {
@@ -172,7 +162,6 @@ query FETCH_FAVORITE_IDS($user_id: String!) {
 }
 
 `;
-
 export const FETCH_ASSETS = `
 query FETCH_ASSETS($user_id:String!) {
   assets:audio_details(where: {user_id: {_eq: $user_id}}) {
@@ -181,7 +170,6 @@ query FETCH_ASSETS($user_id:String!) {
   }
 }
 `;
-
 export const FETCH_FAVORITES = `
 query FETCH_FAVORITES($user_id: String!) {
   favorites(where: {user_id: {_eq: $user_id}}) {

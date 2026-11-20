@@ -1,6 +1,16 @@
 # 🎵 Musify
 
+Musify can be installed as a mobile web app from its HTTPS site. On Android, use **Install** when offered or the browser's **Install app** menu. On iPhone or iPad, use **Share → Add to Home Screen**. Installation support depends on the browser; the installed app and the website share the same account and library.
+
+The mobile player supports phone safe areas, portrait and landscape layouts, and lock-screen/headset controls through the Media Session API where available. Start playback by tapping a track or Play. The app keeps one audio element alive while navigating. Background playback remains subject to the phone and browser's policies. Music streams need an internet connection; the service worker caches the app shell and static assets, not authenticated API responses or audio files. Available updates wait for the user to choose **Update** so a new deployment does not reload an active listening session.
+
+PWA installation and service-worker behavior should be tested against `npm run build` followed by the backend server or `npm --prefix frontend run preview`. Development mode does not install a service worker. Regenerate app icons with `node scripts/generate-app-icons.cjs`.
+
 The React app lives in `frontend/` and the Express API lives in `backend/`. Run `npm run dev:frontend` and `npm run dev:backend` in separate terminals. Use `npm run check` from the repository root to validate the project.
+
+The frontend uses Vite 8 and strict TypeScript, with Vitest for tests and standalone ESLint. Use Node.js 24.15 or newer for development and deployment. Vite runs on port 3000 and proxies `/api` to the backend on port 8080. Production builds remain in `frontend/build` for Express to serve. Run `npm --prefix frontend run preview` to preview a production build on port 4173.
+
+Run `npm run typecheck` for compiler checks or `npm run check` for all validation. Frontend types are colocated with their owners: a component’s props live in its own `types/ComponentName.types.ts`, while hooks, Redux slices, services, and utilities own their corresponding `types/*.types.ts` files. There is no shared root types directory. New frontend source files should use `.ts` or `.tsx`; components should use the typed hooks from `frontend/src/redux/hooks.ts`. The app uses React 19, MUI 9, React Router 7, Firebase 13, and browser-native audio metadata parsing. TypeScript stays on the latest compatible 6.0 release because the lint tooling does not support TypeScript 7 yet. `npm test` runs the Vitest and backend regression suites; `npm --prefix frontend run test:watch` watches frontend tests.
 
 ## 🌐 Website Link  
 [Visit the Application](https://tejas-musify.wl.r.appspot.com/)

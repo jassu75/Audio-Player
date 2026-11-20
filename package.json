@@ -3,12 +3,13 @@
   "private": true,
   "scripts": {
     "start": "npm --prefix backend start",
-    "dev:frontend": "npm --prefix frontend start",
+    "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",
     "build": "npm --prefix frontend run build",
     "lint": "npm --prefix frontend run lint",
     "check:source": "node scripts/check-source.cjs",
-    "test": "npm --prefix frontend test -- --watchAll=false --runInBand && npm --prefix backend test",
-    "check": "npm run check:source && npm run lint && npm test && npm run build"
+    "test": "npm --prefix frontend test && npm --prefix backend test",
+    "check": "npm run check:source && npm run typecheck && npm run lint && npm test && npm run build",
+    "typecheck": "npm --prefix frontend run typecheck"
   }
 }

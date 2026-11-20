@@ -37,7 +37,6 @@ export const ADD_SONG = `
     }
   }
 `;
-
 export const DELETE_SONG = `
 mutation DELETE_SONG($song_id:uuid!){
   delete_audio_details_by_pk(song_id:$song_id){
@@ -45,14 +44,12 @@ mutation DELETE_SONG($song_id:uuid!){
   }
 }
 `;
-
 export const DELETE_PLAYLIST_SONG = `
 mutation DELETE_PLAYLIST_SONG($playlist_id:uuid!,$song_id:uuid!){
   delete_playlist_songs_by_pk(playlist_id:$playlist_id,song_id:$song_id){
     song_id
   }
 }`;
-
 export const ADD_PLAYLIST = `
   mutation ADD_PLAYLIST(
     $playlist_title: String!
@@ -76,7 +73,6 @@ export const ADD_PLAYLIST = `
     }
   }
 `;
-
 export const DELETE_PLAYLIST = `
 mutation DELETE_PLAYLIST($playlist_id: uuid!) {
   delete_playlist_details_by_pk(playlist_id: $playlist_id) {
@@ -84,7 +80,6 @@ mutation DELETE_PLAYLIST($playlist_id: uuid!) {
   }
 }
 `;
-
 export const DELETE_USER = `
   mutation DELETE_USER($user_id: String!) {
     delete_users_by_pk(user_id: $user_id) {
@@ -92,7 +87,6 @@ export const DELETE_USER = `
     }
   }
 `;
-
 export const ADD_PLAYLIST_SONG = `
 mutation ADD_PLAYLIST_SONG ($song_id:uuid!,$playlist_id:uuid!){
  insert_playlist_songs_one(
@@ -107,7 +101,6 @@ mutation ADD_PLAYLIST_SONG ($song_id:uuid!,$playlist_id:uuid!){
 }
 }
 `;
-
 export const ADD_USER = `
   mutation ADD_USER(
     $user_id: String!
@@ -133,7 +126,6 @@ export const ADD_USER = `
     }
   }
 `;
-
 export const UPDATE_SONG_TITLE = `
 mutation UPDATE_SONG_TITLE($song_id: uuid!, $title: String!) {
   update_audio_details_by_pk(
@@ -145,7 +137,6 @@ mutation UPDATE_SONG_TITLE($song_id: uuid!, $title: String!) {
   }
 }
 `;
-
 export const UPDATE_PLAYLIST_TITLE = `
 mutation UPDATE_PLAYLIST_TITLE($playlist_id: uuid!, $playlist_title: String!) {
   update_playlist_details_by_pk(
@@ -157,7 +148,6 @@ mutation UPDATE_PLAYLIST_TITLE($playlist_id: uuid!, $playlist_title: String!) {
   }
 }
 `;
-
 export const UPDATE_USER_PREFERENCE = `
 mutation UPDATE_USER_PREFERENCE($recently_played:[audio_details_updates!]!){
   update_audio_details_many(updates:$recently_played){
@@ -166,7 +156,6 @@ mutation UPDATE_USER_PREFERENCE($recently_played:[audio_details_updates!]!){
 }
 
   `;
-
 export const ADD_FAVORITE = `
 mutation ADD_FAVORITE($user_id:String!,$favorite_id:uuid!){
   insert_favorites(objects:{user_id:$user_id,favorite_id:$favorite_id}){
@@ -177,7 +166,6 @@ mutation ADD_FAVORITE($user_id:String!,$favorite_id:uuid!){
   }
 }
 `;
-
 export const DELETE_FAVORITE = `
 mutation DELETE_FAVORITE($user_id: String!, $favorite_id: uuid!) {
   delete_favorites_by_pk(favorite_id: $favorite_id, user_id: $user_id) {
@@ -186,7 +174,6 @@ mutation DELETE_FAVORITE($user_id: String!, $favorite_id: uuid!) {
   }
 }
 `;
-
 export const MOVE_SONG = `
 mutation MOVE_SONG($old_playlist_id: uuid!, $new_playlist_id: uuid!, $song_id: uuid!) {
   update_playlist_songs(

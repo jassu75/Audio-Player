@@ -1,0 +1,101 @@
+import "./Config/config.js";
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import { existsSync } from "node:fs";
+
+import checkExistingUser from "./routes/queries/checkExistingUser.js";
+import fetchPlaylistSongs from "./routes/queries/fetchPlaylistSongs.js";
+import getPlaylists from "./routes/queries/getPlaylists.js";
+import verifyUser from "./routes/queries/verifyUser.js";
+
+import addUser from "./routes/mutations/addUser.js";
+import addSong from "./routes/mutations/addSong.js";
+import addPlaylist from "./routes/mutations/addPlaylist.js";
+import addPlaylistSong from "./routes/mutations/addPlaylistSong.js";
+import addFavorite from "./routes/mutations/addFavorite.js";
+
+import deletePlaylist from "./routes/mutations/deletePlaylist.js";
+import deleteUser from "./routes/mutations/deleteUser.js";
+import deleteSong from "./routes/mutations/deleteSong.js";
+import deleteFavorite from "./routes/mutations/deleteFavorite.js";
+
+import updateSongTitle from "./routes/mutations/updateSongTitle.js";
+import updatePlaylistTitle from "./routes/mutations/updatePlaylistTitle.js";
+import updateUserPreference from "./routes/mutations/updateUserPreference.js";
+import moveSong from "./routes/mutations/moveSong.js";
+
+import fetchTopSongs from "./routes/external/fetchTopSongs.js";
+import fetchTopAlbums from "./routes/external/fetchTopAlbums.js";
+import fetchAlbumSongs from "./routes/external/fetchAlbumSongs.js";
+import fetchSearchSongs from "./routes/queries/fetchSearchSongs.js";
+import fetchRecentlyPlayed from "./routes/queries/fetchRecentlyPlayed.js";
+import fetchMostListened from "./routes/queries/fetchMostListened.js";
+import fetchFavoriteIds from "./routes/queries/fetchFavoriteIds.js";
+import fetchFavorites from "./routes/queries/fetchFavorites.js";
+import fetchAssets from "./routes/queries/fetchAssets.js";
+import fetchRandomSongs from "./routes/queries/fetchRandomSongs.js";
+import fetchSystemPlaylists from "./routes/queries/fetchSystemPlaylists.js";
+
+import uploadCloudinaryImage from "./routes/uploads/uploadImage.js";
+import uploadCloudinaryAudio from "./routes/uploads/uploadAudio.js";
+
+const app = express();
+app.use(express.json());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const localBuildPath = path.join(__dirname, "../../frontend/build");
+const buildFilePath = existsSync(localBuildPath)
+  ? localBuildPath
+  : path.join(__dirname, "../build");
+app.use(express.static(buildFilePath));
+
+app.use(checkExistingUser);
+app.use(fetchPlaylistSongs);
+app.use(getPlaylists);
+app.use(verifyUser);
+
+app.use(addUser);
+app.use(addSong);
+app.use(addPlaylist);
+app.use(addPlaylistSong);
+app.use(addFavorite);
+
+app.use(deletePlaylist);
+app.use(deleteUser);
+app.use(deleteSong);
+app.use(deleteFavorite);
+
+app.use(updateSongTitle);
+app.use(updatePlaylistTitle);
+app.use(updateUserPreference);
+app.use(moveSong);
+
+app.use(fetchTopSongs);
+app.use(fetchTopAlbums);
+app.use(fetchAlbumSongs);
+app.use(fetchSearchSongs);
+app.use(fetchRecentlyPlayed);
+app.use(fetchMostListened);
+app.use(fetchFavoriteIds);
+app.use(fetchFavorites);
+app.use(fetchAssets);
+app.use(fetchRandomSongs);
+app.use(fetchSystemPlaylists);
+
+app.use(uploadCloudinaryImage);
+app.use(uploadCloudinaryAudio);
+
+app.get(/^\/(?!api(?:\/|$)).*/, (req, res) => {
+  res.sendFile(path.join(buildFilePath, "index.html"));
+});
+
+app.use("/api", (_req, res) => res.status(404).json({ message: "API route not found" }));
+app.use((error, _req, res, _next) => {
+  const status = error.code === "LIMIT_FILE_SIZE" ? 413 : 500;
+  console.error("Request failed", error);
+  res.status(status).json({ message: status === 413 ? "File exceeds the 10 MB upload limit" : "Request failed" });
+});
+
+export default app;

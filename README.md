@@ -1,5 +1,7 @@
 # 🎵 Musify
 
+The React app lives in `frontend/` and the Express API lives in `backend/`. Run `npm run dev:frontend` and `npm run dev:backend` in separate terminals. Use `npm run check` from the repository root to validate the project.
+
 ## 🌐 Website Link  
 [Visit the Application](https://tejas-musify.wl.r.appspot.com/)
 

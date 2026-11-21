@@ -26,7 +26,7 @@ const mainRoutes = [
             },
             {
                 path: "/search",
-                element: (<RequireStates requires={["user"]} skeleton={<SearchSkeleton />}>
+                element: (<RequireStates requires={["user", "favorites"]} skeleton={<SearchSkeleton />}>
             <Search />
           </RequireStates>),
             },

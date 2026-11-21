@@ -15,13 +15,14 @@ test("deleting a playing song removes it from the queue and selects a remaining 
         viewingSongList: { s1: makeSong({ song_id: "s1" }) },
         playingSongList: { s1: makeSong({ song_id: "s1" }), s2: makeSong({ song_id: "s2" }) },
         playingIndex: "s1",
+        searchPlayback: null,
     }, deleteSong("s1"));
     expect(state.viewingSongList).toEqual({});
     expect(state.playingSongList).toEqual({ s2: makeSong({ song_id: "s2" }) });
     expect(state.playingIndex).toBe("s2");
 });
 test("empty queues preserve a null selection", () => {
-    const state = { viewingSongList: {}, playingSongList: {}, playingIndex: null };
+    const state = { viewingSongList: {}, playingSongList: {}, playingIndex: null, searchPlayback: null };
     expect(audioPlayer(state, playNext()).playingIndex).toBeNull();
     expect(audioPlayer(state, playPrevious()).playingIndex).toBeNull();
 });
@@ -40,7 +41,7 @@ test("changing or ending a session clears the previous account's profile, librar
     store.dispatch(resetSessionState());
     expect(store.getState()).toEqual({
         homepage: { user: null, playlistCollection: null },
-        audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null },
-        userPrefs: { favorites: null, recentlyPlayed: null, listens: null },
+        audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null, searchPlayback: null },
+        userPrefs: { favorites: null, recentlyPlayed: null, listens: null, favoriteUpdates: {} },
     });
 });

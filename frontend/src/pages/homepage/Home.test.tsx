@@ -37,6 +37,7 @@ const renderHome = async () => {
 
 test("For You is the first home row and links the three existing covers to their song lists", async () => {
     await renderHome();
+    expect(PLAYLIST_COLLECTIONS[0].type).toBe("personal");
     const rail = screen.getByRole("region", { name: "For You" });
     expect(within(rail).getAllByRole("link").map(link => link.textContent)).toEqual(["Favorites", "Recently Played", "Most Listened"]);
     expect(within(rail).getByRole("link", { name: "Favorites" })).toHaveAttribute("href", "/favorites");
@@ -93,4 +94,19 @@ test("a personal-list request failure displays an error instead of stale songs",
     fireEvent.click(screen.getByRole("link", { name: "Most Listened" }));
     expect(await screen.findByText("Unable to load songs")).toBeInTheDocument();
     expect(screen.queryByText("Previous playlist song")).not.toBeInTheDocument();
+});
+
+test("system playlist tracks can be favorited without moving or interrupting the playback queue", async () => {
+    const sharedSong = makeSong({ song_id: "shared", title: "Shared database track", source: "system", user_id: null });
+    vi.mocked(axios.post).mockResolvedValueOnce({ data: { playlists: [{ songs: sharedSong }] } }).mockResolvedValueOnce({ data: {} });
+    const store = await renderHome();
+    const popular = screen.getByRole("region", { name: "Popular Playlists" });
+    fireEvent.click(within(popular).getByRole("link"));
+    await screen.findByText("Shared database track");
+    fireEvent.click(screen.getByRole("button", { name: "Add to favorites" }));
+    await screen.findByRole("button", { name: "Remove from favorites" });
+    expect(axios.post).toHaveBeenLastCalledWith("/api/addfavorite", { user_id: "u1", favorite_id: "shared" }, expect.anything());
+    expect(store.getState().userPrefs.favorites).toContain("shared");
+    expect(store.getState().audioplayer.playingIndex).toBe("old");
+    expect(screen.queryByText("Rename")).not.toBeInTheDocument();
 });

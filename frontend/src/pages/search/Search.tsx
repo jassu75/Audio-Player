@@ -25,7 +25,7 @@ const Search = () => {
       <Grid className={styles.search_container}>
         <Grid className={styles.search_bar_container}>
           <SearchIcon className={styles.search_icon}/>
-          <TextField variant="outlined" placeholder="Search your uploaded songs..." value={searchText} className={styles.search_bar} onChange={handleSearch}/>
+          <TextField variant="outlined" placeholder="Search songs, artists, or albums..." value={searchText} className={styles.search_bar} onChange={handleSearch}/>
         </Grid>
         {showEmpty ? (<EmptySearch />) : (<SearchSongList showRecentlyPlayed={showRecentlyPlayed}/>)}
       </Grid>

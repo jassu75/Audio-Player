@@ -5,7 +5,7 @@ export const PLAYLIST_COLLECTIONS: PlaylistCollectionConfig[] = [
     {
         id: "for-you",
         title: "For You",
-        type: "system",
+        type: "personal",
         loadPlaylists: loadForYouPlaylists,
         cache: false,
     },

@@ -4,6 +4,7 @@ import { userSelector } from "../../redux/selectors/homepageSelectors";
 import { recentlyPlayedSelector } from "../../redux/selectors/userPreferencesSelectors";
 import { setRecentlyPlayed } from "../../redux/slices/userPreferencesSlice";
 import { postApi } from "../../services/api";
+import { waitForPendingPlays } from "../../services/listeningHistory";
 const useFetchRecentlyPlayed = () => {
     const [recentlyPlayedLoading, setRecentlyPlayedLoading] = useState(false);
     const [recentlyPlayedError, setRecentlyPlayedError] = useState(false);
@@ -18,6 +19,8 @@ const useFetchRecentlyPlayed = () => {
             try {
                 setRecentlyPlayedLoading(true);
                 setRecentlyPlayedError(false);
+                await waitForPendingPlays(user.user_id);
+                if (!active) return;
                 const response = await postApi("/api/fetchrecentlyplayed", { user_id: user.user_id }, {
                     headers: { "Content-Type": "application/json" },
                 });

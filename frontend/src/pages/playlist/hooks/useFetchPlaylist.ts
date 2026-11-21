@@ -5,6 +5,7 @@ import { setRecentlyPlayed } from "../../../redux/slices/userPreferencesSlice";
 import { setViewingSongList } from "../../../redux/slices/audioPlayerSlice";
 import { postApi } from "../../../services/api";
 import { indexSongs } from "../../../utils/songs";
+import { waitForPendingPlays } from "../../../services/listeningHistory";
 const useFetchPlaylist = (playlistId: string) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -18,6 +19,8 @@ const useFetchPlaylist = (playlistId: string) => {
                 setLoading(true);
                 setError(false);
                 dispatch(setViewingSongList(null));
+                if (userId && (playlistId === "recently-played" || playlistId === "most-played")) await waitForPendingPlays(userId);
+                if (!active) return;
                 const songs = playlistId === "recently-played"
                     ? (await postApi("/api/fetchrecentlyplayed", { user_id: userId! })).data.recently_played
                     : playlistId === "most-played"

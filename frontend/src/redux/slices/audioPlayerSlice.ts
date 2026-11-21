@@ -1,4 +1,6 @@
 import type { StoredAudioPlayerState, RenameSongPayload } from "./types/audioPlayerSlice.types";
+import type { RefreshSearchQueuePayload, StartSearchPlaybackPayload } from "./types/audioPlayerSlice.types";
+import { indexSongs } from "../../utils/songs";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { AudioPlayerState } from "./types/audioPlayerSlice.types";
@@ -9,18 +11,34 @@ const initialState: AudioPlayerState = {
     viewingSongList: audioPlayer?.viewingSongList ?? audioPlayer?.viewingSonglist ?? null,
     playingSongList: audioPlayer?.playingSongList ?? audioPlayer?.playingSonglist ?? null,
     playingIndex: audioPlayer?.playingIndex ?? null,
+    searchPlayback: audioPlayer?.searchPlayback ?? null,
 };
 const sync = (state: AudioPlayerState) => {
     writeStoredJson(sessionStorage, "audioplayer", state);
 };
+export const SEARCH_QUEUE_REFRESH_TRACKS = 20;
 const audioPlayerSlice = createSlice({
     name: "audioplayer",
     initialState,
     reducers: {
+        startSearchPlayback: (state, { payload }: PayloadAction<StartSearchPlaybackPayload>) => {
+            state.playingSongList = { [payload.song.song_id]: payload.song };
+            state.playingIndex = payload.song.song_id;
+            state.searchPlayback = { sessionId: payload.sessionId, trackChanges: 0 };
+            sync(state);
+        },
+        refreshSearchQueue: (state, { payload }: PayloadAction<RefreshSearchQueuePayload>) => {
+            if (state.searchPlayback?.sessionId !== payload.sessionId || Math.floor(state.searchPlayback.trackChanges / SEARCH_QUEUE_REFRESH_TRACKS) !== payload.refreshSlot) return;
+            const current = state.playingSongList?.[state.playingIndex ?? ""];
+            if (!current) return;
+            state.playingSongList = indexSongs([current, ...payload.songs.filter(song => song.song_id !== current.song_id)]);
+            sync(state);
+        },
         playSong: (state, action: PayloadAction<string>) => {
             if (!state.viewingSongList?.[action.payload]) return;
             state.playingSongList = { ...state.viewingSongList };
             state.playingIndex = action.payload;
+            state.searchPlayback = null;
             sync(state);
         },
         setViewingSongList: (state, action: PayloadAction<SongMap | null>) => {
@@ -63,6 +81,7 @@ const audioPlayerSlice = createSlice({
             sync(state);
         },
         setPlayingSongList: (state) => {
+            state.searchPlayback = null;
             state.playingSongList = { ...state.viewingSongList };
             sync(state);
         },
@@ -71,6 +90,7 @@ const audioPlayerSlice = createSlice({
             sync(state);
         },
         clearPlayingContext: (state) => {
+            state.searchPlayback = null;
             state.playingIndex = null;
             state.playingSongList = null;
             sync(state);
@@ -80,6 +100,7 @@ const audioPlayerSlice = createSlice({
                 const keys = Object.keys(state.playingSongList);
                 const currentPos = keys.indexOf(String(state.playingIndex));
                 state.playingIndex = keys[(currentPos + 1) % keys.length];
+                if (state.searchPlayback) state.searchPlayback.trackChanges++;
                 sync(state);
             }
         },
@@ -88,10 +109,11 @@ const audioPlayerSlice = createSlice({
                 const keys = Object.keys(state.playingSongList);
                 const currentPos = keys.indexOf(String(state.playingIndex));
                 state.playingIndex = keys[(currentPos - 1 + keys.length) % keys.length];
+                if (state.searchPlayback) state.searchPlayback.trackChanges++;
                 sync(state);
             }
         },
     },
 });
-export const { playSong, setViewingSongList, addViewingSong, deleteViewingSong, deleteSong, renameViewingSong, setPlayingSongList, setPlayingIndex, clearPlayingContext, playNext, playPrevious, } = audioPlayerSlice.actions;
+export const { playSong, startSearchPlayback, refreshSearchQueue, setViewingSongList, addViewingSong, deleteViewingSong, deleteSong, renameViewingSong, setPlayingSongList, setPlayingIndex, clearPlayingContext, playNext, playPrevious } = audioPlayerSlice.actions;
 export default audioPlayerSlice.reducer;

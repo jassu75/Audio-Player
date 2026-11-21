@@ -3,8 +3,14 @@ import { act } from "react";
 import { Provider } from "react-redux";
 import { expect, test, vi } from "vitest";
 import { playSong, renameViewingSong, setPlayingIndex, setViewingSongList } from "../../../redux/slices/audioPlayerSlice";
-import { createTestStore, makeSong } from "../../../test/fixtures";
+import { createTestStore, makeSong, makeUser } from "../../../test/fixtures";
+import { recordPlayEvent } from "../../../services/listeningHistory";
+import axios from "axios";
+import { startSearchPlayback } from "../../../redux/slices/audioPlayerSlice";
+import { deferred } from "../../../test/fixtures";
 import useAudioPlayer from "./useAudioPlayer";
+vi.mock("../../../services/listeningHistory", () => ({ recordPlayEvent: vi.fn().mockResolvedValue(undefined) }));
+vi.mock("axios", () => ({ default: { post: vi.fn() } }));
 test("renaming a playing track leaves audio running; switching tracks loads the new source", async () => {
     const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue();
     const pause = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => { });
@@ -78,4 +84,62 @@ test("blocked mobile autoplay gives a retry instead of pretending the track is p
     expect(screen.getByRole("status")).toBeEmptyDOMElement();
     unmount();
     vi.restoreAllMocks();
+});
+
+test("actual playback tracks uploaded and system songs once, without counting resumes or buffering again", async () => {
+    vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue();
+    vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {});
+    vi.spyOn(HTMLMediaElement.prototype, "load").mockImplementation(() => {});
+    const systemSong = makeSong({ user_id: null, source: "system" });
+    const ownSong = makeSong({ song_id: "s2", user_id: "u1", source: "user", audio_url: "https://example.com/two.mp3" });
+    const store = createTestStore({
+        homepage: { user: makeUser() },
+        audioplayer: { playingSongList: { s1: systemSong, s2: ownSong }, playingIndex: "s1" },
+    });
+    const Harness = () => {
+        const { audioRef } = useAudioPlayer();
+        return <audio data-testid="audio" ref={audioRef} />;
+    };
+    const { unmount } = render(<Provider store={store}><Harness /></Provider>);
+    const audio = screen.getByTestId("audio");
+    expect(recordPlayEvent).not.toHaveBeenCalled();
+    fireEvent.playing(audio);
+    fireEvent.waiting(audio);
+    fireEvent.playing(audio);
+    fireEvent.pause(audio);
+    fireEvent.playing(audio);
+    expect(recordPlayEvent).toHaveBeenCalledTimes(1);
+    expect(recordPlayEvent).toHaveBeenLastCalledWith({ event_id: expect.any(String), user_id: "u1", song_id: "s1" });
+    expect(store.getState().userPrefs.recentlyPlayed?.[0].song_id).toBe("s1");
+    fireEvent.ended(audio);
+    fireEvent.playing(audio);
+    expect(recordPlayEvent).toHaveBeenCalledTimes(2);
+    expect(store.getState().userPrefs.recentlyPlayed?.map(song => song.song_id)).toEqual(["s2", "s1"]);
+    expect(store.getState().userPrefs.listens).toEqual({ s1: 1, s2: 1 });
+    unmount();
+});
+
+test("search playback starts inside the click and adding random tracks does not reload the audio", async () => {
+    const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue();
+    const load = vi.spyOn(HTMLMediaElement.prototype, "load").mockImplementation(() => {});
+    const pause = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {});
+    const pending = deferred<{ data: { randomSongs: ReturnType<typeof makeSong>[] } }>();
+    vi.mocked(axios.post).mockReturnValueOnce(pending.promise);
+    const selected = makeSong();
+    const store = createTestStore({ homepage: { user: makeUser() } });
+    const Harness = () => {
+        const { audioRef } = useAudioPlayer();
+        return <audio ref={audioRef} />;
+    };
+    const { unmount } = render(<Provider store={store}><Harness /></Provider>);
+    act(() => {
+        store.dispatch(startSearchPlayback({ song: selected, sessionId: "search" }));
+        expect(play).toHaveBeenCalledTimes(1);
+    });
+    await act(async () => pending.resolve({ data: { randomSongs: [makeSong({ song_id: "random", audio_url: "https://example.com/random.mp3" })] } }));
+    expect(store.getState().audioplayer.playingSongList).toHaveProperty("random");
+    expect(play).toHaveBeenCalledTimes(1);
+    expect(load).toHaveBeenCalledTimes(1);
+    expect(pause).not.toHaveBeenCalled();
+    unmount();
 });

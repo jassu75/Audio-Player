@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "migrate:listening": "node scripts/migrate-listening.mjs",
+    "verify:listening": "node scripts/verify-listening.mjs",
+    "migrate:search-radio": "node scripts/migrate-search-radio.mjs"
   },
   "keywords": [],
   "author": "",

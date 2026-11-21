@@ -148,14 +148,14 @@ mutation UPDATE_PLAYLIST_TITLE($playlist_id: uuid!, $playlist_title: String!) {
   }
 }
 `;
-export const UPDATE_USER_PREFERENCE = `
-mutation UPDATE_USER_PREFERENCE($recently_played:[audio_details_updates!]!){
-  update_audio_details_many(updates:$recently_played){
-    affected_rows
-  }
+export const RECORD_PLAY_EVENT = `
+mutation RECORD_PLAY_EVENT($event_id: uuid!, $song_id: uuid!, $user_id: String!, $played_at: timestamptz!) {
+  insert_play_events_one(
+    object: {id: $event_id, song_id: $song_id, user_id: $user_id, played_at: $played_at},
+    on_conflict: {constraint: play_events_pkey, update_columns: []}
+  ) { id }
 }
-
-  `;
+`;
 export const ADD_FAVORITE = `
 mutation ADD_FAVORITE($user_id:String!,$favorite_id:uuid!){
   insert_favorites(objects:{user_id:$user_id,favorite_id:$favorite_id}){

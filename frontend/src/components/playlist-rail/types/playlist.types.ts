@@ -5,7 +5,7 @@ export interface Playlist {
     source?: string;
     path?: string;
 }
-export type PlaylistType = "user" | "system";
+export type PlaylistType = "user" | "system" | "personal";
 export interface PlaylistCollection {
     id: string;
     title: string;

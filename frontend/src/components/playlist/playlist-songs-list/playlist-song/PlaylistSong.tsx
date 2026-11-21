@@ -6,6 +6,7 @@ import styles from "./playlistSong.module.css";
 import { playSong, } from "../../../../redux/slices/audioPlayerSlice";
 import PlaylistSongMenu from "./playlist-song-menu/PlaylistSongMenu";
 import SongCover from "../../../helpers/song-cover/SongCover";
+import FavoriteIcon from "../../../favorites/favorite-icon/FavoriteIcon";
 const PlaylistSong = ({ playlistId, song, type }: PlaylistSongProps) => {
     const dispatch = useAppDispatch();
     const showMenu = type === "user";
@@ -29,7 +30,10 @@ const PlaylistSong = ({ playlistId, song, type }: PlaylistSongProps) => {
         </Grid>
       </Grid>
 
-      {showMenu ? (<PlaylistSongMenu song={song} playlistId={playlistId}/>) : null}
+      <Grid className={styles.song_actions}>
+        <FavoriteIcon songId={song.song_id}/>
+        {showMenu ? (<PlaylistSongMenu song={song} playlistId={playlistId}/>) : null}
+      </Grid>
     </Grid>);
 };
 export default PlaylistSong;

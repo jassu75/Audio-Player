@@ -50,6 +50,7 @@ export interface ApiEndpoints {
     "/api/fetchrecentlyplayed": Endpoint<UserRequest, {
         recently_played: Song[];
     }>;
+    "/api/fetchrandomsongs": Endpoint<UserRequest, { randomSongs: Song[] }>;
     "/api/fetchMostListened": Endpoint<UserRequest, {
         most_listened: Song[];
     }>;
@@ -100,9 +101,7 @@ export interface ApiEndpoints {
     "/api/deleteuser": Endpoint<{
         assets: Asset[];
     }>;
-    "/api/updateUserPreference": Endpoint<{
-        data: ListeningUpdate[];
-    }>;
+    "/api/play-events": Endpoint<UserRequest & { event_id: string; song_id: string }, { recorded: boolean }>;
 }
 type Endpoint<Request, Response = unknown> = {
     request: Request;
@@ -114,28 +113,3 @@ type UserRequest = {
 type FavoriteRequest = UserRequest & {
     favorite_id: string;
 };
-export interface ListeningUpdate {
-    where: {
-        song_id: {
-            _eq: string;
-        };
-        _or: [
-            {
-                last_played: {
-                    _is_null: boolean;
-                };
-            },
-            {
-                last_played: {
-                    _neq: string;
-                };
-            }
-        ];
-    };
-    _set: {
-        last_played: string;
-    };
-    _inc: {
-        listens: number;
-    };
-}

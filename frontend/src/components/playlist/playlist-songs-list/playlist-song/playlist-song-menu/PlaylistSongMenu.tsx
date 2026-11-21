@@ -6,7 +6,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import type { PlaylistSongMenuProps } from "./types/PlaylistSongMenu.types";
-import FavoriteIcon from "../../../../favorites/favorite-icon/FavoriteIcon";
 import MoveSong from "../../../actions/song/move-song/MoveSong";
 import RenameSongTitle from "../../../actions/song/rename-song/RenameSongTitle";
 import usePlaylistSongMenu from "./hooks/usePlaylistSongMenu";
@@ -18,8 +17,6 @@ const PlaylistSongMenu = ({ song, playlistId }: PlaylistSongMenuProps) => {
     });
     return (<>
       <Grid className={styles.song_actions}>
-        <FavoriteIcon songId={song.song_id}/>
-
         <IconButton onClick={handleMenuOpen} className={styles.icon}>
           <MoreVertIcon />
         </IconButton>

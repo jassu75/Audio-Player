@@ -19,8 +19,8 @@ export const createTestStore = (overrides: TestStateOverrides = {}) => configure
     reducer: rootReducer,
     preloadedState: {
         homepage: { user: null, playlistCollection: [], ...overrides.homepage },
-        audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null, ...overrides.audioplayer },
-        userPrefs: { favorites: [], recentlyPlayed: [], listens: {}, ...overrides.userPrefs },
+        audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null, searchPlayback: null, ...overrides.audioplayer },
+        userPrefs: { favorites: [], recentlyPlayed: [], listens: {}, favoriteUpdates: {}, ...overrides.userPrefs },
     },
 });
 export const deferred = <T,>() => {

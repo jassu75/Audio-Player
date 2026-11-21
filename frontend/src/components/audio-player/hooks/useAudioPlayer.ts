@@ -3,12 +3,18 @@ import { useAppDispatch, useAppStore } from "../../../redux/hooks";
 import { currentSongSelector } from "../../../redux/selectors/audioPlayerSelectors";
 import { clearPlayingContext, playNext, playPrevious } from "../../../redux/slices/audioPlayerSlice";
 import { connectMediaSession } from "../utils/mediaSession.utils";
+import { userSelector } from "../../../redux/selectors/homepageSelectors";
+import { addListens, addRecentlyPlayed } from "../../../redux/slices/userPreferencesSlice";
+import { recordPlayEvent } from "../../../services/listeningHistory";
+import useSearchPlayback from "./useSearchPlayback";
 
 const useAudioPlayer = () => {
+  useSearchPlayback();
   const dispatch = useAppDispatch();
   const store = useAppStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sourceVersion = useRef(0);
+  const recordedVersion = useRef<number | null>(null);
   const mounted = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
@@ -44,6 +50,7 @@ const useAudioPlayer = () => {
     }
     dispatch(direction === "next" ? playNext() : playPrevious());
     if (previous && currentSongSelector(store.getState())?.song_id === previous.song_id && audio) {
+      recordedVersion.current = null;
       audio.currentTime = 0;
       play();
     }
@@ -60,14 +67,26 @@ const useAudioPlayer = () => {
     };
     const onPlay = () => { setIsPlaying(true); setPlaybackError(""); };
     const onPause = () => setIsPlaying(false);
-    const onPlaying = () => { onPlay(); setIsBuffering(false); };
+    const onPlaying = () => {
+      onPlay();
+      setIsBuffering(false);
+      const state = store.getState();
+      const song = currentSongSelector(state);
+      const user = userSelector(state);
+      if (!song || !user || recordedVersion.current === sourceVersion.current) return;
+      recordedVersion.current = sourceVersion.current;
+      dispatch(addRecentlyPlayed(song));
+      dispatch(addListens(song.song_id));
+      void recordPlayEvent({ event_id: crypto.randomUUID(), song_id: song.song_id, user_id: user.user_id })
+        .catch(error => console.error("Unable to save listening history", error));
+    };
     const onWaiting = () => setIsBuffering(true);
     const onError = () => {
       setIsPlaying(false);
       setIsBuffering(false);
       setPlaybackError("Unable to play this track. Check your connection and try again.");
     };
-    const onEnded = () => moveTrack("next");
+    const onEnded = () => { recordedVersion.current = null; moveTrack("next"); };
     const listeners = { timeupdate: onTimeUpdate, loadedmetadata: onMetadata, durationchange: onMetadata, play: onPlay, playing: onPlaying, pause: onPause, waiting: onWaiting, stalled: onWaiting, canplay: onMetadata, ended: onEnded, error: onError };
     Object.entries(listeners).forEach(([event, listener]) => audio.addEventListener(event, listener));
     const mediaSession = connectMediaSession(audio, {

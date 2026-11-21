@@ -12,7 +12,7 @@ const combinedReducer = combineReducers({
 });
 const rootReducer = (state: Parameters<typeof combinedReducer>[0], action: UnknownAction) => combinedReducer(resetSessionState.match(action) ? {
     homepage: { user: null, playlistCollection: null },
-    userPrefs: { favorites: null, recentlyPlayed: null, listens: null },
-    audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null },
+    userPrefs: { favorites: null, recentlyPlayed: null, listens: null, favoriteUpdates: {} },
+    audioplayer: { viewingSongList: null, playingSongList: null, playingIndex: null, searchPlayback: null },
 } : state, action);
 export default rootReducer;

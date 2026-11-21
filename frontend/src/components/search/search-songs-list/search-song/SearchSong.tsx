@@ -1,13 +1,14 @@
 import { Grid, Typography } from "@mui/material";
 import { useAppDispatch } from "../../../../redux/hooks";
-import { playSong, } from "../../../../redux/slices/audioPlayerSlice";
+import { startSearchPlayback } from "../../../../redux/slices/audioPlayerSlice";
 import type { SearchSongProps } from "./types/SearchSong.types";
 import styles from "./searchSong.module.css";
 import SongCover from "../../../helpers/song-cover/SongCover";
-const SearchSong = ({ songKey, song }: SearchSongProps) => {
+import FavoriteIcon from "../../../favorites/favorite-icon/FavoriteIcon";
+const SearchSong = ({ song }: SearchSongProps) => {
     const dispatch = useAppDispatch();
     const handleSongClick = () => {
-        dispatch(playSong(songKey));
+        dispatch(startSearchPlayback({ song, sessionId: crypto.randomUUID() }));
     };
     return (<Grid className={styles.song_card_info} onClick={handleSongClick}>
       <SongCover loading="lazy" className={styles.song_image} src={song?.cover_art} alt=""/>
@@ -23,6 +24,7 @@ const SearchSong = ({ songKey, song }: SearchSongProps) => {
           </Typography>
         </Grid>
       </Grid>
+      <FavoriteIcon songId={song.song_id}/>
     </Grid>);
 };
 export default SearchSong;

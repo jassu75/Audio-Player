@@ -34,4 +34,6 @@
 .song_content {
   padding-top: 10px;
   height: 100%;
+  flex: 1;
+  min-width: 0;
 }

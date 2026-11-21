@@ -11,7 +11,8 @@ export interface Song {
     cover_art_id?: string | null;
     audio_url_id?: string | null;
     last_played?: string | null;
-    user_id?: string;
+    user_id?: string | null;
+    listens?: number;
     source?: string;
 }
 export type SongMap = Record<string, Song>;

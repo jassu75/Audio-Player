@@ -4,9 +4,11 @@ import { userSelector } from "../../../redux/selectors/homepageSelectors";
 import { setViewingSongList } from "../../../redux/slices/audioPlayerSlice";
 import { postApi } from "../../../services/api";
 import { indexSongs } from "../../../utils/songs";
+import type { SongMap } from "../../../components/playlist/playlist-songs-list/playlist-song/types/song.types";
 const useFetchFavorites = () => {
     const [favoritesLoading, setFavoritesLoading] = useState(true);
     const [favoritesError, setFavoritesError] = useState(false);
+    const [favoriteSongs, setFavoriteSongs] = useState<SongMap | null>(null);
     const dispatch = useAppDispatch();
     const userId = useAppSelector(userSelector)?.user_id;
     useEffect(() => {
@@ -20,8 +22,10 @@ const useFetchFavorites = () => {
             try {
                 const response = await postApi("/api/fetchfavorites", { user_id: userId });
                 const songs = indexSongs((response.data?.favorites ?? []).map((favorite) => favorite.song));
-                if (active)
+                if (active) {
+                    setFavoriteSongs(songs);
                     dispatch(setViewingSongList(songs));
+                }
             }
             catch (error) {
                 if (active)
@@ -36,6 +40,6 @@ const useFetchFavorites = () => {
         fetchFavorites();
         return () => { active = false; };
     }, [dispatch, userId]);
-    return { favoritesLoading, favoritesError };
+    return { favoritesLoading, favoritesError, favoriteSongs };
 };
 export default useFetchFavorites;

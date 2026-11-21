@@ -1,102 +1,167 @@
 # 🎵 Musify
 
-Clicking a search or search-history result starts that track immediately, then builds its playback queue with up to 50 random songs from the existing `fetch_user_songs_randomly` database function. The random queue refreshes every 20 next/previous/automatic track advances, preserving the current track and playback position. It continues while navigating, and selecting a normal playlist or Favorites track switches back to that list. Search results stay separate from the playback queue. Run `npm --prefix backend run migrate:search-radio` on each database to update the existing function to sample both the user’s uploaded songs and shared system audio.
+Upload your audio, organize playlists, and listen to your uploads and shared library tracks in one place. Musify works in the browser and can be installed as a mobile web app.
 
-The `personal` For You collection combines uploaded and shared database tracks in Favorites, Recently Played, and Most Listened. Search includes the signed-in user’s uploads and shared system audio, matching title, artist, and album. Shared tracks can be favorited; editing controls remain limited to user playlists.
+[Open Musify](https://tejas-musify.wl.r.appspot.com/)
 
-Playback writes a per-user event to `play_events` when audio actually starts. Resuming or recovering from buffering does not add a second event. Retries reuse the event ID to avoid duplicate counts. Recently Played and Most Listened read this table directly: the API groups the current user’s events by song, counts plays, and finds the latest play time. There is no summary table or view, and legacy audio-row counters are not used for these lists. Reads use cursor pagination and only return accessible tracks. History pages wait for pending writes before fetching. Run `npm --prefix backend run migrate:listening` to configure the play-event constraints and remove the old summary view. Run `npm --prefix backend run verify:listening` for live query validation and rollback-only database checks.
+## Features
 
-Musify can be installed as a mobile web app from its HTTPS site. On Android, use **Install** when offered or the browser's **Install app** menu. On iPhone or iPad, use **Share → Add to Home Screen**. Installation support depends on the browser; the installed app and the website share the same account and library.
+### Home and For You
 
-The mobile player supports phone safe areas, portrait and landscape layouts, and lock-screen/headset controls through the Media Session API where available. Start playback by tapping a track or Play. The app keeps one audio element alive while navigating. Background playback remains subject to the phone and browser's policies. Music streams need an internet connection; the service worker caches the app shell and static assets, not authenticated API responses or audio files. Available updates wait for the user to choose **Update** so a new deployment does not reload an active listening session.
+The homepage contains three collections:
 
-PWA installation and service-worker behavior should be tested against `npm run build` followed by the backend server or `npm --prefix frontend run preview`. Development mode does not install a service worker. Regenerate app icons with `node scripts/generate-app-icons.cjs`.
+| Collection | Contents |
+| --- | --- |
+| For You | Favorites, Recently Played, and Most Listened |
+| Your Playlists | Playlists you create and upload audio to |
+| Popular Playlists | Shared system playlists stored in the database |
 
-The React app lives in `frontend/` and the Express API lives in `backend/`. Run `npm run dev:frontend` and `npm run dev:backend` in separate terminals. Use `npm run check` from the repository root to validate the project.
+Uploaded and shared tracks both support favorites, search, and listening history. Recently Played and Most Listened reflect your own playback activity.
 
-Authentication uses a server-verified Firebase session cookie lasting seven days. The profile stays in Redux memory and is reloaded from `/api/auth/session` after a refresh. The old local-storage `user` entry is removed at startup. Firebase browser authentication uses memory persistence only; successful login exchanges its temporary ID token for the session cookie and signs out the browser SDK. Existing users need to sign in again after this migration.
+The rails are configured in [playlistCollections.ts](frontend/src/pages/homepage/constants/playlistCollections.ts). Every entry uses the same structure: `id`, `title`, `type`, `loadPlaylists`, and `cache`. For You uses the `personal` type; shared playlists use `system`.
 
-Session cookies are `HttpOnly`, `SameSite=Lax`, and host-only. Production uses the `__Host-` cookie prefix and `Secure`; deploy behind HTTPS with `NODE_ENV=production` (App Engine is detected automatically). Plain HTTP cookies are only for local development. Serve the API under the same origin as the frontend, using Vite’s `/api` proxy during development. API responses are not cached. All API POST requests, including multipart uploads, require the `X-Musify-Request` header to prevent cross-site form submissions; keep the API’s cross-origin access disabled. Logout and account deletion clear the server cookie.
+### Accounts
 
-The frontend uses Vite 8 and strict TypeScript, with Vitest for tests and standalone ESLint. Use Node.js 24.15 or newer for development and deployment. Vite runs on port 3000 and proxies `/api` to the backend on port 8080. Production builds remain in `frontend/build` for Express to serve. Run `npm --prefix frontend run preview` to preview a production build on port 4173.
+Sign up with an email address and password, or sign in with Google. Email accounts must be verified before signing in.
 
-Run `npm run typecheck` for compiler checks or `npm run check` for all validation. Frontend types are colocated with their owners: a component’s props live in its own `types/ComponentName.types.ts`, while hooks, Redux slices, services, and utilities own their corresponding `types/*.types.ts` files. There is no shared root types directory. New frontend source files should use `.ts` or `.tsx`; components should use the typed hooks from `frontend/src/redux/hooks.ts`. The app uses React 19, MUI 9, React Router 7, Firebase 13, and browser-native audio metadata parsing. TypeScript stays on the latest compatible 6.0 release because the lint tooling does not support TypeScript 7 yet. `npm test` runs the Vitest and backend regression suites; `npm --prefix frontend run test:watch` watches frontend tests.
+![Sign-up form](https://github.com/user-attachments/assets/55e24145-1987-4e4e-9f24-6c8b503784d7)
 
-## 🌐 Website Link  
-[Visit the Application](https://tejas-musify.wl.r.appspot.com/)
+### Uploads and playlists
 
-## 📽️ Demo Link  
-[Watch on YouTube](https://youtu.be/a4fB9b7h3oA?si=VRNRHWyofjqSH-v6)
+Create playlists, upload audio, rename your playlists and tracks, move tracks between playlists, and remove items from your library. Tracks with missing or broken artwork display the default cover image.
 
----
+![Audio upload dialog](https://github.com/user-attachments/assets/0b8f8359-6573-4209-9b41-f5cf7fc1b021)
 
-## 🎤 Introduction  
-Welcome to **Musify** — Upload your favorite audio files and enjoy ad-free listening anytime, anywhere.
+![Uploaded tracks in a personal playlist](https://github.com/user-attachments/assets/c945adce-6fdf-4016-b1c0-a85c89e08f07)
 
----
+### Favorites
 
-## 🧭 Directions
+Favorite uploaded or shared tracks from anywhere in the app. The heart changes immediately while the save runs in the background. Unfavoriting a track on the Favorites page immediately removes it from the list; failed saves restore the previous state and show an error.
 
-### 🔐 Signup and Login  
-Users can create an account using their email ID and password, or sign in directly with their Google account.  
-If they choose the former, they must verify their email address before logging in.
+![Favorites collection](https://github.com/user-attachments/assets/dc45edec-e9bf-46e2-a9d6-4ffd0d9e5f41)
 
-![Signup](https://github.com/user-attachments/assets/55e24145-1987-4e4e-9f24-6c8b503784d7)
+### Search and playback
 
----
+Search your uploads and shared tracks by title, artist, or album. Selecting a search result or a track in the search page's recently played list starts it immediately, then builds a queue with up to 50 random tracks from your accessible library.
 
-### 🏠 Homepage  
-This is the landing page of the application. Create your playlist, search for your favorite songs, or listen to high-quality, royalty-free music!
+The random queue refreshes every 20 next, previous, or automatic track advances while preserving the current track and playback position. Playback continues while navigating. Selecting a track from a regular playlist or Favorites switches playback to that list.
 
-<img width="1911" height="941" alt="Homepage" src="https://github.com/user-attachments/assets/7db86a4a-7ce6-4c4e-90a5-ee3ad78a778a" />
+### Mobile installation
 
----
+Open the HTTPS site on your phone:
 
-### 📤 Audio Uploader  
-Upload audio files and enjoy them ad-free, anytime.
+- **Android:** use the app's **Install** prompt when available, or the browser's **Install app** menu.
+- **iPhone or iPad:** use **Share → Add to Home Screen**.
 
-<img width="1700" height="896" alt="Uploader" src="https://github.com/user-attachments/assets/0b8f8359-6573-4209-9b41-f5cf7fc1b021" />
+The player supports portrait and landscape layouts, phone safe areas, and lock-screen and headset controls through the Media Session API where supported. Tap a track or Play to start playback. Background playback depends on the phone and browser.
 
----
+Music streams require an internet connection. The service worker caches the app shell and static assets; authenticated API responses and audio files are not cached. Available app updates wait for you to choose **Update**.
 
-<img width="1257" height="774" alt="Library" src="https://github.com/user-attachments/assets/c945adce-6fdf-4016-b1c0-a85c89e08f07" />
+## Run locally
 
----
+Use **Node.js 24.15 or newer** and npm. Run these commands from the repository root:
 
-### 🎧 Audio Player  
-Lose yourself in your favorite music with our sleek audio player!
+```powershell
+npm --prefix frontend ci
+npm --prefix backend ci
+```
 
-<img width="1421" height="920" alt="Player" src="https://github.com/user-attachments/assets/913c5463-0b01-434c-b02a-47423c1058dc" />
+Configure `backend/.env` with the credentials for your existing services:
 
----
+| Variable | Purpose |
+| --- | --- |
+| `HASURA_URL` | Hasura GraphQL endpoint |
+| `HASURA_SECRET_KEY` | Hasura admin secret |
+| `FIREBASE_SERVICE_ACCOUNT` | Base64-encoded Firebase service account JSON |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+| `PORT` | Optional backend port; defaults to `8080` |
 
-### 🔍 Search  
-Quickly find songs from your personal collection with the search feature.
+The Firebase browser configuration is in [frontend/src/config/firebase.ts](frontend/src/config/firebase.ts). It must match the Firebase project used by the backend. Keep backend credentials out of source control.
 
-<img width="840" height="539" alt="image" src="https://github.com/user-attachments/assets/afb865b7-6781-4f8a-9eaa-31d9103595da" />
+Start the API in one terminal:
 
----
+```powershell
+npm run dev:backend
+```
 
-### 🎯 For You  
-Enjoy personally curated music recommendations based on your listening history.
+Start the frontend in another terminal:
 
----
+```powershell
+npm run dev:frontend
+```
 
-## ❤️ Favorites  
-All your liked songs in one place.
+Open [localhost:3000](http://localhost:3000). Vite proxies `/api` requests to the backend on port `8080`. Both ports must be available. When running commands inside `frontend`, use `npm run dev` instead of the root-level `dev:frontend` script.
 
-<img width="1314" height="786" alt="Favorites" src="https://github.com/user-attachments/assets/dc45edec-e9bf-46e2-a9d6-4ffd0d9e5f41" />
+## Database updates
 
----
+The application uses an existing Hasura/PostgreSQL schema. These scripts update that schema; they do not provision a new database. Run them against each environment using its backend credentials:
 
-## ⏮️ Recently Played  
-Revisit your recently played tracks.
+```powershell
+npm --prefix backend run migrate:listening
+npm --prefix backend run migrate:search-radio
+```
 
-<img width="864" height="300" alt="Recently Played" src="https://github.com/user-attachments/assets/deac50dc-c47c-4ef1-a66b-2ce11dc32a00" />
+- `migrate:listening` configures play-event constraints and removes the old listening summary view.
+- `migrate:search-radio` updates the existing `fetch_user_songs_randomly` function to include both uploaded and shared tracks, returning up to 50 tracks with distinct titles.
 
----
+Listening activity is recorded in `play_events` when audio actually starts. Resuming or recovering from buffering does not count as another play, and retries reuse the event ID. Recently Played and Most Listened query the signed-in user's events directly, grouping by song to find the latest play and total plays. They do not require a summary table or view.
 
-## 🔁 Most Played  
-Your most-listened tracks, ranked.
+Validate listening queries and database behavior with:
 
-<img width="590" height="453" alt="Most Played" src="https://github.com/user-attachments/assets/12b6bafa-c282-4f28-ab28-4e40882ea87e" />
+```powershell
+npm --prefix backend run verify:listening
+```
+
+The verification script uses rollback-only database checks.
+
+## Development
+
+| Directory | Contents |
+| --- | --- |
+| `frontend/` | React, strict TypeScript, Vite, MUI, Redux, and frontend tests |
+| `backend/` | Express API, authentication, uploads, database migrations, and backend tests |
+| `scripts/` | Repository checks and app icon generation |
+
+Frontend source uses `.ts` and `.tsx`. Types live beside their owning component, hook, service, or utility in a local `types/` folder, with filenames ending in `.types.ts`, such as `types/ComponentName.types.ts`. Components use the typed Redux hooks from [frontend/src/redux/hooks.ts](frontend/src/redux/hooks.ts).
+
+Run all source, type, lint, test, and production build checks:
+
+```powershell
+npm run check
+```
+
+Individual commands:
+
+| Command | Purpose |
+| --- | --- |
+| `npm run typecheck` | TypeScript compiler checks |
+| `npm run lint` | Frontend ESLint checks |
+| `npm test` | Frontend Vitest and backend regression tests |
+| `npm --prefix frontend run test:watch` | Frontend tests in watch mode |
+| `npm run build` | Production frontend build in `frontend/build` |
+| `npm --prefix frontend run preview` | Preview the frontend build on port `4173` |
+| `node scripts/generate-app-icons.cjs` | Regenerate PWA icons |
+
+Test PWA installation and service-worker behavior with a production build served by the backend or Vite preview. Development mode does not install a service worker. Vite preview only serves the frontend; use the backend to test authenticated API flows from a production build.
+
+### Authentication
+
+Firebase login exchanges a temporary ID token for a server-verified session cookie lasting seven days. Firebase browser authentication uses memory persistence, and the profile lives in Redux memory, restored through `/api/auth/session` after a refresh.
+
+Session cookies are `HttpOnly`, `SameSite=Lax`, and host-only. Production uses `Secure` cookies with the `__Host-` prefix. Serve the frontend and API from the same HTTPS origin in production; Vite's proxy provides the same-origin API path during development. API POST requests require the `X-Musify-Request` header, which the frontend API client supplies. Logout and account deletion clear the session cookie.
+
+## Deploy to Google App Engine
+
+The backend's [app.yaml](backend/app.yaml) uses the Node.js 24 runtime. From the repository root, build the frontend, copy its output into the backend deployment directory, and deploy:
+
+```powershell
+npm run build
+if ($LASTEXITCODE -ne 0) { throw "Build failed" }
+New-Item -ItemType Directory -Path .\backend\build -Force | Out-Null
+Copy-Item .\frontend\build\* .\backend\build -Recurse -Force -ErrorAction Stop
+gcloud app deploy .\backend\app.yaml --project=tejas-musify
+```
+
+Sign in to the Google Cloud CLI with an account that can deploy to the project, and supply the required backend environment configuration for the deployment. Express serves the frontend build and API from the same origin. App Engine is detected automatically for production cookie security; other production hosts should set `NODE_ENV=production`.

@@ -7,6 +7,7 @@ import { createTestStore, makePlaylist, makeSong, makeUser } from "../../test/fi
 import Favorites from "../favorites/Favorites";
 import Playlist from "../playlist/Playlist";
 import Home from "./Home";
+import { PLAYLIST_COLLECTIONS } from "./constants/playlistCollections";
 
 vi.mock("axios", () => ({ default: { post: vi.fn() } }));
 vi.mock("../../config/axiosAuth", () => ({ default: { post: vi.fn() } }));
@@ -14,13 +15,15 @@ vi.mock("../../components/navbar/Navbar", () => ({ default: () => <nav>Musify</n
 vi.mock("../helpers/error/Error", () => ({ default: () => <div>Unable to load songs</div> }));
 beforeEach(() => vi.clearAllMocks());
 
-const renderHome = () => {
+const renderHome = async () => {
     const oldSong = makeSong({ song_id: "old", title: "Previous playlist song" });
     const store = createTestStore({
-        homepage: { user: makeUser(), playlistCollection: [
-            { id: "user", title: "Your Playlists", type: "user", collection: [makePlaylist()] },
-            { id: "system", title: "Popular Playlists", type: "system", collection: [makePlaylist({ playlist_id: "system" })] },
-        ] },
+        homepage: { user: makeUser(), playlistCollection: await Promise.all(PLAYLIST_COLLECTIONS.map(async config => ({
+            id: config.id,
+            title: config.title,
+            type: config.type,
+            collection: config.cache ? [makePlaylist({ playlist_id: config.id })] : await config.loadPlaylists("u1", new AbortController().signal),
+        }))) },
         audioplayer: { viewingSongList: { old: oldSong }, playingSongList: { old: oldSong }, playingIndex: "old" },
         userPrefs: { favorites: ["s1"] },
     });
@@ -32,8 +35,8 @@ const renderHome = () => {
     return store;
 };
 
-test("For You is the first home row and links the three existing covers to their song lists", () => {
-    renderHome();
+test("For You is the first home row and links the three existing covers to their song lists", async () => {
+    await renderHome();
     const rail = screen.getByRole("region", { name: "For You" });
     expect(within(rail).getAllByRole("link").map(link => link.textContent)).toEqual(["Favorites", "Recently Played", "Most Listened"]);
     expect(within(rail).getByRole("link", { name: "Favorites" })).toHaveAttribute("href", "/favorites");
@@ -51,7 +54,7 @@ test.each([
 ] as const)("%s opens its backend list and selecting a song starts that queue", async (title, endpoint, responseKey) => {
     const songs = [makeSong({ title: "First personal track" }), makeSong({ song_id: "s2", title: "Second personal track" })];
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { [responseKey]: songs } });
-    const store = renderHome();
+    const store = await renderHome();
     fireEvent.click(screen.getByRole("link", { name: title }));
     expect(await screen.findByText(`Audio in ${title}`)).toBeInTheDocument();
     expect(await screen.findByText("First personal track")).toBeInTheDocument();
@@ -68,7 +71,7 @@ test.each([
 
 test("the Favorites shortcut fetches favorites and plays the selected song", async () => {
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { favorites: [{ song: makeSong({ title: "Favorite track" }) }] } });
-    const store = renderHome();
+    const store = await renderHome();
     fireEvent.click(screen.getByRole("link", { name: "Favorites" }));
     fireEvent.click(await screen.findByText("Favorite track"));
     expect(axios.post).toHaveBeenCalledWith("/api/fetchfavorites", { user_id: "u1" }, expect.objectContaining({ withCredentials: true }));
@@ -77,7 +80,7 @@ test("the Favorites shortcut fetches favorites and plays the selected song", asy
 
 test("an empty personal list displays its title and empty state", async () => {
     vi.mocked(axios.post).mockResolvedValueOnce({ data: { recently_played: [] } });
-    renderHome();
+    await renderHome();
     fireEvent.click(screen.getByRole("link", { name: "Recently Played" }));
     expect(await screen.findByText("Nothing Here Yet...")).toBeInTheDocument();
     expect(screen.getByText("Audio in Recently Played")).toBeInTheDocument();
@@ -86,7 +89,7 @@ test("an empty personal list displays its title and empty state", async () => {
 test("a personal-list request failure displays an error instead of stale songs", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(axios.post).mockRejectedValueOnce(new Error("offline"));
-    renderHome();
+    await renderHome();
     fireEvent.click(screen.getByRole("link", { name: "Most Listened" }));
     expect(await screen.findByText("Unable to load songs")).toBeInTheDocument();
     expect(screen.queryByText("Previous playlist song")).not.toBeInTheDocument();

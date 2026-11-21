@@ -7,9 +7,9 @@ const PlaylistRail = ({ collection }: PlaylistRailProps) => {
     if (!collection || collection.collection?.length === 0) {
         return null;
     }
-    return (<Grid className={styles.homepage_playlists}>
+    return (<Grid component="section" aria-label={collection.title} className={styles.homepage_playlists}>
       <Grid className={styles.title}>
-        <Typography variant="HomepageTitleText" className={styles.title_text}>
+        <Typography component="h2" variant="HomepageTitleText" className={styles.title_text}>
           {collection.title}
         </Typography>
       </Grid>

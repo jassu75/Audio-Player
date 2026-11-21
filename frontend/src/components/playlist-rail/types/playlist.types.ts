@@ -3,6 +3,7 @@ export interface Playlist {
     playlist_title: string;
     playlist_cover_art: string;
     source?: string;
+    path?: string;
 }
 export type PlaylistType = "user" | "system";
 export interface PlaylistCollection {

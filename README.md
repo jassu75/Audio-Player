@@ -1,5 +1,27 @@
 # 🎵 Musify
 
+Clicking a search or search-history result starts that track immediately, then builds its playback queue with up to 50 random songs from the existing `fetch_user_songs_randomly` database function. The random queue refreshes every 20 next/previous/automatic track advances, preserving the current track and playback position. It continues while navigating, and selecting a normal playlist or Favorites track switches back to that list. Search results stay separate from the playback queue. Run `npm --prefix backend run migrate:search-radio` on each database to update the existing function to sample both the user’s uploaded songs and shared system audio.
+
+The `personal` For You collection combines uploaded and shared database tracks in Favorites, Recently Played, and Most Listened. Search includes the signed-in user’s uploads and shared system audio, matching title, artist, and album. Shared tracks can be favorited; editing controls remain limited to user playlists.
+
+Playback writes a per-user event to `play_events` when audio actually starts. Resuming or recovering from buffering does not add a second event. Retries reuse the event ID to avoid duplicate counts. Recently Played and Most Listened read this table directly: the API groups the current user’s events by song, counts plays, and finds the latest play time. There is no summary table or view, and legacy audio-row counters are not used for these lists. Reads use cursor pagination and only return accessible tracks. History pages wait for pending writes before fetching. Run `npm --prefix backend run migrate:listening` to configure the play-event constraints and remove the old summary view. Run `npm --prefix backend run verify:listening` for live query validation and rollback-only database checks.
+
+Musify can be installed as a mobile web app from its HTTPS site. On Android, use **Install** when offered or the browser's **Install app** menu. On iPhone or iPad, use **Share → Add to Home Screen**. Installation support depends on the browser; the installed app and the website share the same account and library.
+
+The mobile player supports phone safe areas, portrait and landscape layouts, and lock-screen/headset controls through the Media Session API where available. Start playback by tapping a track or Play. The app keeps one audio element alive while navigating. Background playback remains subject to the phone and browser's policies. Music streams need an internet connection; the service worker caches the app shell and static assets, not authenticated API responses or audio files. Available updates wait for the user to choose **Update** so a new deployment does not reload an active listening session.
+
+PWA installation and service-worker behavior should be tested against `npm run build` followed by the backend server or `npm --prefix frontend run preview`. Development mode does not install a service worker. Regenerate app icons with `node scripts/generate-app-icons.cjs`.
+
+The React app lives in `frontend/` and the Express API lives in `backend/`. Run `npm run dev:frontend` and `npm run dev:backend` in separate terminals. Use `npm run check` from the repository root to validate the project.
+
+Authentication uses a server-verified Firebase session cookie lasting seven days. The profile stays in Redux memory and is reloaded from `/api/auth/session` after a refresh. The old local-storage `user` entry is removed at startup. Firebase browser authentication uses memory persistence only; successful login exchanges its temporary ID token for the session cookie and signs out the browser SDK. Existing users need to sign in again after this migration.
+
+Session cookies are `HttpOnly`, `SameSite=Lax`, and host-only. Production uses the `__Host-` cookie prefix and `Secure`; deploy behind HTTPS with `NODE_ENV=production` (App Engine is detected automatically). Plain HTTP cookies are only for local development. Serve the API under the same origin as the frontend, using Vite’s `/api` proxy during development. API responses are not cached. All API POST requests, including multipart uploads, require the `X-Musify-Request` header to prevent cross-site form submissions; keep the API’s cross-origin access disabled. Logout and account deletion clear the server cookie.
+
+The frontend uses Vite 8 and strict TypeScript, with Vitest for tests and standalone ESLint. Use Node.js 24.15 or newer for development and deployment. Vite runs on port 3000 and proxies `/api` to the backend on port 8080. Production builds remain in `frontend/build` for Express to serve. Run `npm --prefix frontend run preview` to preview a production build on port 4173.
+
+Run `npm run typecheck` for compiler checks or `npm run check` for all validation. Frontend types are colocated with their owners: a component’s props live in its own `types/ComponentName.types.ts`, while hooks, Redux slices, services, and utilities own their corresponding `types/*.types.ts` files. There is no shared root types directory. New frontend source files should use `.ts` or `.tsx`; components should use the typed hooks from `frontend/src/redux/hooks.ts`. The app uses React 19, MUI 9, React Router 7, Firebase 13, and browser-native audio metadata parsing. TypeScript stays on the latest compatible 6.0 release because the lint tooling does not support TypeScript 7 yet. `npm test` runs the Vitest and backend regression suites; `npm --prefix frontend run test:watch` watches frontend tests.
+
 ## 🌐 Website Link  
 [Visit the Application](https://tejas-musify.wl.r.appspot.com/)
 

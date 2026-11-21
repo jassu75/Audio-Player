@@ -1,0 +1,45 @@
+.song_card {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.song_actions { display: flex; align-items: center; padding-left: 10px; }
+
+.song_card_info {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  height: 70px;
+  cursor: pointer;
+  width: 400px;
+  max-width: 72%;
+}
+
+.song_image {
+  aspect-ratio: 1;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song_title {
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song_artist {
+  color: white;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.song_content {
+  padding-top: 10px;
+  height: 100%;
+}

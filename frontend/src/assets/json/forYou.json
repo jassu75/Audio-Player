@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "cover_art": "/images/ForYou/FavoritesItem.jpeg",
+      "title": "Favorites",
+      "id": "favorites",
+      "path": "/favorites"
+    },
+    {
+      "cover_art": "/images/ForYou/RecentsItem.png",
+      "title": "Recently Played",
+      "id": "recently-played",
+      "path": "/playlists/recently-played/?page=1"
+    },
+    {
+      "cover_art": "/images/ForYou/TopSongsItem.jpg",
+      "title": "Most Listened",
+      "id": "most-played",
+      "path": "/playlists/most-played/?page=1"
+    }
+  ]
+}

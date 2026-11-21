@@ -1,0 +1,8 @@
+.container { padding: 9px; width: 100%; box-sizing: border-box; }
+.title { color: #d3d3d3; text-align: center; padding: 0 15px 15px; }
+.cards { display: flex; gap: 15px; overflow-x: auto; padding: 4px; }
+.card { display: flex; flex-direction: column; flex: 0 0 170px; gap: 15px; padding: 5px; text-decoration: none; color: #fff; border-radius: 10px; }
+.card:focus-visible { outline: 2px solid #e7c95e; outline-offset: 1px; }
+.image { width: 100%; aspect-ratio: 1; object-fit: cover; border: 1px solid #fff; border-radius: 10px; box-sizing: border-box; }
+.label { padding-left: 7px; }
+@media (max-width: 600px) { .card { flex-basis: 140px; } }

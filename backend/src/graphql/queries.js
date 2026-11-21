@@ -113,7 +113,7 @@ query FETCH_SEARCH_SONGS($user_id: String!, $search_text: String!) {
 export const FETCH_RECENTLY_PLAYED = `
 query FETCH_RECENTLY_PLAYED($user_id:String!){
   recently_played:audio_details(
-    where:{user_id:{_eq:$user_id}},order_by:{last_played:desc_nulls_last},
+    where:{user_id:{_eq:$user_id},last_played:{_is_null:false}},order_by:{last_played:desc_nulls_last},
     limit:50
   ){
     cover_art

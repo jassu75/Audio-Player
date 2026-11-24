@@ -1,30 +1,43 @@
 .song_card {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 12px;
   width: 100%;
+  min-width: 0;
 }
 
 .song_actions {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.song_actions :global(.MuiIconButton-root) {
+  width: 44px;
+  height: 44px;
 }
 
 .song_card_info {
   border-radius: 8px;
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  height: 70px;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: 16px;
+  min-height: 70px;
   cursor: pointer;
-  width: 400px;
-  max-width: 72%;
 }
 
 .song_image {
   aspect-ratio: 1;
-  height: 100%;
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
   object-fit: cover;
+  border-radius: 8px;
 }
 
 .song_title {
@@ -44,6 +57,26 @@
 }
 
 .song_content {
-  padding-top: 10px;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 500px) {
+  .song_card {
+    gap: 8px;
+  }
+
+  .song_card_info {
+    gap: 12px;
+    min-height: 56px;
+  }
+
+  .song_image {
+    width: 56px;
+    height: 56px;
+  }
 }

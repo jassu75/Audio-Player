@@ -1,8 +1,11 @@
 .playlist_songs {
   display: flex;
   flex-direction: column;
-  padding: 9px;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 12px clamp(12px, 3vw, 24px) 24px;
   width: 100%;
+  gap: 20px;
 }
 
 .title_text {
@@ -20,7 +23,10 @@
   gap: 10px;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  width: 100%;
+  max-width: 720px;
+  box-sizing: border-box;
+  padding: 12px 0;
 }
 
 .songs_container {
@@ -28,6 +34,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 24px;
   width: 100%;
 }

@@ -46,6 +46,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        skipWaiting: false,
+        clientsClaim: false,
         globPatterns: ["**/*.{js,css,html,png,ico,svg,webp,jpg,jpeg}"],
         navigateFallbackDenylist: [/^\/api(?:\/|$)/, /^\/__(?:\/|$)/],
         cleanupOutdatedCaches: true,

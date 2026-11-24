@@ -55,7 +55,7 @@ Open the HTTPS site on your phone:
 
 The player supports portrait and landscape layouts, phone safe areas, and lock-screen and headset controls through the Media Session API where supported. Tap a track or Play to start playback. Background playback depends on the phone and browser.
 
-Music streams require an internet connection. The service worker caches the app shell and static assets; authenticated API responses and audio files are not cached. Available app updates wait for you to choose **Update**.
+Music streams require an internet connection. The service worker caches the app shell and static assets; authenticated API responses and audio files are not cached. Updates download automatically when detected and take effect after you fully close and reopen the app. All Musify tabs and windows must be closed before a waiting update can activate; minimizing the app does not apply it. Update checks also run when the app becomes visible, reconnects, and every five minutes while visible and online. Updates never force a reload of an open app.
 
 ## Run locally
 

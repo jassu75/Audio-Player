@@ -18,6 +18,64 @@ vi.mock("../../../services/listeningHistory", () => ({
   recordPlayEvent: vi.fn().mockResolvedValue(undefined),
 }));
 vi.mock("axios", () => ({ default: { post: vi.fn() } }));
+
+test("background track transitions keep playback and the media session active despite queued events from the old track", async () => {
+  let paused = true;
+  const session = {
+    playbackState: "none" as MediaSessionPlaybackState,
+    metadata: null,
+    setActionHandler: vi.fn(),
+    setPositionState: vi.fn(),
+  };
+  vi.stubGlobal("navigator", { mediaSession: session });
+  vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden");
+  vi.spyOn(HTMLMediaElement.prototype, "paused", "get").mockImplementation(() => paused);
+  const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(function (this: HTMLMediaElement) {
+    paused = false;
+    fireEvent.play(this);
+    return Promise.resolve();
+  });
+  const pause = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(function (this: HTMLMediaElement) {
+    paused = true;
+    fireEvent.pause(this);
+  });
+  const load = vi.spyOn(HTMLMediaElement.prototype, "load").mockImplementation(() => {});
+  const store = createTestStore({ audioplayer: {
+    playingSongList: {
+      s1: makeSong(),
+      s2: makeSong({ song_id: "s2", audio_url: "https://example.com/two.mp3" }),
+    },
+    playingIndex: "s1",
+  } });
+  const Harness = () => {
+    const player = useAudioPlayer();
+    return <><audio data-testid="background-audio" ref={player.audioRef} /><p role="status">{player.isPlaying ? "Playing" : "Paused"}</p></>;
+  };
+  const { unmount } = render(<Provider store={store}><Harness /></Provider>);
+  try {
+    const audio = screen.getByTestId("background-audio");
+    await screen.findByText("Playing");
+    fireEvent.ended(audio);
+    expect(store.getState().audioplayer.playingIndex).toBe("s2");
+    expect(audio).toHaveAttribute("src", "https://example.com/two.mp3");
+    expect(play).toHaveBeenCalledTimes(2);
+    expect(session.playbackState).toBe("playing");
+    fireEvent.pause(audio);
+    fireEvent.emptied(audio);
+    expect(session.playbackState).toBe("playing");
+    expect(screen.getByRole("status")).toHaveTextContent("Playing");
+    expect(pause).not.toHaveBeenCalled();
+    expect(load).not.toHaveBeenCalled();
+    paused = true;
+    fireEvent.pause(audio);
+    expect(session.playbackState).toBe("paused");
+    expect(screen.getByRole("status")).toHaveTextContent("Paused");
+  } finally {
+    unmount();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  }
+});
 test("renaming a playing track leaves audio running; switching tracks loads the new source", async () => {
   const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue();
   const pause = vi
@@ -54,10 +112,10 @@ test("renaming a playing track leaves audio running; switching tracks loads the 
     store.dispatch(renameViewingSong({ songId: "s1", newTitle: "Renamed" })),
   );
   expect(pause).not.toHaveBeenCalled();
-  expect(load).toHaveBeenCalledTimes(1);
+  expect(load).not.toHaveBeenCalled();
   act(() => store.dispatch(setPlayingIndex("s2")));
   await waitFor(() => expect(play).toHaveBeenCalledTimes(2));
-  expect(pause).toHaveBeenCalledTimes(1);
+  expect(pause).not.toHaveBeenCalled();
   unmount();
   vi.restoreAllMocks();
 });
@@ -244,7 +302,7 @@ test("search playback starts inside the click and adding random tracks does not 
   );
   expect(store.getState().audioplayer.playingSongList).toHaveProperty("random");
   expect(play).toHaveBeenCalledTimes(1);
-  expect(load).toHaveBeenCalledTimes(1);
+  expect(load).not.toHaveBeenCalled();
   expect(pause).not.toHaveBeenCalled();
   unmount();
 });

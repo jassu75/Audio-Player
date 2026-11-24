@@ -58,8 +58,10 @@ test("publishes artwork and routes phone controls to playback", () => {
     actions.get(action)?.({ action });
     expect(handler).toHaveBeenCalledTimes(1);
   }
+  Object.defineProperty(audio, "paused", { configurable: true, value: false });
   fireEvent.play(audio);
   expect(session.playbackState).toBe("playing");
+  Object.defineProperty(audio, "paused", { configurable: true, value: true });
   fireEvent.pause(audio);
   expect(session.playbackState).toBe("paused");
   connection.dispose();

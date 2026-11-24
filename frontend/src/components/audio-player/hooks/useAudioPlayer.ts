@@ -104,7 +104,9 @@ const useAudioPlayer = () => {
       setIsPlaying(true);
       setPlaybackError("");
     };
-    const onPause = () => setIsPlaying(false);
+    const onPause = () => {
+      if (audio.paused) setIsPlaying(false);
+    };
     const onPlaying = () => {
       onPlay();
       setIsBuffering(false);
@@ -169,7 +171,6 @@ const useAudioPlayer = () => {
       }
       const key = song ? song.song_id + "\n" + song.audio_url : "";
       if (key === activeKey) return;
-      if (activeKey) audio.pause();
       activeKey = key;
       sourceVersion.current++;
       setProgress(0);
@@ -179,13 +180,13 @@ const useAudioPlayer = () => {
       setDuration(song?.duration ?? 0);
       if (!song) {
         if (audio.hasAttribute("src")) {
+          audio.pause();
           audio.removeAttribute("src");
           audio.load();
         }
         return;
       }
       audio.src = song.audio_url;
-      audio.load();
       play();
     };
     const unsubscribe = store.subscribe(syncTrack);

@@ -72,7 +72,7 @@ test.each([false, true])("shuffle controls playback without restarting the curre
   expect(shuffle).toHaveAttribute("aria-pressed", "true");
   expect(audio.currentTime).toBe(35);
   expect(play).toHaveBeenCalledTimes(1);
-  expect(load).toHaveBeenCalledTimes(1);
+  expect(load).not.toHaveBeenCalled();
   expect(pause).not.toHaveBeenCalled();
   vi.spyOn(Math, "random").mockReturnValue(0.99);
   fireEvent.ended(audio);

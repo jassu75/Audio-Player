@@ -1,9 +1,26 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
+import { randomUUID } from "node:crypto";
+
+const appVersion = randomUUID();
+
 export default defineConfig({
+  define: {
+    "import.meta.env.VITE_APP_VERSION": JSON.stringify(appVersion),
+  },
   plugins: [
     react(),
+    {
+      name: "app-deployment-version",
+      generateBundle() {
+        this.emitFile({
+          type: "asset",
+          fileName: "version.json",
+          source: JSON.stringify({ version: appVersion }),
+        });
+      },
+    },
     VitePWA({
       registerType: "prompt",
       injectRegister: false,

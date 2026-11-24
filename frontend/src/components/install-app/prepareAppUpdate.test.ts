@@ -3,6 +3,7 @@ import { prepareAppUpdate } from "./prepareAppUpdate";
 
 beforeEach(() => {
   vi.useFakeTimers();
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));
   vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible");
 });
 
@@ -66,6 +67,18 @@ test("an up-to-date launch starts normally without reloading", async () => {
   expect(await prepareAppUpdate(reload)).toBe(false);
   expect(registration.update).toHaveBeenCalledTimes(1);
   expect(reload).not.toHaveBeenCalled();
+});
+
+test("reloads when an automatic update takes control without waiting for activation", async () => {
+  const { registration, workers } = setup();
+  registration.update.mockImplementation(async () => {
+    workers.dispatchEvent(new Event("controllerchange"));
+  });
+  const reload = vi.fn();
+  expect(await prepareAppUpdate(reload)).toBe(true);
+  expect(reload).toHaveBeenCalledTimes(1);
+  workers.dispatchEvent(new Event("controllerchange"));
+  expect(reload).toHaveBeenCalledTimes(1);
 });
 
 test("a slow update does not block startup indefinitely or reload after playback could have begun", async () => {

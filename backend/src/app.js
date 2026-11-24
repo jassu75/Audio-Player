@@ -57,7 +57,18 @@ const localBuildPath = path.join(__dirname, "../../frontend/build");
 const buildFilePath = existsSync(localBuildPath)
   ? localBuildPath
   : path.join(__dirname, "../build");
-app.use(express.static(buildFilePath));
+app.use(
+  express.static(buildFilePath, {
+    setHeaders: (res, filePath) => {
+      const isBuildAsset =
+        path.relative(buildFilePath, filePath).split(path.sep)[0] === "assets";
+      res.set(
+        "Cache-Control",
+        isBuildAsset ? "public, max-age=31536000, immutable" : "no-cache",
+      );
+    },
+  }),
+);
 app.use(checkExistingUser);
 app.use(fetchPlaylistSongs);
 app.use(getPlaylists);
@@ -83,6 +94,7 @@ app.use(fetchSystemPlaylists);
 app.use(uploadCloudinaryImage);
 app.use(uploadCloudinaryAudio);
 app.get(/^\/(?!api(?:\/|$)).*/, (req, res) => {
+  res.set("Cache-Control", "no-cache");
   res.sendFile(path.join(buildFilePath, "index.html"));
 });
 app.use("/api", (_req, res) =>
@@ -91,13 +103,9 @@ app.use("/api", (_req, res) =>
 app.use((error, _req, res, _next) => {
   const status = error.code === "LIMIT_FILE_SIZE" ? 413 : 500;
   console.error("Request failed", error);
-  res
-    .status(status)
-    .json({
-      message:
-        status === 413
-          ? "File exceeds the 10 MB upload limit"
-          : "Request failed",
-    });
+  res.status(status).json({
+    message:
+      status === 413 ? "File exceeds the 10 MB upload limit" : "Request failed",
+  });
 });
 export default app;

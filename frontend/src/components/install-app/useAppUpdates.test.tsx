@@ -40,7 +40,7 @@ const register = (update = vi.fn().mockResolvedValue(undefined)) => {
   return update;
 };
 
-test("a waiting update does not show an Update prompt or request activation in an open installed app", () => {
+test("a waiting update does not reload an active session or show an Update prompt", () => {
   vi.stubGlobal("navigator", {
     userAgent: "iPhone", platform: "iPhone", maxTouchPoints: 1,
     standalone: true, onLine: true,

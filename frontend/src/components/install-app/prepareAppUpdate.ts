@@ -1,6 +1,9 @@
+import { refreshDeploymentCache } from "./refreshDeploymentCache";
+
 const reloadPage = () => window.location.reload();
 
-export const prepareAppUpdate = (reload = reloadPage): Promise<boolean> => {
+export const prepareAppUpdate = async (reload = reloadPage): Promise<boolean> => {
+  if (await refreshDeploymentCache(reload)) return true;
   if (
     !("serviceWorker" in navigator) ||
     !navigator.serviceWorker.controller
@@ -23,7 +26,7 @@ export const prepareAppUpdate = (reload = reloadPage): Promise<boolean> => {
       resolve(reloading);
     };
     const onControllerChange = () => {
-      if (finished || !activating) return;
+      if (finished) return;
       finish(true);
       reload();
     };

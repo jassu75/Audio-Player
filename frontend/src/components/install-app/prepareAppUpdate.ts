@@ -1,13 +1,13 @@
+import type { AppUpdateResult } from "./types/AppUpdateGate.types";
+
 const reloadPage = () => window.location.reload();
 
-export const prepareAppUpdate = (reload = reloadPage): Promise<boolean> => {
+export const prepareAppUpdate = (reload = reloadPage): Promise<AppUpdateResult> => {
   if (
     !("serviceWorker" in navigator) ||
-    !navigator.serviceWorker.controller ||
-    !navigator.onLine ||
-    document.visibilityState !== "visible"
+    !navigator.serviceWorker.controller
   )
-    return Promise.resolve(false);
+    return Promise.resolve({ status: "ready" });
 
   return new Promise((resolve) => {
     const workers = navigator.serviceWorker;
@@ -15,26 +15,31 @@ export const prepareAppUpdate = (reload = reloadPage): Promise<boolean> => {
     let installing: ServiceWorker | null = null;
     let finished = false;
     let activating = false;
-    const finish = (reloading = false) => {
+    let updateFound = false;
+    const finish = (result?: AppUpdateResult) => {
       if (finished) return;
       finished = true;
       window.clearTimeout(timeout);
       workers.removeEventListener("controllerchange", onControllerChange);
       registration?.removeEventListener("updatefound", watchInstallation);
       installing?.removeEventListener("statechange", onStateChange);
-      resolve(reloading);
+      resolve(result ?? { status: updateFound ? "required" : "ready" });
     };
     const onControllerChange = () => {
       if (finished || !activating) return;
-      finish(true);
+      finish({ status: "reloading" });
       reload();
     };
     const activateWaiting = () => {
-      if (finished || activating || document.visibilityState !== "visible")
+      if (finished || activating)
         return;
       if (registration?.waiting) {
         activating = true;
-        registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        try {
+          registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        } catch {
+          finish({ status: "required" });
+        }
       }
     };
     const onStateChange = () => {
@@ -46,6 +51,7 @@ export const prepareAppUpdate = (reload = reloadPage): Promise<boolean> => {
       if (finished) return;
       installing?.removeEventListener("statechange", onStateChange);
       installing = registration?.installing ?? null;
+      updateFound ||= Boolean(installing || registration?.waiting);
       installing?.addEventListener("statechange", onStateChange);
       activateWaiting();
     };
@@ -60,6 +66,7 @@ export const prepareAppUpdate = (reload = reloadPage): Promise<boolean> => {
         registration.addEventListener("updatefound", watchInstallation);
         watchInstallation();
         if (activating || installing) return;
+        if (!navigator.onLine) return finish();
         await registration.update();
         if (finished) return;
         watchInstallation();

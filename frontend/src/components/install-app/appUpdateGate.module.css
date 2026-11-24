@@ -1,0 +1,35 @@
+.container {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #202020;
+  color: #fff;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.card h1 {
+  font-size: 24px;
+}
+
+.card p {
+  color: #d1c6ce;
+  line-height: 1.5;
+}
+
+.card :global(.MuiButton-root) {
+  min-height: 48px;
+  min-width: 120px;
+  background: #d4af37;
+  color: #202020;
+}
+
+.card :global(.MuiCircularProgress-root) {
+  color: #d4af37;
+}

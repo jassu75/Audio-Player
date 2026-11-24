@@ -35,7 +35,7 @@ test("activates an already downloaded update before the app starts and reloads o
   const { registration, workers, pending } = setup();
   registration.waiting = pending as unknown as ServiceWorker;
   const reload = vi.fn();
-  expect(await prepareAppUpdate(reload)).toBe(true);
+  expect(await prepareAppUpdate(reload)).toEqual({ status: "reloading" });
   expect(pending.postMessage).toHaveBeenCalledWith({ type: "SKIP_WAITING" });
   expect(reload).toHaveBeenCalledTimes(1);
   workers.dispatchEvent(new Event("controllerchange"));
@@ -56,14 +56,14 @@ test("waits for a new update found during startup to finish installing", async (
   registration.waiting = pending as unknown as ServiceWorker;
   pending.state = "installed";
   pending.dispatchEvent(new Event("statechange"));
-  expect(await startup).toBe(true);
+  expect(await startup).toEqual({ status: "reloading" });
   expect(reload).toHaveBeenCalledTimes(1);
 });
 
 test("an up-to-date launch starts normally without reloading", async () => {
   const { registration } = setup();
   const reload = vi.fn();
-  expect(await prepareAppUpdate(reload)).toBe(false);
+  expect(await prepareAppUpdate(reload)).toEqual({ status: "ready" });
   expect(registration.update).toHaveBeenCalledTimes(1);
   expect(reload).not.toHaveBeenCalled();
 });
@@ -74,7 +74,7 @@ test("a slow update does not block startup indefinitely or reload after playback
   const reload = vi.fn();
   const startup = prepareAppUpdate(reload);
   await vi.advanceTimersByTimeAsync(8000);
-  expect(await startup).toBe(false);
+  expect(await startup).toEqual({ status: "ready" });
   registration.waiting = pending as unknown as ServiceWorker;
   registration.dispatchEvent(new Event("updatefound"));
   workers.dispatchEvent(new Event("controllerchange"));
@@ -86,20 +86,29 @@ test("offline launches and failed update checks keep the existing version usable
   const { registration, browser } = setup();
   const reload = vi.fn();
   browser.onLine = false;
-  expect(await prepareAppUpdate(reload)).toBe(false);
+  expect(await prepareAppUpdate(reload)).toEqual({ status: "ready" });
   expect(registration.update).not.toHaveBeenCalled();
   browser.onLine = true;
   registration.update.mockRejectedValue(new Error("Network unavailable"));
-  expect(await prepareAppUpdate(reload)).toBe(false);
+  expect(await prepareAppUpdate(reload)).toEqual({ status: "ready" });
   expect(reload).not.toHaveBeenCalled();
 });
 
-test("bringing a hidden launch to the foreground does not activate updates after startup", async () => {
+test("a downloaded update that cannot activate requires an update instead of starting the old app", async () => {
   const { registration, pending } = setup();
   registration.waiting = pending as unknown as ServiceWorker;
-  vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden");
-  expect(await prepareAppUpdate(vi.fn())).toBe(false);
-  vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible");
-  document.dispatchEvent(new Event("visibilitychange"));
-  expect(pending.postMessage).not.toHaveBeenCalled();
+  pending.postMessage.mockImplementation(() => false);
+  const reload = vi.fn();
+  const startup = prepareAppUpdate(reload);
+  await vi.advanceTimersByTimeAsync(8000);
+  expect(await startup).toEqual({ status: "required" });
+  expect(reload).not.toHaveBeenCalled();
+});
+
+test("an update still downloading when startup times out cannot be skipped", async () => {
+  const { registration, pending } = setup();
+  registration.installing = pending as unknown as ServiceWorker;
+  const startup = prepareAppUpdate(vi.fn());
+  await vi.advanceTimersByTimeAsync(8000);
+  expect(await startup).toEqual({ status: "required" });
 });

@@ -1,8 +1,14 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  padding: max(8px, env(safe-area-inset-top, 0px))
+    max(12px, env(safe-area-inset-right, 0px)) 0
+    max(12px, env(safe-area-inset-left, 0px));
+}
+
 .button:global(.MuiIconButton-root) {
-  position: absolute;
-  top: max(8px, env(safe-area-inset-top, 0px));
-  left: max(12px, env(safe-area-inset-left, 0px));
-  z-index: 1;
   min-width: 48px;
   min-height: 48px;
   color: #d4af37;

@@ -15,14 +15,16 @@ const BackButton = () => {
   };
 
   return (
-    <IconButton
-      type="button"
-      aria-label="Back"
-      onClick={handleBack}
-      className={styles.button}
-    >
-      <ArrowBackIcon />
-    </IconButton>
+    <nav className={styles.container} aria-label="Page navigation">
+      <IconButton
+        type="button"
+        aria-label="Back"
+        onClick={handleBack}
+        className={styles.button}
+      >
+        <ArrowBackIcon />
+      </IconButton>
+    </nav>
   );
 };
 

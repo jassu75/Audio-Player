@@ -12,6 +12,7 @@ import Error from "../helpers/error/Error";
 import styles from "./favorites.module.css";
 import useFetchFavoriteIds from "./hooks/useFetchFavoriteIds";
 import useFetchFavorites from "./hooks/useFetchFavorites";
+import BackButton from "../../components/helpers/back-button/BackButton";
 const Favorites = () => {
   const { favoritesError, favoritesLoading, favoriteSongs } =
     useFetchFavorites();
@@ -37,30 +38,33 @@ const Favorites = () => {
     return <FavoriteSkeleton />;
   if (visibleSongs.length === 0) return <EmptySongsList />;
   return (
-    <Grid className={styles.favorite_songs}>
-      <Grid className={styles.title}>
-        <Typography variant="HomepageTitleText" className={styles.title_text}>
-          Songs in Favorites
-        </Typography>
-      </Grid>
-      <Grid className={styles.songs_container}>
-        <Grid className={styles.favorites_container}>
-          {visibleSongs.slice(start, end).map((song) => (
-            <FavoriteCard
-              key={song.song_id}
-              songKey={song.song_id}
-              favorite={song}
-            />
-          ))}
+    <>
+      <BackButton />
+      <Grid className={styles.favorite_songs}>
+        <Grid className={styles.title}>
+          <Typography variant="HomepageTitleText" className={styles.title_text}>
+            Songs in Favorites
+          </Typography>
         </Grid>
-        <Pagination
-          variant="outlined"
-          count={pageCount}
-          page={page}
-          onChange={handlePageChange}
-        />
+        <Grid className={styles.songs_container}>
+          <Grid className={styles.favorites_container}>
+            {visibleSongs.slice(start, end).map((song) => (
+              <FavoriteCard
+                key={song.song_id}
+                songKey={song.song_id}
+                favorite={song}
+              />
+            ))}
+          </Grid>
+          <Pagination
+            variant="outlined"
+            count={pageCount}
+            page={page}
+            onChange={handlePageChange}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 export default Favorites;

@@ -9,6 +9,7 @@ import EmptySearch from "../../components/helpers/empty-state/empty-search/Empty
 import SearchSongList from "../../components/search/search-songs-list/SearchSongList";
 import useFetchRecentlyPlayed from "../../hooks/user-preferences/useFetchRecentlyPlayed";
 import Error from "../helpers/error/Error";
+import BackButton from "../../components/helpers/back-button/BackButton";
 const Search = () => {
   const { recentlyPlayedLoading, recentlyPlayedError } =
     useFetchRecentlyPlayed();
@@ -22,25 +23,28 @@ const Search = () => {
   if (error || (showRecentlyPlayed && recentlyPlayedError)) return <Error />;
   if (recentlyPlayedLoading) return <SearchSkeleton />;
   return (
-    <Grid className={styles.container}>
-      <Grid className={styles.search_container}>
-        <Grid className={styles.search_bar_container}>
-          <SearchIcon className={styles.search_icon} />
-          <TextField
-            variant="outlined"
-            placeholder="Search songs, artists, or albums..."
-            value={searchText}
-            className={styles.search_bar}
-            onChange={handleSearch}
-          />
+    <>
+      <BackButton />
+      <Grid className={styles.container}>
+        <Grid className={styles.search_container}>
+          <Grid className={styles.search_bar_container}>
+            <SearchIcon className={styles.search_icon} />
+            <TextField
+              variant="outlined"
+              placeholder="Search songs, artists, or albums..."
+              value={searchText}
+              className={styles.search_bar}
+              onChange={handleSearch}
+            />
+          </Grid>
+          {showEmpty ? (
+            <EmptySearch />
+          ) : (
+            <SearchSongList showRecentlyPlayed={showRecentlyPlayed} />
+          )}
         </Grid>
-        {showEmpty ? (
-          <EmptySearch />
-        ) : (
-          <SearchSongList showRecentlyPlayed={showRecentlyPlayed} />
-        )}
       </Grid>
-    </Grid>
+    </>
   );
 };
 export default Search;

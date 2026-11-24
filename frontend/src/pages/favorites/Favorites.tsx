@@ -36,7 +36,15 @@ const Favorites = () => {
   if (favoritesError || favoritesIdError) return <Error />;
   if (favoritesLoading || favoritesIdLoading || !visibleSongs)
     return <FavoriteSkeleton />;
-  if (visibleSongs.length === 0) return <EmptySongsList />;
+  if (visibleSongs.length === 0)
+    return (
+      <>
+        <BackButton />
+        <Grid className={styles.empty_state}>
+          <EmptySongsList />
+        </Grid>
+      </>
+    );
   return (
     <>
       <BackButton />

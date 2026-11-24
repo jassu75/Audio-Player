@@ -1,3 +1,10 @@
+.empty_state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .favorites_container {
   display: grid;
   grid-template-columns: repeat(auto-fit, 240px);

@@ -23,6 +23,8 @@ const useAudioPlayer = () => {
   const sourceVersion = useRef(0);
   const recordedVersion = useRef<number | null>(null);
   const mounted = useRef(false);
+  const shuffle = useRef(false);
+  const [isShuffling, setIsShuffling] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
   const [playbackError, setPlaybackError] = useState("");
@@ -67,7 +69,14 @@ const useAudioPlayer = () => {
         play();
         return;
       }
-      dispatch(direction === "next" ? playNext() : playPrevious());
+      const candidates = Object.keys(
+        store.getState().audioplayer.playingSongList ?? {},
+      ).filter((songId) => songId !== previous?.song_id);
+      const nextSongId =
+        direction === "next" && shuffle.current && candidates.length
+          ? candidates[Math.floor(Math.random() * candidates.length)]
+          : undefined;
+      dispatch(direction === "next" ? playNext(nextSongId) : playPrevious());
       if (
         previous &&
         currentSongSelector(store.getState())?.song_id === previous.song_id &&
@@ -223,6 +232,11 @@ const useAudioPlayer = () => {
   };
   return {
     audioRef,
+    isShuffling,
+    handleToggleShuffle: () => {
+      shuffle.current = !shuffle.current;
+      setIsShuffling(shuffle.current);
+    },
     isPlaying,
     isBuffering,
     playbackError,

@@ -14,11 +14,14 @@ import { formatTime } from "../../utils/audioPlayer.utils";
 import type { MaxPlayerProps } from "./types/MaxPlayer.types";
 import styles from "./maxPlayer.module.css";
 import SongCover from "../../../helpers/song-cover/SongCover";
+import ShuffleButton from "../../shuffle-button/ShuffleButton";
 
 const MaxPlayer = ({ audioPlayerProps }: MaxPlayerProps) => {
   const song = useAppSelector(currentSongSelector);
   const {
     isPlaying,
+    isShuffling,
+    handleToggleShuffle,
     isBuffering,
     playbackError,
     progress,
@@ -58,10 +61,13 @@ const MaxPlayer = ({ audioPlayerProps }: MaxPlayerProps) => {
           />
         </div>
         <div className={styles.song_info}>
-          <h2 id="mobile-player-title" className={styles.title}>
-            {song.title}
-          </h2>
-          <p className={styles.artist}>{song.artist || "Unknown artist"}</p>
+          <div className={styles.song_details}>
+            <h2 id="mobile-player-title" className={styles.title}>
+              {song.title}
+            </h2>
+            <p className={styles.artist}>{song.artist || "Unknown artist"}</p>
+          </div>
+          <ShuffleButton enabled={isShuffling} onClick={handleToggleShuffle} />
         </div>
         <div className={styles.progress_bar}>
           <Slider

@@ -56,7 +56,15 @@
   box-shadow: 0 16px 48px #0005;
 }
 .song_info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   width: 100%;
+  min-width: 0;
+}
+
+.song_details {
+  flex: 1;
   min-width: 0;
 }
 .title {

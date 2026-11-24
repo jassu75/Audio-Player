@@ -7,21 +7,38 @@ import { DEFAULT_SONG_COVER } from "../../helpers/song-cover/songCover.utils";
 afterEach(() => vi.unstubAllGlobals());
 
 const setup = () => {
-  const actions = new Map<MediaSessionAction, MediaSessionActionHandler | null>();
+  const actions = new Map<
+    MediaSessionAction,
+    MediaSessionActionHandler | null
+  >();
   const session = {
     metadata: null as MediaMetadata | null,
     playbackState: "none" as MediaSessionPlaybackState,
-    setActionHandler: vi.fn((action: MediaSessionAction, handler: MediaSessionActionHandler | null) => actions.set(action, handler)),
+    setActionHandler: vi.fn(
+      (action: MediaSessionAction, handler: MediaSessionActionHandler | null) =>
+        actions.set(action, handler),
+    ),
     setPositionState: vi.fn(),
   };
   vi.stubGlobal("navigator", { mediaSession: session });
-  vi.stubGlobal("MediaMetadata", class {
-    constructor(data: MediaMetadataInit) { Object.assign(this, data); }
-  });
+  vi.stubGlobal(
+    "MediaMetadata",
+    class {
+      constructor(data: MediaMetadataInit) {
+        Object.assign(this, data);
+      }
+    },
+  );
   const audio = document.createElement("audio");
   Object.defineProperty(audio, "duration", { configurable: true, value: 120 });
   audio.currentTime = 50;
-  const controls = { play: vi.fn(), pause: vi.fn(), next: vi.fn(), previous: vi.fn(), stop: vi.fn() };
+  const controls = {
+    play: vi.fn(),
+    pause: vi.fn(),
+    next: vi.fn(),
+    previous: vi.fn(),
+    stop: vi.fn(),
+  };
   return { session, audio, actions, controls };
 };
 
@@ -31,7 +48,13 @@ test("publishes artwork and routes phone controls to playback", () => {
   connection.setTrack(makeSong({ title: "Phone track", artist: "Artist" }));
   expect(session.metadata?.title).toBe("Phone track");
   expect(session.metadata?.artist).toBe("Artist");
-  for (const [action, handler] of [["play", controls.play], ["pause", controls.pause], ["nexttrack", controls.next], ["previoustrack", controls.previous], ["stop", controls.stop]] as const) {
+  for (const [action, handler] of [
+    ["play", controls.play],
+    ["pause", controls.pause],
+    ["nexttrack", controls.next],
+    ["previoustrack", controls.previous],
+    ["stop", controls.stop],
+  ] as const) {
     actions.get(action)?.({ action });
     expect(handler).toHaveBeenCalledTimes(1);
   }
@@ -42,7 +65,7 @@ test("publishes artwork and routes phone controls to playback", () => {
   connection.dispose();
   expect(session.metadata).toBeNull();
   expect(session.playbackState).toBe("none");
-  expect([...actions.values()].every(handler => handler === null)).toBe(true);
+  expect([...actions.values()].every((handler) => handler === null)).toBe(true);
 });
 
 test("clamps lock-screen seeks and reports a valid position", () => {
@@ -53,14 +76,19 @@ test("clamps lock-screen seeks and reports a valid position", () => {
   actions.get("seekbackward")?.({ action: "seekbackward", seekOffset: 1000 });
   expect(audio.currentTime).toBe(0);
   actions.get("seekto")?.({ action: "seekto", seekTime: 35 });
-  expect(session.setPositionState).toHaveBeenLastCalledWith({ duration: 120, position: 35, playbackRate: 1 });
+  expect(session.setPositionState).toHaveBeenLastCalledWith({
+    duration: 120,
+    position: 35,
+    playbackRate: 1,
+  });
   connection.dispose();
 });
 
 test("an unsupported phone action does not prevent other actions from working", () => {
   const { session, audio, actions, controls } = setup();
   session.setActionHandler.mockImplementation((action, handler) => {
-    if (action === "seekto") throw new DOMException("Unsupported", "NotSupportedError");
+    if (action === "seekto")
+      throw new DOMException("Unsupported", "NotSupportedError");
     return actions.set(action, handler);
   });
   const connection = connectMediaSession(audio, controls);
@@ -80,9 +108,14 @@ test("playback remains available without Media Session support", () => {
 test("lock-screen artwork uses the original default for missing or historical covers", () => {
   const { session, audio, controls } = setup();
   const connection = connectMediaSession(audio, controls);
-  for (const cover_art of ["", "/static/media/defaultMusicImage.oldhash.webp"]) {
+  for (const cover_art of [
+    "",
+    "/static/media/defaultMusicImage.oldhash.webp",
+  ]) {
     connection.setTrack(makeSong({ cover_art }));
-    expect(session.metadata?.artwork[0]?.src).toBe(new URL(DEFAULT_SONG_COVER, window.location.origin).href);
+    expect(session.metadata?.artwork[0]?.src).toBe(
+      new URL(DEFAULT_SONG_COVER, window.location.origin).href,
+    );
   }
   connection.dispose();
 });

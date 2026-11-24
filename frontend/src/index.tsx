@@ -8,12 +8,13 @@ import reportWebVitals from "./reportWebVitals";
 import { removeLegacyUser } from "./services/session";
 removeLegacyUser();
 const container = document.getElementById("root");
-if (!container)
-    throw new Error("Root element not found");
+if (!container) throw new Error("Root element not found");
 const root = ReactDOM.createRoot(container);
-root.render(<React.StrictMode>
+root.render(
+  <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>);
+  </React.StrictMode>,
+);
 reportWebVitals();

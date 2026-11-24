@@ -16,96 +16,123 @@ import type { ProfileProps } from "./types/Profile.types";
 import type { Asset } from "../../../hooks/cloudinary/types/useCloudinaryUpload.types";
 import styles from "./profile.module.css";
 const logout = () => {
-    sessionStorage.clear();
-    window.location.replace("/account");
+  sessionStorage.clear();
+  window.location.replace("/account");
 };
 const Profile = ({ username }: ProfileProps) => {
-    const user = useAppSelector(userSelector);
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-    const [signOutLoading, setSignOutLoading] = useState(false);
-    const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
-    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-    const handleSignout = async () => {
-        try {
-            setSignOutLoading(true);
-            await endUserSession();
-            logout();
-        }
-        catch (error) {
-            console.error("error logging out user", error);
-        }
-        finally {
-            setSignOutLoading(false);
-            handleMenuClose();
-        }
-    };
-    const handleDeleteAccount = async () => {
-        try {
-            setDeleteAccountLoading(true);
-            if (user) {
-                const assets = await postApi("/api/fetchassets", { user_id: user.user_id }, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                const refinedAssets = assets.data?.assets.flatMap((asset) => {
-                    const result: Asset[] = [];
-                    if (asset.cover_art_id && asset.cover_art_id !== "static") {
-                        result.push({ id: asset.cover_art_id, type: "image" });
-                    }
-                    if (asset.audio_url_id)
-                        result.push({ id: asset.audio_url_id, type: "video" });
-                    return result;
-                });
-                await postApi("/api/deleteuser", { assets: refinedAssets }, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                await endUserSession();
-                logout();
-            }
-        }
-        catch (error) {
-            console.error("Error deleting user", error);
-        }
-        finally {
-            setDeleteAccountLoading(false);
-            handleMenuClose();
-        }
-    };
-    return (<Grid className={styles.upload_actions}>
-      <ButtonBase className={styles.welcome_text_container} onClick={handleMenuOpen}>
-        <Avatar src={defaultAvatar}/>
+  const user = useAppSelector(userSelector);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [signOutLoading, setSignOutLoading] = useState(false);
+  const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleSignout = async () => {
+    try {
+      setSignOutLoading(true);
+      await endUserSession();
+      logout();
+    } catch (error) {
+      console.error("error logging out user", error);
+    } finally {
+      setSignOutLoading(false);
+      handleMenuClose();
+    }
+  };
+  const handleDeleteAccount = async () => {
+    try {
+      setDeleteAccountLoading(true);
+      if (user) {
+        const assets = await postApi(
+          "/api/fetchassets",
+          { user_id: user.user_id },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        const refinedAssets = assets.data?.assets.flatMap((asset) => {
+          const result: Asset[] = [];
+          if (asset.cover_art_id && asset.cover_art_id !== "static") {
+            result.push({ id: asset.cover_art_id, type: "image" });
+          }
+          if (asset.audio_url_id)
+            result.push({ id: asset.audio_url_id, type: "video" });
+          return result;
+        });
+        await postApi(
+          "/api/deleteuser",
+          { assets: refinedAssets },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        await endUserSession();
+        logout();
+      }
+    } catch (error) {
+      console.error("Error deleting user", error);
+    } finally {
+      setDeleteAccountLoading(false);
+      handleMenuClose();
+    }
+  };
+  return (
+    <Grid className={styles.upload_actions}>
+      <ButtonBase
+        className={styles.welcome_text_container}
+        onClick={handleMenuOpen}
+      >
+        <Avatar src={defaultAvatar} />
         <Typography variant="UserWelcomeText" className={styles.username_text}>
           {username}
         </Typography>
       </ButtonBase>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
         <MenuItem onClick={handleSignout} className={styles.menu_item}>
-          {signOutLoading ? (<>
+          {signOutLoading ? (
+            <>
               <Typography variant="MenuItemText">Signing Out</Typography>
-              <CircularProgress className={styles.loader} size={20}/>
-            </>) : (<Typography variant="MenuItemText">Sign Out</Typography>)}
+              <CircularProgress className={styles.loader} size={20} />
+            </>
+          ) : (
+            <Typography variant="MenuItemText">Sign Out</Typography>
+          )}
         </MenuItem>
-        <Divider className={styles.divider}/>
+        <Divider className={styles.divider} />
 
         <MenuItem onClick={handleDeleteAccount} className={styles.menu_item}>
-          {deleteAccountLoading ? (<>
-              <Typography variant="MenuItemText" className={styles.deleteacount_text}>
+          {deleteAccountLoading ? (
+            <>
+              <Typography
+                variant="MenuItemText"
+                className={styles.deleteacount_text}
+              >
                 Deleting Account
               </Typography>
-              <CircularProgress className={styles.loader} size={20}/>
-            </>) : (<Typography variant="MenuItemText" className={styles.deleteacount_text}>
+              <CircularProgress className={styles.loader} size={20} />
+            </>
+          ) : (
+            <Typography
+              variant="MenuItemText"
+              className={styles.deleteacount_text}
+            >
               Delete Account
-            </Typography>)}
+            </Typography>
+          )}
         </MenuItem>
       </Menu>
-    </Grid>);
+    </Grid>
+  );
 };
 export default Profile;

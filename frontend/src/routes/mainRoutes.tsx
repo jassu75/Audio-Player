@@ -9,34 +9,51 @@ import Home from "../pages/homepage/Home";
 import Playlist from "../pages/playlist/Playlist";
 import Search from "../pages/search/Search";
 const mainRoutes = [
-    {
-        element: <RequireAudioPlayer />,
-        children: [
-            {
-                path: "/",
-                element: (<RequireStates requires={["user", "playlistCollection"]} skeleton={<HomepageSkeleton />}>
+  {
+    element: <RequireAudioPlayer />,
+    children: [
+      {
+        path: "/",
+        element: (
+          <RequireStates
+            requires={["user", "playlistCollection"]}
+            skeleton={<HomepageSkeleton />}
+          >
             <Home />
-          </RequireStates>),
-            },
-            {
-                path: "/playlists/:playlistId?",
-                element: (<RequireStates requires={["user", "playlistCollection", "favorites"]} skeleton={<PlaylistSkeleton />}>
+          </RequireStates>
+        ),
+      },
+      {
+        path: "/playlists/:playlistId?",
+        element: (
+          <RequireStates
+            requires={["user", "playlistCollection", "favorites"]}
+            skeleton={<PlaylistSkeleton />}
+          >
             <Playlist />
-          </RequireStates>),
-            },
-            {
-                path: "/search",
-                element: (<RequireStates requires={["user", "favorites"]} skeleton={<SearchSkeleton />}>
+          </RequireStates>
+        ),
+      },
+      {
+        path: "/search",
+        element: (
+          <RequireStates
+            requires={["user", "favorites"]}
+            skeleton={<SearchSkeleton />}
+          >
             <Search />
-          </RequireStates>),
-            },
-            {
-                path: "/favorites",
-                element: (<RequireStates requires={["user"]} skeleton={<FavoriteSkeleton />}>
+          </RequireStates>
+        ),
+      },
+      {
+        path: "/favorites",
+        element: (
+          <RequireStates requires={["user"]} skeleton={<FavoriteSkeleton />}>
             <Favorites />
-          </RequireStates>),
-            },
-        ],
-    },
+          </RequireStates>
+        ),
+      },
+    ],
+  },
 ];
 export default mainRoutes;

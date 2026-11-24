@@ -1,3 +1,3 @@
 export interface SearchSongListProps {
-    showRecentlyPlayed: boolean;
+  showRecentlyPlayed: boolean;
 }

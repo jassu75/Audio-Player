@@ -69,7 +69,6 @@ query FETCH_SEARCH_SONGS($user_id: String!, $search_text: String!) {
 }
 `;
 
-
 export const FETCH_FAVORITE_IDS = `
 query FETCH_FAVORITE_IDS($user_id: String!) {
   favoriteIds:favorites(where: {user_id: {_eq: $user_id}}) {

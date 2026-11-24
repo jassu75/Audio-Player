@@ -1,3 +1,3 @@
 export interface FavoriteIconProps {
-    songId: string;
+  songId: string;
 }

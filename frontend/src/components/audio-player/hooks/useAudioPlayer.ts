@@ -1,10 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppStore } from "../../../redux/hooks";
 import { currentSongSelector } from "../../../redux/selectors/audioPlayerSelectors";
-import { clearPlayingContext, playNext, playPrevious } from "../../../redux/slices/audioPlayerSlice";
+import {
+  clearPlayingContext,
+  playNext,
+  playPrevious,
+} from "../../../redux/slices/audioPlayerSlice";
 import { connectMediaSession } from "../utils/mediaSession.utils";
 import { userSelector } from "../../../redux/selectors/homepageSelectors";
-import { addListens, addRecentlyPlayed } from "../../../redux/slices/userPreferencesSlice";
+import {
+  addListens,
+  addRecentlyPlayed,
+} from "../../../redux/slices/userPreferencesSlice";
 import { recordPlayEvent } from "../../../services/listeningHistory";
 import useSearchPlayback from "./useSearchPlayback";
 
@@ -28,44 +35,66 @@ const useAudioPlayer = () => {
     if (!audio?.getAttribute("src")) return;
     const version = sourceVersion.current;
     setPlaybackError("");
-    audio.play().then(() => {
-      if (mounted.current && sourceVersion.current === version) setIsPlaying(true);
-    }).catch((error: unknown) => {
-      if (!mounted.current || sourceVersion.current !== version || (error instanceof DOMException && error.name === "AbortError")) return;
-      setIsPlaying(false);
-      setIsBuffering(false);
-      setPlaybackError(error instanceof DOMException && error.name === "NotAllowedError"
-        ? "Tap Play to start listening."
-        : "Unable to play this track. Check your connection and try again.");
-    });
+    audio
+      .play()
+      .then(() => {
+        if (mounted.current && sourceVersion.current === version)
+          setIsPlaying(true);
+      })
+      .catch((error: unknown) => {
+        if (
+          !mounted.current ||
+          sourceVersion.current !== version ||
+          (error instanceof DOMException && error.name === "AbortError")
+        )
+          return;
+        setIsPlaying(false);
+        setIsBuffering(false);
+        setPlaybackError(
+          error instanceof DOMException && error.name === "NotAllowedError"
+            ? "Tap Play to start listening."
+            : "Unable to play this track. Check your connection and try again.",
+        );
+      });
   }, []);
 
-  const moveTrack = useCallback((direction: "next" | "previous") => {
-    const audio = audioRef.current;
-    const previous = currentSongSelector(store.getState());
-    if (direction === "previous" && audio && audio.currentTime > 3) {
-      audio.currentTime = 0;
-      play();
-      return;
-    }
-    dispatch(direction === "next" ? playNext() : playPrevious());
-    if (previous && currentSongSelector(store.getState())?.song_id === previous.song_id && audio) {
-      recordedVersion.current = null;
-      audio.currentTime = 0;
-      play();
-    }
-  }, [dispatch, play, store]);
+  const moveTrack = useCallback(
+    (direction: "next" | "previous") => {
+      const audio = audioRef.current;
+      const previous = currentSongSelector(store.getState());
+      if (direction === "previous" && audio && audio.currentTime > 3) {
+        audio.currentTime = 0;
+        play();
+        return;
+      }
+      dispatch(direction === "next" ? playNext() : playPrevious());
+      if (
+        previous &&
+        currentSongSelector(store.getState())?.song_id === previous.song_id &&
+        audio
+      ) {
+        recordedVersion.current = null;
+        audio.currentTime = 0;
+        play();
+      }
+    },
+    [dispatch, play, store],
+  );
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     mounted.current = true;
-    const onTimeUpdate = () => setProgress(Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
+    const onTimeUpdate = () =>
+      setProgress(Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
     const onMetadata = () => {
       setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
       setIsBuffering(false);
     };
-    const onPlay = () => { setIsPlaying(true); setPlaybackError(""); };
+    const onPlay = () => {
+      setIsPlaying(true);
+      setPlaybackError("");
+    };
     const onPause = () => setIsPlaying(false);
     const onPlaying = () => {
       onPlay();
@@ -73,22 +102,47 @@ const useAudioPlayer = () => {
       const state = store.getState();
       const song = currentSongSelector(state);
       const user = userSelector(state);
-      if (!song || !user || recordedVersion.current === sourceVersion.current) return;
+      if (!song || !user || recordedVersion.current === sourceVersion.current)
+        return;
       recordedVersion.current = sourceVersion.current;
       dispatch(addRecentlyPlayed(song));
       dispatch(addListens(song.song_id));
-      void recordPlayEvent({ event_id: crypto.randomUUID(), song_id: song.song_id, user_id: user.user_id })
-        .catch(error => console.error("Unable to save listening history", error));
+      void recordPlayEvent({
+        event_id: crypto.randomUUID(),
+        song_id: song.song_id,
+        user_id: user.user_id,
+      }).catch((error) =>
+        console.error("Unable to save listening history", error),
+      );
     };
     const onWaiting = () => setIsBuffering(true);
     const onError = () => {
       setIsPlaying(false);
       setIsBuffering(false);
-      setPlaybackError("Unable to play this track. Check your connection and try again.");
+      setPlaybackError(
+        "Unable to play this track. Check your connection and try again.",
+      );
     };
-    const onEnded = () => { recordedVersion.current = null; moveTrack("next"); };
-    const listeners = { timeupdate: onTimeUpdate, loadedmetadata: onMetadata, durationchange: onMetadata, play: onPlay, playing: onPlaying, pause: onPause, waiting: onWaiting, stalled: onWaiting, canplay: onMetadata, ended: onEnded, error: onError };
-    Object.entries(listeners).forEach(([event, listener]) => audio.addEventListener(event, listener));
+    const onEnded = () => {
+      recordedVersion.current = null;
+      moveTrack("next");
+    };
+    const listeners = {
+      timeupdate: onTimeUpdate,
+      loadedmetadata: onMetadata,
+      durationchange: onMetadata,
+      play: onPlay,
+      playing: onPlaying,
+      pause: onPause,
+      waiting: onWaiting,
+      stalled: onWaiting,
+      canplay: onMetadata,
+      ended: onEnded,
+      error: onError,
+    };
+    Object.entries(listeners).forEach(([event, listener]) =>
+      audio.addEventListener(event, listener),
+    );
     const mediaSession = connectMediaSession(audio, {
       play,
       pause: () => audio.pause(),
@@ -130,7 +184,9 @@ const useAudioPlayer = () => {
     return () => {
       mounted.current = false;
       unsubscribe();
-      Object.entries(listeners).forEach(([event, listener]) => audio.removeEventListener(event, listener));
+      Object.entries(listeners).forEach(([event, listener]) =>
+        audio.removeEventListener(event, listener),
+      );
       audio.pause();
       mediaSession.dispose();
     };
@@ -153,14 +209,30 @@ const useAudioPlayer = () => {
   };
   const handleSliderChange = (_: Event, value: number | number[]) => {
     const audio = audioRef.current;
-    if (!audio || typeof value !== "number" || !Number.isFinite(value) || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+    if (
+      !audio ||
+      typeof value !== "number" ||
+      !Number.isFinite(value) ||
+      !Number.isFinite(audio.duration) ||
+      audio.duration <= 0
+    )
+      return;
     const position = Math.min(audio.duration, Math.max(0, value));
     audio.currentTime = position;
     setProgress(position);
   };
   return {
-    audioRef, isPlaying, isBuffering, playbackError, progress, duration, isExpanded,
-    handleTogglePlay, handlePlayNext, handlePlayPrevious, handleSliderChange,
+    audioRef,
+    isPlaying,
+    isBuffering,
+    playbackError,
+    progress,
+    duration,
+    isExpanded,
+    handleTogglePlay,
+    handlePlayNext,
+    handlePlayPrevious,
+    handleSliderChange,
     handleExpand: () => setIsExpanded(true),
     handleCollapse: () => setIsExpanded(false),
     handleClose: () => dispatch(clearPlayingContext()),

@@ -14,8 +14,8 @@ const RequireAudioPlayer = () => {
         <Outlet />
       </Grid>
       <Grid className={currentSong ? styles.audioplayer : styles.idle_player}>
-          <AudioPlayer />
-        </Grid>
+        <AudioPlayer />
+      </Grid>
     </Grid>
   );
 };

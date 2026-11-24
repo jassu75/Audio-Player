@@ -13,26 +13,31 @@ import styles from "./favorites.module.css";
 import useFetchFavoriteIds from "./hooks/useFetchFavoriteIds";
 import useFetchFavorites from "./hooks/useFetchFavorites";
 const Favorites = () => {
-    const { favoritesError, favoritesLoading, favoriteSongs } = useFetchFavorites();
-    const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
-    const favorites = useAppSelector(favoritesSelector);
-    const updates = useAppSelector(state => state.userPrefs.favoriteUpdates);
-    const visibleSongs = useMemo(() => {
-        if (!favoriteSongs || !favorites) return null;
-        return Object.values(favoriteSongs).filter(song => updates[song.song_id]?.isFavorite ?? favorites.includes(song.song_id));
-    }, [favoriteSongs, favorites, updates]);
-    const dispatch = useAppDispatch();
-    const { pageCount, start, end, handlePageChange, page } = usePagination(visibleSongs?.length ?? 0);
-    useEffect(() => {
-        if (visibleSongs) dispatch(setViewingSongList(indexSongs(visibleSongs)));
-    }, [visibleSongs, dispatch]);
-    if (favoritesError || favoritesIdError)
-        return <Error />;
-    if (favoritesLoading || favoritesIdLoading || !visibleSongs)
-        return <FavoriteSkeleton />;
-    if (visibleSongs.length === 0)
-        return <EmptySongsList />;
-    return (<Grid className={styles.favorite_songs}>
+  const { favoritesError, favoritesLoading, favoriteSongs } =
+    useFetchFavorites();
+  const { favoritesIdLoading, favoritesIdError } = useFetchFavoriteIds();
+  const favorites = useAppSelector(favoritesSelector);
+  const updates = useAppSelector((state) => state.userPrefs.favoriteUpdates);
+  const visibleSongs = useMemo(() => {
+    if (!favoriteSongs || !favorites) return null;
+    return Object.values(favoriteSongs).filter(
+      (song) =>
+        updates[song.song_id]?.isFavorite ?? favorites.includes(song.song_id),
+    );
+  }, [favoriteSongs, favorites, updates]);
+  const dispatch = useAppDispatch();
+  const { pageCount, start, end, handlePageChange, page } = usePagination(
+    visibleSongs?.length ?? 0,
+  );
+  useEffect(() => {
+    if (visibleSongs) dispatch(setViewingSongList(indexSongs(visibleSongs)));
+  }, [visibleSongs, dispatch]);
+  if (favoritesError || favoritesIdError) return <Error />;
+  if (favoritesLoading || favoritesIdLoading || !visibleSongs)
+    return <FavoriteSkeleton />;
+  if (visibleSongs.length === 0) return <EmptySongsList />;
+  return (
+    <Grid className={styles.favorite_songs}>
       <Grid className={styles.title}>
         <Typography variant="HomepageTitleText" className={styles.title_text}>
           Songs in Favorites
@@ -40,12 +45,22 @@ const Favorites = () => {
       </Grid>
       <Grid className={styles.songs_container}>
         <Grid className={styles.favorites_container}>
-          {visibleSongs
-            .slice(start, end)
-            .map((song) => (<FavoriteCard key={song.song_id} songKey={song.song_id} favorite={song}/>))}
+          {visibleSongs.slice(start, end).map((song) => (
+            <FavoriteCard
+              key={song.song_id}
+              songKey={song.song_id}
+              favorite={song}
+            />
+          ))}
         </Grid>
-        <Pagination variant="outlined" count={pageCount} page={page} onChange={handlePageChange}/>
+        <Pagination
+          variant="outlined"
+          count={pageCount}
+          page={page}
+          onChange={handlePageChange}
+        />
       </Grid>
-    </Grid>);
+    </Grid>
+  );
 };
 export default Favorites;

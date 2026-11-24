@@ -8,21 +8,23 @@ import CreatePlaylistButton from "./create-playlist-button/CreatePlaylistButton"
 import styles from "./navbar.module.css";
 import Profile from "./profile/Profile";
 const Navbar = () => {
-    const user = useAppSelector(userSelector);
-    const navigate = useNavigate();
-    const handleSearchClick = () => {
-        navigate("/search");
-    };
-    return user ? (<>
+  const user = useAppSelector(userSelector);
+  const navigate = useNavigate();
+  const handleSearchClick = () => {
+    navigate("/search");
+  };
+  return user ? (
+    <>
       <Grid className={styles.user_welcome_container}>
-        <Profile username={user?.username}/>
+        <Profile username={user?.username} />
         <Grid className={styles.icon_container}>
           <IconButton onClick={handleSearchClick}>
-            <SearchIcon className={styles.search_icon}/>
+            <SearchIcon className={styles.search_icon} />
           </IconButton>
           <CreatePlaylistButton />
         </Grid>
       </Grid>
-    </>) : null;
+    </>
+  ) : null;
 };
 export default Navbar;

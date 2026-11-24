@@ -4,7 +4,11 @@
   width: 100%;
 }
 
-.song_actions { display: flex; align-items: center; padding-left: 10px; }
+.song_actions {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
 
 .song_card_info {
   border-radius: 8px;

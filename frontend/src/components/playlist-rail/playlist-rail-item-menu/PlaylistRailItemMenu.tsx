@@ -9,39 +9,86 @@ import type { PlaylistRailItemMenuProps } from "./types/PlaylistRailItemMenu.typ
 import MessageModal from "../../helpers/modals/message-modal/MessageModal";
 import RenamePlaylistTitle from "../../playlist/actions/playlist/rename-playlist/RenamePlaylistTitle";
 import styles from "./playlistRailItemMenu.module.css";
-const PlaylistRailItemMenu = ({ playlist, playlistRailItemProps }: PlaylistRailItemMenuProps) => {
-    return (<>
-      <IconButton onClick={playlistRailItemProps.handleMenuOpen} sx={{ color: "White" }}>
+const PlaylistRailItemMenu = ({
+  playlist,
+  playlistRailItemProps,
+}: PlaylistRailItemMenuProps) => {
+  return (
+    <>
+      <IconButton
+        onClick={playlistRailItemProps.handleMenuOpen}
+        sx={{ color: "White" }}
+      >
         <MoreVertIcon />
       </IconButton>
 
-      <Menu anchorEl={playlistRailItemProps.anchorEl} open={Boolean(playlistRailItemProps.anchorEl)} onClose={playlistRailItemProps.handleMenuClose} slotProps={{
-            root: { sx: { ".MuiList-root": { padding: 0 } } },
-        }}>
-        <MenuItem disabled={playlistRailItemProps.loading !== null} onClick={playlistRailItemProps.handleRenamePlaylist} className={styles.menu_item}>
-          {playlistRailItemProps.loading === "rename" ? (<>
+      <Menu
+        anchorEl={playlistRailItemProps.anchorEl}
+        open={Boolean(playlistRailItemProps.anchorEl)}
+        onClose={playlistRailItemProps.handleMenuClose}
+        slotProps={{
+          root: { sx: { ".MuiList-root": { padding: 0 } } },
+        }}
+      >
+        <MenuItem
+          disabled={playlistRailItemProps.loading !== null}
+          onClick={playlistRailItemProps.handleRenamePlaylist}
+          className={styles.menu_item}
+        >
+          {playlistRailItemProps.loading === "rename" ? (
+            <>
               <Typography variant="MenuItemText">Renaming</Typography>
-              <CircularProgress className={styles.loader} size={20}/>
-            </>) : (<Typography variant="MenuItemText">Rename</Typography>)}
+              <CircularProgress className={styles.loader} size={20} />
+            </>
+          ) : (
+            <Typography variant="MenuItemText">Rename</Typography>
+          )}
         </MenuItem>
 
-        <Divider className={styles.divider}/>
+        <Divider className={styles.divider} />
 
-        <MenuItem disabled={playlistRailItemProps.loading !== null} onClick={() => playlistRailItemProps.handleDeletePlaylist(playlist.playlist_id)} className={styles.menu_item}>
-          {playlistRailItemProps.loading === "delete" ? (<>
-              <Typography variant="MenuItemText" className={styles.delete_item_text}>
+        <MenuItem
+          disabled={playlistRailItemProps.loading !== null}
+          onClick={() =>
+            playlistRailItemProps.handleDeletePlaylist(playlist.playlist_id)
+          }
+          className={styles.menu_item}
+        >
+          {playlistRailItemProps.loading === "delete" ? (
+            <>
+              <Typography
+                variant="MenuItemText"
+                className={styles.delete_item_text}
+              >
                 Deleting
               </Typography>
-              <CircularProgress className={styles.loader} size={20}/>
-            </>) : (<Typography variant="MenuItemText" className={styles.delete_item_text}>
+              <CircularProgress className={styles.loader} size={20} />
+            </>
+          ) : (
+            <Typography
+              variant="MenuItemText"
+              className={styles.delete_item_text}
+            >
               Delete
-            </Typography>)}
+            </Typography>
+          )}
         </MenuItem>
       </Menu>
 
-      <MessageModal open={playlistRailItemProps.cantDeleteModal} onClose={() => playlistRailItemProps.setCantDeleteModal(false)} messageTitle="Cant delete Playlist!" message="Please delete the songs in the playlist before proceeding"/>
+      <MessageModal
+        open={playlistRailItemProps.cantDeleteModal}
+        onClose={() => playlistRailItemProps.setCantDeleteModal(false)}
+        messageTitle="Cant delete Playlist!"
+        message="Please delete the songs in the playlist before proceeding"
+      />
 
-      <RenamePlaylistTitle open={playlistRailItemProps.loading === "rename"} onClose={playlistRailItemProps.closeRenameModal} playlistId={playlist.playlist_id} playlistTitle={playlist.playlist_title}/>
-    </>);
+      <RenamePlaylistTitle
+        open={playlistRailItemProps.loading === "rename"}
+        onClose={playlistRailItemProps.closeRenameModal}
+        playlistId={playlist.playlist_id}
+        playlistTitle={playlist.playlist_title}
+      />
+    </>
+  );
 };
 export default PlaylistRailItemMenu;

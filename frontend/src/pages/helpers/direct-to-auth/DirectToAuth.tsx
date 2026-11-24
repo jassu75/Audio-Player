@@ -4,11 +4,12 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import styles from "./directToAuth.module.css";
 const DirectToAuth = () => {
-    const navigate = useNavigate();
-    const handleRedirect = () => {
-        navigate("/account");
-    };
-    return (<Grid className={styles.redirect_text_container}>
+  const navigate = useNavigate();
+  const handleRedirect = () => {
+    navigate("/account");
+  };
+  return (
+    <Grid className={styles.redirect_text_container}>
       <Typography variant="RedirectText" className={styles.redirect_text}>
         Please check your email and verify it. Once verified, click the button
         below to login
@@ -18,6 +19,7 @@ const DirectToAuth = () => {
           Go to Login Page
         </Typography>
       </ButtonBase>
-    </Grid>);
+    </Grid>
+  );
 };
 export default DirectToAuth;

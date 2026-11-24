@@ -10,23 +10,36 @@ import { indexSongs } from "../../../utils/songs";
 import SearchSong from "./search-song/SearchSong";
 import styles from "./searchSongList.module.css";
 const SearchSongList = ({ showRecentlyPlayed }: SearchSongListProps) => {
-    const songsList = useAppSelector(viewingSongListSelector);
-    const recentlyPlayed = useAppSelector(recentlyPlayedSelector);
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        if (showRecentlyPlayed && recentlyPlayed) {
-            dispatch(setViewingSongList(indexSongs(recentlyPlayed)));
-        }
-    }, [dispatch, recentlyPlayed, showRecentlyPlayed]);
-    return (<Grid className={styles.song_list_container}>
-      {showRecentlyPlayed ? (<Typography variant="recentlyPlayedText" className={styles.recently_played_text}>
+  const songsList = useAppSelector(viewingSongListSelector);
+  const recentlyPlayed = useAppSelector(recentlyPlayedSelector);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (showRecentlyPlayed && recentlyPlayed) {
+      dispatch(setViewingSongList(indexSongs(recentlyPlayed)));
+    }
+  }, [dispatch, recentlyPlayed, showRecentlyPlayed]);
+  return (
+    <Grid className={styles.song_list_container}>
+      {showRecentlyPlayed ? (
+        <Typography
+          variant="recentlyPlayedText"
+          className={styles.recently_played_text}
+        >
           RECENTLY PLAYED
-        </Typography>) : null}
+        </Typography>
+      ) : null}
       {songsList && Object.keys(songsList).length > 0
-            ? Object.values(songsList)
-                .slice(0, 15)
-                .map((song) => (<SearchSong key={song.song_id} songKey={song.song_id} song={song}/>))
-            : null}
-    </Grid>);
+        ? Object.values(songsList)
+            .slice(0, 15)
+            .map((song) => (
+              <SearchSong
+                key={song.song_id}
+                songKey={song.song_id}
+                song={song}
+              />
+            ))
+        : null}
+    </Grid>
+  );
 };
 export default SearchSongList;

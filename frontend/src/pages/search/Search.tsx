@@ -10,25 +10,37 @@ import SearchSongList from "../../components/search/search-songs-list/SearchSong
 import useFetchRecentlyPlayed from "../../hooks/user-preferences/useFetchRecentlyPlayed";
 import Error from "../helpers/error/Error";
 const Search = () => {
-    const { recentlyPlayedLoading, recentlyPlayedError } = useFetchRecentlyPlayed();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const searchText = searchParams.get("searchtext") || "";
-    const { showEmpty, showRecentlyPlayed, error } = useFetchSearchSongs(searchText);
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchParams({ searchtext: e.target.value }, { replace: true });
-    };
-    if (error || (showRecentlyPlayed && recentlyPlayedError))
-        return <Error />;
-    if (recentlyPlayedLoading)
-        return <SearchSkeleton />;
-    return (<Grid className={styles.container}>
+  const { recentlyPlayedLoading, recentlyPlayedError } =
+    useFetchRecentlyPlayed();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchText = searchParams.get("searchtext") || "";
+  const { showEmpty, showRecentlyPlayed, error } =
+    useFetchSearchSongs(searchText);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams({ searchtext: e.target.value }, { replace: true });
+  };
+  if (error || (showRecentlyPlayed && recentlyPlayedError)) return <Error />;
+  if (recentlyPlayedLoading) return <SearchSkeleton />;
+  return (
+    <Grid className={styles.container}>
       <Grid className={styles.search_container}>
         <Grid className={styles.search_bar_container}>
-          <SearchIcon className={styles.search_icon}/>
-          <TextField variant="outlined" placeholder="Search songs, artists, or albums..." value={searchText} className={styles.search_bar} onChange={handleSearch}/>
+          <SearchIcon className={styles.search_icon} />
+          <TextField
+            variant="outlined"
+            placeholder="Search songs, artists, or albums..."
+            value={searchText}
+            className={styles.search_bar}
+            onChange={handleSearch}
+          />
         </Grid>
-        {showEmpty ? (<EmptySearch />) : (<SearchSongList showRecentlyPlayed={showRecentlyPlayed}/>)}
+        {showEmpty ? (
+          <EmptySearch />
+        ) : (
+          <SearchSongList showRecentlyPlayed={showRecentlyPlayed} />
+        )}
       </Grid>
-    </Grid>);
+    </Grid>
+  );
 };
 export default Search;

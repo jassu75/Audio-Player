@@ -1,6 +1,6 @@
 export interface MessageModalProps {
-    open: boolean;
-    onClose: () => void;
-    message: string;
-    messageTitle: string;
+  open: boolean;
+  onClose: () => void;
+  message: string;
+  messageTitle: string;
 }

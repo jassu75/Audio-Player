@@ -10,10 +10,10 @@ Upload your audio, organize playlists, and listen to your uploads and shared lib
 
 The homepage contains three collections:
 
-| Collection | Contents |
-| --- | --- |
-| For You | Favorites, Recently Played, and Most Listened |
-| Your Playlists | Playlists you create and upload audio to |
+| Collection        | Contents                                       |
+| ----------------- | ---------------------------------------------- |
+| For You           | Favorites, Recently Played, and Most Listened  |
+| Your Playlists    | Playlists you create and upload audio to       |
 | Popular Playlists | Shared system playlists stored in the database |
 
 Uploaded and shared tracks both support favorites, search, and listening history. Recently Played and Most Listened reflect your own playback activity.
@@ -68,15 +68,15 @@ npm --prefix backend ci
 
 Configure `backend/.env` with the credentials for your existing services:
 
-| Variable | Purpose |
-| --- | --- |
-| `HASURA_URL` | Hasura GraphQL endpoint |
-| `HASURA_SECRET_KEY` | Hasura admin secret |
+| Variable                   | Purpose                                      |
+| -------------------------- | -------------------------------------------- |
+| `HASURA_URL`               | Hasura GraphQL endpoint                      |
+| `HASURA_SECRET_KEY`        | Hasura admin secret                          |
 | `FIREBASE_SERVICE_ACCOUNT` | Base64-encoded Firebase service account JSON |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
-| `PORT` | Optional backend port; defaults to `8080` |
+| `CLOUDINARY_CLOUD_NAME`    | Cloudinary cloud name                        |
+| `CLOUDINARY_API_KEY`       | Cloudinary API key                           |
+| `CLOUDINARY_API_SECRET`    | Cloudinary API secret                        |
+| `PORT`                     | Optional backend port; defaults to `8080`    |
 
 The Firebase browser configuration is in [frontend/src/config/firebase.ts](frontend/src/config/firebase.ts). It must match the Firebase project used by the backend. Keep backend credentials out of source control.
 
@@ -118,11 +118,11 @@ The verification script uses rollback-only database checks.
 
 ## Development
 
-| Directory | Contents |
-| --- | --- |
-| `frontend/` | React, strict TypeScript, Vite, MUI, Redux, and frontend tests |
-| `backend/` | Express API, authentication, uploads, database migrations, and backend tests |
-| `scripts/` | Repository checks and app icon generation |
+| Directory   | Contents                                                                     |
+| ----------- | ---------------------------------------------------------------------------- |
+| `frontend/` | React, strict TypeScript, Vite, MUI, Redux, and frontend tests               |
+| `backend/`  | Express API, authentication, uploads, database migrations, and backend tests |
+| `scripts/`  | Repository checks and app icon generation                                    |
 
 Frontend source uses `.ts` and `.tsx`. Types live beside their owning component, hook, service, or utility in a local `types/` folder, with filenames ending in `.types.ts`, such as `types/ComponentName.types.ts`. Components use the typed Redux hooks from [frontend/src/redux/hooks.ts](frontend/src/redux/hooks.ts).
 
@@ -134,15 +134,15 @@ npm run check
 
 Individual commands:
 
-| Command | Purpose |
-| --- | --- |
-| `npm run typecheck` | TypeScript compiler checks |
-| `npm run lint` | Frontend ESLint checks |
-| `npm test` | Frontend Vitest and backend regression tests |
-| `npm --prefix frontend run test:watch` | Frontend tests in watch mode |
-| `npm run build` | Production frontend build in `frontend/build` |
-| `npm --prefix frontend run preview` | Preview the frontend build on port `4173` |
-| `node scripts/generate-app-icons.cjs` | Regenerate PWA icons |
+| Command                                | Purpose                                       |
+| -------------------------------------- | --------------------------------------------- |
+| `npm run typecheck`                    | TypeScript compiler checks                    |
+| `npm run lint`                         | Frontend ESLint checks                        |
+| `npm test`                             | Frontend Vitest and backend regression tests  |
+| `npm --prefix frontend run test:watch` | Frontend tests in watch mode                  |
+| `npm run build`                        | Production frontend build in `frontend/build` |
+| `npm --prefix frontend run preview`    | Preview the frontend build on port `4173`     |
+| `node scripts/generate-app-icons.cjs`  | Regenerate PWA icons                          |
 
 Test PWA installation and service-worker behavior with a production build served by the backend or Vite preview. Development mode does not install a service worker. Vite preview only serves the frontend; use the backend to test authenticated API flows from a production build.
 

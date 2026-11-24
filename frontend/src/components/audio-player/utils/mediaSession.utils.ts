@@ -1,8 +1,18 @@
-import type { MediaSessionConnection, MediaSessionControls } from "./types/mediaSession.types";
-import { DEFAULT_SONG_COVER, getSongCoverArt } from "../../helpers/song-cover/songCover.utils";
+import type {
+  MediaSessionConnection,
+  MediaSessionControls,
+} from "./types/mediaSession.types";
+import {
+  DEFAULT_SONG_COVER,
+  getSongCoverArt,
+} from "../../helpers/song-cover/songCover.utils";
 
-export const connectMediaSession = (audio: HTMLAudioElement, controls: MediaSessionControls): MediaSessionConnection => {
-  if (!("mediaSession" in navigator)) return { setTrack: () => undefined, dispose: () => undefined };
+export const connectMediaSession = (
+  audio: HTMLAudioElement,
+  controls: MediaSessionControls,
+): MediaSessionConnection => {
+  if (!("mediaSession" in navigator))
+    return { setTrack: () => undefined, dispose: () => undefined };
   const session = navigator.mediaSession;
   const updatePosition = () => {
     if (!session.setPositionState) return;
@@ -21,19 +31,30 @@ export const connectMediaSession = (audio: HTMLAudioElement, controls: MediaSess
     }
   };
   const seek = (position: number) => {
-    if (!Number.isFinite(position) || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+    if (
+      !Number.isFinite(position) ||
+      !Number.isFinite(audio.duration) ||
+      audio.duration <= 0
+    )
+      return;
     audio.currentTime = Math.min(audio.duration, Math.max(0, position));
     updatePosition();
   };
-  const handlers: Partial<Record<MediaSessionAction, MediaSessionActionHandler>> = {
+  const handlers: Partial<
+    Record<MediaSessionAction, MediaSessionActionHandler>
+  > = {
     play: controls.play,
     pause: controls.pause,
     nexttrack: controls.next,
     previoustrack: controls.previous,
     stop: controls.stop,
-    seekbackward: details => seek(audio.currentTime - (details.seekOffset ?? 10)),
-    seekforward: details => seek(audio.currentTime + (details.seekOffset ?? 10)),
-    seekto: details => { if (details.seekTime !== undefined) seek(details.seekTime); },
+    seekbackward: (details) =>
+      seek(audio.currentTime - (details.seekOffset ?? 10)),
+    seekforward: (details) =>
+      seek(audio.currentTime + (details.seekOffset ?? 10)),
+    seekto: (details) => {
+      if (details.seekTime !== undefined) seek(details.seekTime);
+    },
   };
   const registered: MediaSessionAction[] = [];
   for (const action of Object.keys(handlers) as MediaSessionAction[]) {
@@ -44,11 +65,33 @@ export const connectMediaSession = (audio: HTMLAudioElement, controls: MediaSess
       continue;
     }
   }
-  const onPlay = () => { session.playbackState = "playing"; updatePosition(); };
-  const onPause = () => { session.playbackState = "paused"; updatePosition(); };
-  const onEmpty = () => { session.playbackState = "none"; updatePosition(); };
-  const listeners = { play: onPlay, playing: onPlay, pause: onPause, ended: onPause, emptied: onEmpty, timeupdate: updatePosition, loadedmetadata: updatePosition, durationchange: updatePosition, ratechange: updatePosition, seeked: updatePosition };
-  Object.entries(listeners).forEach(([event, listener]) => audio.addEventListener(event, listener));
+  const onPlay = () => {
+    session.playbackState = "playing";
+    updatePosition();
+  };
+  const onPause = () => {
+    session.playbackState = "paused";
+    updatePosition();
+  };
+  const onEmpty = () => {
+    session.playbackState = "none";
+    updatePosition();
+  };
+  const listeners = {
+    play: onPlay,
+    playing: onPlay,
+    pause: onPause,
+    ended: onPause,
+    emptied: onEmpty,
+    timeupdate: updatePosition,
+    loadedmetadata: updatePosition,
+    durationchange: updatePosition,
+    ratechange: updatePosition,
+    seeked: updatePosition,
+  };
+  Object.entries(listeners).forEach(([event, listener]) =>
+    audio.addEventListener(event, listener),
+  );
   return {
     setTrack(song) {
       if (!song) {
@@ -56,23 +99,42 @@ export const connectMediaSession = (audio: HTMLAudioElement, controls: MediaSess
         session.playbackState = "none";
       } else if (typeof MediaMetadata !== "undefined") {
         let artwork: string;
-        try { artwork = new URL(getSongCoverArt(song.cover_art), window.location.href).href; }
-        catch { artwork = new URL(DEFAULT_SONG_COVER, window.location.origin).href; }
-        session.metadata = new MediaMetadata({ title: song.title, artist: song.artist, album: song.album, artwork: [{ src: artwork }] });
+        try {
+          artwork = new URL(
+            getSongCoverArt(song.cover_art),
+            window.location.href,
+          ).href;
+        } catch {
+          artwork = new URL(DEFAULT_SONG_COVER, window.location.origin).href;
+        }
+        session.metadata = new MediaMetadata({
+          title: song.title,
+          artist: song.artist,
+          album: song.album,
+          artwork: [{ src: artwork }],
+        });
       }
       updatePosition();
     },
     dispose() {
-      Object.entries(listeners).forEach(([event, listener]) => audio.removeEventListener(event, listener));
+      Object.entries(listeners).forEach(([event, listener]) =>
+        audio.removeEventListener(event, listener),
+      );
       for (const action of registered) {
-        try { session.setActionHandler(action, null); }
-        catch { continue; }
+        try {
+          session.setActionHandler(action, null);
+        } catch {
+          continue;
+        }
       }
       session.metadata = null;
       session.playbackState = "none";
       if (session.setPositionState) {
-        try { session.setPositionState(); }
-        catch { return; }
+        try {
+          session.setPositionState();
+        } catch {
+          return;
+        }
       }
     },
   };

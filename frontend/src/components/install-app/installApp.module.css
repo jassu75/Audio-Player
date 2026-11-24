@@ -1,6 +1,35 @@
-.prompt { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; width: min(520px, calc(100vw - 32px)); padding: 14px 16px; border: 1px solid #6b5869; border-radius: 16px; background: #29232f; color: #fff; box-shadow: 0 8px 32px #0005; box-sizing: border-box; }
-.copy { flex: 1 1 200px; }
-.copy strong { font-size: 14px; }
-.copy p { margin: 6px 0 0; font-size: 13px; line-height: 1.45; color: #d1c6ce; }
-.actions { display: flex; margin-left: auto; }
-.actions :global(.MuiButton-root) { min-height: 44px; color: #efd780; text-transform: none; }
+.prompt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  width: min(520px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border: 1px solid #6b5869;
+  border-radius: 16px;
+  background: #29232f;
+  color: #fff;
+  box-shadow: 0 8px 32px #0005;
+  box-sizing: border-box;
+}
+.copy {
+  flex: 1 1 200px;
+}
+.copy strong {
+  font-size: 14px;
+}
+.copy p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #d1c6ce;
+}
+.actions {
+  display: flex;
+  margin-left: auto;
+}
+.actions :global(.MuiButton-root) {
+  min-height: 44px;
+  color: #efd780;
+  text-transform: none;
+}

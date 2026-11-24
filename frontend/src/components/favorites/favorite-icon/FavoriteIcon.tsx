@@ -9,24 +9,47 @@ import { favoritesSelector } from "../../../redux/selectors/userPreferencesSelec
 import { finishFavoriteUpdate } from "../../../redux/slices/userPreferencesSlice";
 
 const FavoriteIcon = ({ songId }: FavoriteIconProps) => {
-    const favorites = useAppSelector(favoritesSelector);
-    const update = useAppSelector(state => state.userPrefs.favoriteUpdates[songId]);
-    const dispatch = useAppDispatch();
-    const isFavorite = update?.isFavorite ?? favorites?.includes(songId) ?? false;
-    const { toggleFavorite } = useUpdateFavorites();
-    const handleFavoriteIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        void toggleFavorite(songId).catch(() => {});
-    };
-    const dismissError = () => {
-        if (update && !update.pending) dispatch(finishFavoriteUpdate({ songId, requestId: update.requestId }));
-    };
-    return (<>
-      <IconButton onClick={handleFavoriteIconClick} aria-busy={update?.pending || undefined} aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"} aria-pressed={isFavorite} title={update?.error}>
-        {isFavorite ? <FilledHeartIcon /> : <BorderHeartIcon className={styles.unfavorite_icon} />}
+  const favorites = useAppSelector(favoritesSelector);
+  const update = useAppSelector(
+    (state) => state.userPrefs.favoriteUpdates[songId],
+  );
+  const dispatch = useAppDispatch();
+  const isFavorite = update?.isFavorite ?? favorites?.includes(songId) ?? false;
+  const { toggleFavorite } = useUpdateFavorites();
+  const handleFavoriteIconClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
+    void toggleFavorite(songId).catch(() => {});
+  };
+  const dismissError = () => {
+    if (update && !update.pending)
+      dispatch(finishFavoriteUpdate({ songId, requestId: update.requestId }));
+  };
+  return (
+    <>
+      <IconButton
+        onClick={handleFavoriteIconClick}
+        aria-busy={update?.pending || undefined}
+        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        aria-pressed={isFavorite}
+        title={update?.error}
+      >
+        {isFavorite ? (
+          <FilledHeartIcon />
+        ) : (
+          <BorderHeartIcon className={styles.unfavorite_icon} />
+        )}
       </IconButton>
-      <Snackbar open={Boolean(update?.error)} autoHideDuration={6000} onClose={dismissError} onClick={event => event.stopPropagation()} message={update?.error} />
-    </>);
+      <Snackbar
+        open={Boolean(update?.error)}
+        autoHideDuration={6000}
+        onClose={dismissError}
+        onClick={(event) => event.stopPropagation()}
+        message={update?.error}
+      />
+    </>
+  );
 };
 
 export default FavoriteIcon;

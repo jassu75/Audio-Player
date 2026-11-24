@@ -1,16 +1,16 @@
 export interface Asset {
-    id: string;
-    type: "image" | "video";
+  id: string;
+  type: "image" | "video";
 }
 export interface AudioUpload {
-    audioUrl: string;
-    audioUrlId: string;
+  audioUrl: string;
+  audioUrlId: string;
 }
 export interface ImageUpload {
-    coverArt: string;
-    coverArtId: string;
+  coverArt: string;
+  coverArtId: string;
 }
 export interface UploadResponses {
-    audio: AudioUpload;
-    image: ImageUpload;
+  audio: AudioUpload;
+  image: ImageUpload;
 }

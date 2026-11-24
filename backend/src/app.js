@@ -38,14 +38,16 @@ import uploadCloudinaryAudio from "./routes/uploads/uploadAudio.js";
 const app = express();
 app.use(express.json());
 app.use("/api", (_req, res, next) => {
-    res.set("Cache-Control", "no-store");
-    next();
+  res.set("Cache-Control", "no-store");
+  next();
 });
 app.use("/api", requireSameOriginRequest);
-app.use(createSessionRouter(firebaseAuth, async (user_id) => {
+app.use(
+  createSessionRouter(firebaseAuth, async (user_id) => {
     const response = await client.request(CHECK_EXISTING_USER, { user_id });
     return response.users;
-}));
+  }),
+);
 app.use(verifyUser);
 app.use(addUser);
 app.use("/api", firebaseAuthenticate);
@@ -53,8 +55,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const localBuildPath = path.join(__dirname, "../../frontend/build");
 const buildFilePath = existsSync(localBuildPath)
-    ? localBuildPath
-    : path.join(__dirname, "../build");
+  ? localBuildPath
+  : path.join(__dirname, "../build");
 app.use(express.static(buildFilePath));
 app.use(checkExistingUser);
 app.use(fetchPlaylistSongs);
@@ -81,12 +83,21 @@ app.use(fetchSystemPlaylists);
 app.use(uploadCloudinaryImage);
 app.use(uploadCloudinaryAudio);
 app.get(/^\/(?!api(?:\/|$)).*/, (req, res) => {
-    res.sendFile(path.join(buildFilePath, "index.html"));
+  res.sendFile(path.join(buildFilePath, "index.html"));
 });
-app.use("/api", (_req, res) => res.status(404).json({ message: "API route not found" }));
+app.use("/api", (_req, res) =>
+  res.status(404).json({ message: "API route not found" }),
+);
 app.use((error, _req, res, _next) => {
-    const status = error.code === "LIMIT_FILE_SIZE" ? 413 : 500;
-    console.error("Request failed", error);
-    res.status(status).json({ message: status === 413 ? "File exceeds the 10 MB upload limit" : "Request failed" });
+  const status = error.code === "LIMIT_FILE_SIZE" ? 413 : 500;
+  console.error("Request failed", error);
+  res
+    .status(status)
+    .json({
+      message:
+        status === 413
+          ? "File exceeds the 10 MB upload limit"
+          : "Request failed",
+    });
 });
 export default app;

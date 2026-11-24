@@ -20,9 +20,20 @@
   width: 100%;
 }
 
-.playlist_card { text-decoration: none; color: #fff; }
-.playlist_card:focus-visible { outline: 2px solid #e7c95e; outline-offset: 1px; border-radius: 10px; }
-@media (max-width: 600px) { .playlist_card { width: 140px; } }
+.playlist_card {
+  text-decoration: none;
+  color: #fff;
+}
+.playlist_card:focus-visible {
+  outline: 2px solid #e7c95e;
+  outline-offset: 1px;
+  border-radius: 10px;
+}
+@media (max-width: 600px) {
+  .playlist_card {
+    width: 140px;
+  }
+}
 
 .playlist_content {
   padding-left: 7px;

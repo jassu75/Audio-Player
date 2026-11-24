@@ -4,19 +4,35 @@ import type { PlaylistRailProps } from "./types/PlaylistRail.types";
 import PlaylistRailItem from "./playlist-rail-item/PlaylistRailItem";
 import styles from "./playlistRail.module.css";
 const PlaylistRail = ({ collection }: PlaylistRailProps) => {
-    if (!collection || collection.collection?.length === 0) {
-        return null;
-    }
-    return (<Grid component="section" aria-label={collection.title} className={styles.homepage_playlists}>
+  if (!collection || collection.collection?.length === 0) {
+    return null;
+  }
+  return (
+    <Grid
+      component="section"
+      aria-label={collection.title}
+      className={styles.homepage_playlists}
+    >
       <Grid className={styles.title}>
-        <Typography component="h2" variant="HomepageTitleText" className={styles.title_text}>
+        <Typography
+          component="h2"
+          variant="HomepageTitleText"
+          className={styles.title_text}
+        >
           {collection.title}
         </Typography>
       </Grid>
 
       <Grid className={styles.playlists}>
-        {collection.collection.map((playlist) => (<PlaylistRailItem key={playlist.playlist_id} playlist={playlist} type={collection.type}/>))}
+        {collection.collection.map((playlist) => (
+          <PlaylistRailItem
+            key={playlist.playlist_id}
+            playlist={playlist}
+            type={collection.type}
+          />
+        ))}
       </Grid>
-    </Grid>);
+    </Grid>
+  );
 };
 export default PlaylistRail;

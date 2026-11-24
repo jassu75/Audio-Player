@@ -38,4 +38,6 @@
   }
 }
 
-.idle_player { display: none; }
+.idle_player {
+  display: none;
+}

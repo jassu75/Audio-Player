@@ -6,12 +6,15 @@ import PlaylistRail from "../../components/playlist-rail/PlaylistRail";
 import HomepageSkeleton from "../../components/skeletons/homepage/HomepageSkeleton";
 import { playlistCollectionSelector } from "../../redux/selectors/homepageSelectors";
 const Home = () => {
-    const playlistCollection = useAppSelector(playlistCollectionSelector);
-    if (!playlistCollection)
-        return <HomepageSkeleton />;
-    return (<Grid className={styles.container}>
+  const playlistCollection = useAppSelector(playlistCollectionSelector);
+  if (!playlistCollection) return <HomepageSkeleton />;
+  return (
+    <Grid className={styles.container}>
       <Navbar />
-      {playlistCollection.map((collection) => (<PlaylistRail key={collection.id} collection={collection}/>))}
-    </Grid>);
+      {playlistCollection.map((collection) => (
+        <PlaylistRail key={collection.id} collection={collection} />
+      ))}
+    </Grid>
+  );
 };
 export default Home;

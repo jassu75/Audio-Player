@@ -6,17 +6,19 @@ import theme from "./theme/theme";
 import authRoutes from "./routes/authRoutes";
 import mainRoutes from "./routes/mainRoutes";
 const AppRoutes = () => {
-    const routes = useRoutes([...mainRoutes, ...authRoutes]);
-    return routes;
+  const routes = useRoutes([...mainRoutes, ...authRoutes]);
+  return routes;
 };
 function App() {
-    return (<ThemeProvider theme={theme}>
+  return (
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <div className="App">
           <AppRoutes />
           <InstallApp />
         </div>
       </BrowserRouter>
-    </ThemeProvider>);
+    </ThemeProvider>
+  );
 }
 export default App;

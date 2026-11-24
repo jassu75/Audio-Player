@@ -23,6 +23,8 @@ const useAudioPlayer = () => {
   const sourceVersion = useRef(0);
   const recordedVersion = useRef<number | null>(null);
   const mounted = useRef(false);
+  const shuffle = useRef(false);
+  const [isShuffling, setIsShuffling] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
   const [playbackError, setPlaybackError] = useState("");
@@ -67,7 +69,14 @@ const useAudioPlayer = () => {
         play();
         return;
       }
-      dispatch(direction === "next" ? playNext() : playPrevious());
+      const candidates = Object.keys(
+        store.getState().audioplayer.playingSongList ?? {},
+      ).filter((songId) => songId !== previous?.song_id);
+      const nextSongId =
+        direction === "next" && shuffle.current && candidates.length
+          ? candidates[Math.floor(Math.random() * candidates.length)]
+          : undefined;
+      dispatch(direction === "next" ? playNext(nextSongId) : playPrevious());
       if (
         previous &&
         currentSongSelector(store.getState())?.song_id === previous.song_id &&
@@ -95,7 +104,9 @@ const useAudioPlayer = () => {
       setIsPlaying(true);
       setPlaybackError("");
     };
-    const onPause = () => setIsPlaying(false);
+    const onPause = () => {
+      if (audio.paused) setIsPlaying(false);
+    };
     const onPlaying = () => {
       onPlay();
       setIsBuffering(false);
@@ -160,7 +171,6 @@ const useAudioPlayer = () => {
       }
       const key = song ? song.song_id + "\n" + song.audio_url : "";
       if (key === activeKey) return;
-      if (activeKey) audio.pause();
       activeKey = key;
       sourceVersion.current++;
       setProgress(0);
@@ -170,13 +180,13 @@ const useAudioPlayer = () => {
       setDuration(song?.duration ?? 0);
       if (!song) {
         if (audio.hasAttribute("src")) {
+          audio.pause();
           audio.removeAttribute("src");
           audio.load();
         }
         return;
       }
       audio.src = song.audio_url;
-      audio.load();
       play();
     };
     const unsubscribe = store.subscribe(syncTrack);
@@ -223,6 +233,11 @@ const useAudioPlayer = () => {
   };
   return {
     audioRef,
+    isShuffling,
+    handleToggleShuffle: () => {
+      shuffle.current = !shuffle.current;
+      setIsShuffling(shuffle.current);
+    },
     isPlaying,
     isBuffering,
     playbackError,

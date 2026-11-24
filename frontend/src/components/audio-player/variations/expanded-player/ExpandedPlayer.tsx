@@ -13,10 +13,13 @@ import type { ExpandedPlayerProps } from "./types/ExpandedPlayer.types";
 import { formatTime } from "../../utils/audioPlayer.utils";
 import styles from "./expandedPlayer.module.css";
 import SongCover from "../../../helpers/song-cover/SongCover";
+import ShuffleButton from "../../shuffle-button/ShuffleButton";
 const ExpandedPlayer = ({ audioPlayerProps }: ExpandedPlayerProps) => {
   const song = useAppSelector(currentSongSelector);
   const {
     isPlaying,
+    isShuffling,
+    handleToggleShuffle,
     playbackError,
     progress,
     duration,
@@ -49,8 +52,11 @@ const ExpandedPlayer = ({ audioPlayerProps }: ExpandedPlayerProps) => {
         </Grid>
 
         <Grid className={styles.song_info}>
-          <Typography className={styles.title}>{song.title}</Typography>
-          <Typography className={styles.artist}>{song.artist}</Typography>
+          <div className={styles.song_details}>
+            <Typography className={styles.title}>{song.title}</Typography>
+            <Typography className={styles.artist}>{song.artist}</Typography>
+          </div>
+          <ShuffleButton enabled={isShuffling} onClick={handleToggleShuffle} />
         </Grid>
 
         <Grid className={styles.controls}>

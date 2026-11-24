@@ -122,11 +122,14 @@ const audioPlayerSlice = createSlice({
       state.playingSongList = null;
       sync(state);
     },
-    playNext: (state) => {
+    playNext: (state, { payload }: PayloadAction<string | undefined>) => {
       if (state.playingSongList && Object.keys(state.playingSongList).length) {
         const keys = Object.keys(state.playingSongList);
         const currentPos = keys.indexOf(String(state.playingIndex));
-        state.playingIndex = keys[(currentPos + 1) % keys.length];
+        state.playingIndex =
+          payload && keys.includes(payload)
+            ? payload
+            : keys[(currentPos + 1) % keys.length];
         if (state.searchPlayback) state.searchPlayback.trackChanges++;
         sync(state);
       }

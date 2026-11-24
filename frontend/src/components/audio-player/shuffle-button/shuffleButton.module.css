@@ -1,0 +1,10 @@
+.button:global(.MuiIconButton-root) {
+  min-width: 48px;
+  min-height: 48px;
+  flex-shrink: 0;
+  color: #c5babf;
+}
+
+.button:global(.MuiIconButton-root)[aria-pressed="true"] {
+  color: #e7c95e;
+}

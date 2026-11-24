@@ -66,15 +66,17 @@ export const connectMediaSession = (
     }
   }
   const onPlay = () => {
+    if (audio.paused) return;
     session.playbackState = "playing";
     updatePosition();
   };
   const onPause = () => {
+    if (!audio.paused) return;
     session.playbackState = "paused";
     updatePosition();
   };
   const onEmpty = () => {
-    session.playbackState = "none";
+    if (!audio.getAttribute("src")) session.playbackState = "none";
     updatePosition();
   };
   const listeners = {

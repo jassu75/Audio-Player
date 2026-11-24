@@ -11,7 +11,7 @@ const AudioPlayer = () => {
   const isDesktop = useMediaQuery("(min-width: 901px)");
   return (
     <>
-      <audio ref={audioPlayerProps.audioRef} preload="metadata" />
+      <audio ref={audioPlayerProps.audioRef} autoPlay preload="auto" />
       {!song ? null : isDesktop ? (
         <ExpandedPlayer audioPlayerProps={audioPlayerProps} />
       ) : (
